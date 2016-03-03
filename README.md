@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/IngageGroup/Contributr.png?label=ready&title=Ready)](https://waffle.io/IngageGroup/Contributr)
 # Contributr
 
 To start your Phoenix app:

@@ -7,8 +7,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello Contributr!</title>
+    <title> <%= assigns[:page_title] || "Home" %> |  Contributr </title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
   </head>
 
   <body>
@@ -16,10 +17,20 @@
       <header class="header">
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
+          <%= if assigns[:current_user] do %>
+            <li> <a> Welcome <%= @current_user.name %> </a>  </li>
+            <li>
+              <a  href="<%= auth_path(@conn, :delete) %>"> Logout </a>
+            </li>
+          <% else %>  
+            <li>
+							<a class="btn btn-primary" href="<%= auth_path(@conn, :request, "google") %>"> Login </a> </li>
+          <% end %>
           </ul>
         </nav>
-        <span class="logo"></span>
+        <span class="logo">
+          <h1> CONTRIBUTR </h1> 
+        </span>
       </header>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
@@ -33,3 +44,4 @@
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>
+

@@ -12,7 +12,7 @@ config :logger, level: :warn
 # Configure your database
 config :contributr, Contributr.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: System.get_env("PG_USER"),
+  username: "postgres",
   #  password: System.get_env("PG_PASSWORD"),
   database: "contributr_test",
   hostname: "localhost",

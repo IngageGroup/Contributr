@@ -13,7 +13,6 @@ config :logger, level: :warn
 config :contributr, Contributr.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  #  password: System.get_env("PG_PASSWORD"),
   database: "contributr_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

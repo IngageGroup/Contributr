@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/IngageGroup/Contributr.svg?branch=master)](https://travis-ci.org/IngageGroup/Contributr)
 
+
 [![Stories in Ready](https://badge.waffle.io/IngageGroup/Contributr.png?label=ready&title=Ready)](https://waffle.io/IngageGroup/Contributr)
 
 

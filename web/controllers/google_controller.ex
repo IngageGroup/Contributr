@@ -15,31 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
-defmodule Contributr.User do
-  use Contributr.Web, :model
+defmodule Contributr.GoogleController do
 
-  schema "users" do
-    field :name, :string
-    field :email, :string
-    field :uid, :string
-    field :avatar_url, :string
-    field :access_token, :string
-    field :expires_at, :integer
-
-    timestamps
-  end
-
-  @required_fields ~w(name email uid access_token expires_at)
-  @optional_fields ~w(avatar_url)
-
-  @doc """
-  Creates a changeset based on the `model` and `params`.
-
-  If no params are provided, an invalid changeset is returned
-  with no validation performed.
-  """
-  def changeset(model, params \\ :empty) do
-    model
-    |> cast(params, @required_fields, @optional_fields)
-  end
+  
 end

@@ -26,13 +26,14 @@ defmodule UserFromAuth do
     {:ok, basic_info(auth)}
   end
 
-  def create_or_update(conn) do
-    user = get_session(conn, :current_user)
-    case Repo.get_by(Contributr.User, uid: user.id) do 
+  def create_or_update(conn, user) do
+    #user = get_session(conn, :current_user)
+    #user = %{name: user.name, uid: user.id, avatar_url: user.avatar, email: user.email }
+    changeset = Contributr.User.changeset(%Contributr.User{}, user)
+    case Repo.get_by(Contributr.User, email: user.email) do 
       nil ->
         Logger.debug "no results found"
         # create record
-        changeset = %Contributr.User{name: user.name, uid: user.id, avatar_url: user.avatar, email: user.email }
         case Repo.insert(changeset) do 
           {:ok, _user} ->
             Logger.debug "inserted record!"
@@ -40,10 +41,9 @@ defmodule UserFromAuth do
             Logger.error "unable to insert record" <> changeset
         end 
       %Contributr.User{} = u -> 
-        Logger.debug  u.id 
-        u = %{u | uid: user.id}
-        Logger.debug  u.id
-        case Repo.update(u) do
+        #update = %{uid: user.uid, access_token: user.access_token}
+        changeset = Contributr.User.changeset(u, user)
+        case Repo.update(changeset) do
           {:ok, user} ->
             Logger.debug "Successfully update record" 
           {:error, changeset} ->
@@ -53,7 +53,14 @@ defmodule UserFromAuth do
   end
 
   defp basic_info(auth) do
-  	%{id: auth.uid, name: name_from_auth(auth), avatar: auth.info.image, email: auth.info.email}
+    #IO.inspect(auth)
+  	%{uid: auth.uid, 
+      name: name_from_auth(auth), 
+      avatar_url: auth.info.image, 
+      email: auth.info.email, 
+      access_token: auth.extra.raw_info.token.access_token,
+      expires_at: auth.extra.raw_info.token.expires_at
+    }
   end
 	
 	defp name_from_auth(auth) do

@@ -22,6 +22,16 @@
     <%= @user.avatar_url %>
   </li>
 
+  <li>
+    <strong>Access Token:</strong>
+    <%= @user.access_token %>
+  </li>
+
+  <li>
+    <strong>Expires At:</strong>
+    <%= @user.expires_at %>
+  </li>
+
 </ul>
 
 <%= link "Edit", to: user_path(@conn, :edit, @user) %>

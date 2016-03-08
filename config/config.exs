@@ -30,7 +30,7 @@ config :phoenix, :generators,
 
 config :ueberauth, Ueberauth,
   providers: [
-    google: {Ueberauth.Strategy.Google, []}
+    google: {Ueberauth.Strategy.Google, ["email profile https://www.googleapis.com/auth/admin.directory.customer.readonly"]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,

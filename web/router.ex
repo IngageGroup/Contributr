@@ -31,20 +31,20 @@ defmodule Contributr.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/auth", Contributr do
-    pipe_through [:browser]
-
-    get "/:provider", AuthController, :request
-    get "/:provider/callback", AuthController, :callback
-    post "/:provider/callback", AuthController, :callback
-    get "/logout", AuthController, :delete
-  end
-
   scope "/", Contributr do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
     resources "/users", UserController
+  end
+
+  scope "/auth", Contributr do
+    pipe_through [:browser]
+
+    get "/logout", AuthController, :delete
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+    post "/:provider/callback", AuthController, :callback
   end
 
   # Other scopes may use custom stacks.

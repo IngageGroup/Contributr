@@ -38,7 +38,8 @@ defmodule Contributr.Mixfile do
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
      {:ueberauth, "~> 0.2"},
-     {:ueberauth_google, "~> 0.2"}
+     {:ueberauth_google, "~> 0.2"},
+     {:dialyxir, "~> 0.3", only: [:dev]}
    ]
   end
 

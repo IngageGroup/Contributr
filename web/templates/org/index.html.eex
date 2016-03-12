@@ -1,0 +1,30 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th> Name </th>
+      <th> Active? </th>
+      <th> Manager </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for org <- @orgs do %>
+      <tr>
+        <td> <%= org.name %> </td>
+        <td> <%= org.active %> </td>
+        <td>  
+        <% if org.manager do %> 
+         <%= org.manager.name %>
+        <% end %>
+        </td>
+        <td class="text-right">
+          <%= link "Show", to: org_path(@conn, :show, org), class: "btn btn-default btn-xs" %>
+          <%= link "Edit", to: org_path(@conn, :edit, org), class: "btn btn-default btn-xs" %>
+          <%= link "Delete", to: org_path(@conn, :delete, org), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link "New Organization", to: org_path(@conn, :new) %>

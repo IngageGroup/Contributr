@@ -11,16 +11,18 @@
     <%= error_tag f, :name %>
   </div>
 
-  <div class="form-group">
-    <%= label f, :email, class: "control-label" %>
-    <%= text_input f, :email, class: "form-control" %>
-    <%= error_tag f, :email %>
+  <div class="checkbox">
+    <label>
+      <%= checkbox f, :active  %>
+      Active? 
+    </label>
+    <%= error_tag f, :active %>
   </div>
 
   <div class="form-group">
-    <%= label f, :avatar_url, class: "control-label" %>
-    <%= text_input f, :avatar_url, class: "form-control" %>
-    <%= error_tag f, :avatar_url %>
+    <%= label f, :user, class: "control-label" %>
+    <%= select f, :user, @users, class: "form-control" %>
+    <%= error_tag f, :user %>
   </div>
 
   <div class="form-group">

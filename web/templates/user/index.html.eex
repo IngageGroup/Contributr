@@ -5,11 +5,7 @@
     <tr>
       <th>Name</th>
       <th>Email</th>
-      <th>Uid</th>
-      <th>Avatar url</th>
-      <th>Access Token</th>
-      <th>Expires At</th>
-
+      <th>Avatar</th>
       <th></th>
     </tr>
   </thead>
@@ -18,10 +14,7 @@
     <tr>
       <td><%= user.name %></td>
       <td><%= user.email %></td>
-      <td><%= user.uid %></td>
       <td><img src="<%= user.avatar_url %>"> </td>
-      <td><%= user.access_token %></td>
-      <td><%= user.expires_at %></td>
       
       <td class="text-right">
         <%= link "Show", to: user_path(@conn, :show, user), class: "btn btn-default btn-xs" %>

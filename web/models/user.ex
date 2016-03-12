@@ -25,12 +25,14 @@ defmodule Contributr.User do
     field :avatar_url, :string
     field :access_token, :string
     field :expires_at, :integer
+    
+    has_many :orgs, Contributr.Organization
 
     timestamps
   end
 
-  @required_fields ~w(name email uid access_token expires_at)
-  @optional_fields ~w(avatar_url)
+  @required_fields ~w(name email)
+  @optional_fields ~w(uid access_token expires_at avatar_url)
 
   @doc """
   Creates a changeset based on the `model` and `params`.

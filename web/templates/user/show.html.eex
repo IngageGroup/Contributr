@@ -13,23 +13,8 @@
   </li>
 
   <li>
-    <strong>Uid:</strong>
-    <%= @user.uid %>
-  </li>
-
-  <li>
-    <strong>Avatar url:</strong>
-    <%= @user.avatar_url %>
-  </li>
-
-  <li>
-    <strong>Access Token:</strong>
-    <%= @user.access_token %>
-  </li>
-
-  <li>
-    <strong>Expires At:</strong>
-    <%= @user.expires_at %>
+    <strong>Avatar:</strong>
+    <img src="<%= @user.avatar_url %>" />
   </li>
 
 </ul>

@@ -15,6 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
-defmodule Contributr.UserView do
+defmodule Contributr.OrgView do
   use Contributr.Web, :view
+
+  def users_for_select(users) do 
+    users 
+    |> Enum.map(&["#{&1.name}": &1.id])
+    |> List.flatten
+  end
+
 end

@@ -15,6 +15,28 @@
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
-defmodule Contributr.UserView do
-  use Contributr.Web, :view
+defmodule Contributr.Organization do
+  use Contributr.Web, :model
+
+  schema "orgs" do
+    field :name, :string
+    field :active, :boolean, default: false
+    belongs_to :manager, Contributr.User
+
+    timestamps
+  end
+
+  @required_fields ~w(name active)
+  @optional_fields ~w(manager_id)
+
+  @doc """
+  Creates a changeset based on the `model` and `params`.
+
+  If no params are provided, an invalid changeset is returned
+  with no validation performed.
+  """
+  def changeset(model, params \\ :empty) do
+    model
+    |> cast(params, @required_fields, @optional_fields)
+  end
 end

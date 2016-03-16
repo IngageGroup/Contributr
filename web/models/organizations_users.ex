@@ -15,19 +15,29 @@
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
-defmodule Contributr.OrgView do
-  use Contributr.Web, :view
 
-  def users_for_select(users) do 
-    users 
-    |> Enum.map(&["#{&1.name}": &1.id])
-    |> List.flatten
+defmodule Contributr.OrganizationsUsers do
+  use Contributr.Web, :model
+
+  schema "organizations_users" do
+    belongs_to :org, Contributr.Org
+    belongs_to :user, Contributr.User
+    belongs_to :role, Contributr.Role
+
+    timestamps
   end
 
-  def manager_for_org(manager) do
-    if (manager) do 
-      hd(manager).name
-    end
-  end
+  @required_fields ~w(user_id org_id role_id)
+  @optional_fields ~w()
 
+  @doc """
+  Creates a changeset based on the `model` and `params`.
+
+  If no params are provided, an invalid changeset is returned
+  with no validation performed.
+  """
+  def changeset(model, params \\ :empty) do
+    model
+    |> cast(params, @required_fields, @optional_fields)
+  end
 end

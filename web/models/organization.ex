@@ -23,6 +23,7 @@ defmodule Contributr.Organization do
     field :active, :boolean, default: false
     belongs_to :manager, Contributr.User
 
+    has_many :organizations_users, Contributr.OrganizationsUsers
     timestamps
   end
 

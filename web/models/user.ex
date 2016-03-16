@@ -13,7 +13,7 @@
 # GNU General Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+# along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
 defmodule Contributr.User do
   use Contributr.Web, :model
@@ -27,6 +27,7 @@ defmodule Contributr.User do
     field :expires_at, :integer
     
     has_many :orgs, Contributr.Organization
+    has_many :organizations_users, Contributr.OrganizationsUsers
 
     timestamps
   end

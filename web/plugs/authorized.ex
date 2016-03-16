@@ -15,19 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
-defmodule Contributr.OrgView do
-  use Contributr.Web, :view
+defmodule Contributr.Plugs.Authorized do
+  @moduledoc """
+    Plug to determine if a user has the correct authorization
+  """
+  import Plug.Conn
+  use Contributr.Web, :controller
 
-  def users_for_select(users) do 
-    users 
-    |> Enum.map(&["#{&1.name}": &1.id])
-    |> List.flatten
-  end
+  def init(default), do: default
 
-  def manager_for_org(manager) do
-    if (manager) do 
-      hd(manager).name
-    end
+  def call(conn, _default) do
+    conn
   end
 
 end

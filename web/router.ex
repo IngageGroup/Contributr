@@ -37,7 +37,7 @@ defmodule Contributr.Router do
     get "/", PageController, :index
     resources "/users", UserController
     resources "/orgs", OrgController
-
+    resources "/roles", RoleController
   end
 
   scope "/auth", Contributr do

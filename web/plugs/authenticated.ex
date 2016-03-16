@@ -15,19 +15,24 @@
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
-defmodule Contributr.OrgView do
-  use Contributr.Web, :view
+defmodule Contributr.Plugs.Authenticated do
+  @moduledoc """
+    Plug to determine if the user is currently logged in.
+    It currently determines if they have a current active session and assigns
+    the current_user variable.
+  """
 
-  def users_for_select(users) do 
-    users 
-    |> Enum.map(&["#{&1.name}": &1.id])
-    |> List.flatten
-  end
+  import Plug.Conn
+  use Contributr.Web, :controller
 
-  def manager_for_org(manager) do
-    if (manager) do 
-      hd(manager).name
+  def init(default), do: default
+
+  def call(conn, _default) do
+    case get_session(conn, :current_user) do
+      nil ->
+        conn |> put_flash(:error, "Unauthorized!") |> redirect(to: "/") |> halt
+      %{} = user -> 
+        assign(conn, :current_user, user) 
     end
   end
-
 end

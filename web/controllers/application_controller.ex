@@ -14,11 +14,26 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
-
-defmodule Contributr.PageController do
+defmodule Contributr.ApplicationController do
+  @moduledoc """
+    The main functionality of contributr lives here.
+  """
   use Contributr.Web, :controller
+  alias Contributr.Organization
 
-  def index(conn, _params) do
-    render conn, "index.html", current_user: get_session(conn, :current_user)
+  plug Contributr.Plugs.Authenticated 
+  plug :organization_exists 
+  plug :put_layout, "organization.html"
+
+  def index(conn, %{"organization" => orgname}) do
+    render conn, "index.html", org_name: orgname
   end
+
+  defp organization_exists(conn, _) do
+    case Repo.get_by(Organization, url: conn.params["organization"]) do 
+      nil -> conn |> put_flash(:error, "Organization not found") |> redirect(to: "/") |> halt
+      %Organization{} = org -> assign(conn, :organization, org)
+    end
+  end
+
 end

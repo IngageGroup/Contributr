@@ -1,0 +1,1 @@
+<h1> Application <%= assigns[:org_name] %></h1>

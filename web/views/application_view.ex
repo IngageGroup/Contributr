@@ -13,13 +13,8 @@
 # GNU General Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+# along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
-defmodule Contributr.LayoutView do
+defmodule Contributr.ApplicationView do
   use Contributr.Web, :view
-
-  def org_name(organization) do
-    organization.name
-  end
-
 end

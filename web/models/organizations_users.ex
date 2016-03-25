@@ -20,7 +20,7 @@ defmodule Contributr.OrganizationsUsers do
   use Contributr.Web, :model
 
   schema "organizations_users" do
-    belongs_to :org, Contributr.Org
+    belongs_to :org, Contributr.Organization
     belongs_to :user, Contributr.User
     belongs_to :role, Contributr.Role
 

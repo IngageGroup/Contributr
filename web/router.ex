@@ -37,8 +37,6 @@ defmodule Contributr.Router do
     # the home page
     get "/", PageController, :index
 
-    
-
     get "/:organization", ApplicationController, :index
 
   end

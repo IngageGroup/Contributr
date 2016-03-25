@@ -22,10 +22,27 @@ defmodule Contributr.Plugs.Authorized do
   import Plug.Conn
   use Contributr.Web, :controller
 
-  def init(default), do: default
+  alias Contributr.OrganizationsUsers
 
-  def call(conn, _default) do
-    conn
+  def init(auth), do: auth 
+
+  def call(%Plug.Conn{params: %{"organization" => org}} = conn, _auth) do 
+    # is current user a member of this organization?
+    IO.puts(_auth);
+    user = Repo.get_by(Contributr.User, email: get_session(conn, :current_user).email) 
+
+    query = from ou in OrganizationsUsers,
+            join: o in assoc(ou, :org),
+            where: ou.user_id == ^user.id and o.url == ^org,
+            preload: [:role],
+            select: ou
+
+    case Repo.all(query) do
+      [] -> conn |> put_flash(:error, "Not a member of this organization") |> redirect(to: "/") |> halt
+      [%Contributr.OrganizationsUsers{}]= ou -> 
+        role = hd(ou).role
+        conn = put_session(conn, :role, role)
+    end
   end
 
 end

@@ -22,4 +22,12 @@ defmodule Contributr.LayoutView do
     organization.name
   end
 
+  def showManageMenu(nil) do 
+    false
+  end
+
+  def showManageMenu(role) do 
+    String.downcase(role) == "manager" 
+  end
+
 end

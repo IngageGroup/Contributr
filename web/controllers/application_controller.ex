@@ -23,10 +23,14 @@ defmodule Contributr.ApplicationController do
 
   plug Contributr.Plugs.Authenticated 
   plug :organization_exists 
+  
+  plug Contributr.Plugs.Authorized 
+
   plug :put_layout, "organization.html"
 
   def index(conn, %{"organization" => orgname}) do
-    render conn, "index.html", org_name: orgname
+    role = get_session(conn, :role)
+    render conn, "index.html", org_name: orgname, role: role.name
   end
 
   defp organization_exists(conn, _) do

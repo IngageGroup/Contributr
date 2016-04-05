@@ -14,7 +14,6 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
-
 defmodule Contributr.Router do
   use Contributr.Web, :router
   require Ueberauth
@@ -32,8 +31,8 @@ defmodule Contributr.Router do
   end
 
   pipeline :organization do
-    plug Contributr.Plugs.Authenticated
-    
+    # eventually figure out how to create plugs 
+    # that I can add here
   end
 
   #TODO: make a plug that only allows superadmins in here

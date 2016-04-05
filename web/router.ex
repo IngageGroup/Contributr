@@ -13,7 +13,7 @@
 # GNU General Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+# along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
 defmodule Contributr.Router do
   use Contributr.Web, :router
@@ -31,14 +31,9 @@ defmodule Contributr.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", Contributr do
-    pipe_through :browser # Use the default browser stack
-
-    # the home page
-    get "/", PageController, :index
-
-    get "/:organization", ApplicationController, :index
-
+  pipeline :organization do
+    plug Contributr.Plugs.Authenticated
+    
   end
 
   #TODO: make a plug that only allows superadmins in here
@@ -57,6 +52,22 @@ defmodule Contributr.Router do
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
     post "/:provider/callback", AuthController, :callback
+  end
+
+  scope "/", Contributr do
+    pipe_through [:browser]
+
+    # the home page
+    get "/", PageController, :index
+
+  end
+
+  scope "/:organization", Contributr do 
+
+    pipe_through [:browser,:organization]
+
+    get "/", ApplicationController, :index
+    resources "/users", OrgUserController 
   end
 
   # Other scopes may use custom stacks.

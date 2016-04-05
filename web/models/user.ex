@@ -25,6 +25,8 @@ defmodule Contributr.User do
     field :avatar_url, :string
     field :access_token, :string
     field :expires_at, :integer
+    field :eligible_to_recieve, :boolean, default: false
+    field :eligible_to_give, :float
     
     has_many :orgs, Contributr.Organization
     has_many :organizations_users, Contributr.OrganizationsUsers
@@ -33,7 +35,7 @@ defmodule Contributr.User do
   end
 
   @required_fields ~w(name email)
-  @optional_fields ~w(uid access_token expires_at avatar_url)
+  @optional_fields ~w(uid access_token expires_at avatar_url eligible_to_recieve eligible_to_give)
 
   @doc """
   Creates a changeset based on the `model` and `params`.

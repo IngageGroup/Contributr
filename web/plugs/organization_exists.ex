@@ -14,20 +14,23 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
-defmodule Contributr.ApplicationController do
+
+defmodule Contributr.Plugs.OrganizationExists do
   @moduledoc """
-    The main functionality of contributr lives here.
+    Plug to determine if an organization exists 
   """
+  import Plug.Conn
   use Contributr.Web, :controller
+
   alias Contributr.Organization
   
-  plug Contributr.Plugs.OrganizationExists 
-  plug Contributr.Plugs.Authorized 
-  plug :put_layout, "organization.html"
+  def init(default), do: default
 
-  def index(conn, %{"organization" => orgname}) do
-    role = get_session(conn, :role)
-    render conn, "index.html", org_name: orgname, role: role.name
+  def call(%Plug.Conn{params: %{"organization" => org}} = conn, _default) do 
+    case Repo.get_by(Organization, url: conn.params["organization"]) do 
+          nil -> conn |> put_flash(:error, "Organization not found") |> redirect(to: "/") |> halt
+          %Organization{} = org -> assign(conn, :organization, org)
+        end
   end
 
 end

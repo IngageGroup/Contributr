@@ -14,20 +14,10 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
-defmodule Contributr.ApplicationController do
-  @moduledoc """
-    The main functionality of contributr lives here.
-  """
-  use Contributr.Web, :controller
-  alias Contributr.Organization
-  
-  plug Contributr.Plugs.OrganizationExists 
-  plug Contributr.Plugs.Authorized 
-  plug :put_layout, "organization.html"
 
-  def index(conn, %{"organization" => orgname}) do
-    role = get_session(conn, :role)
-    render conn, "index.html", org_name: orgname, role: role.name
-  end
+defmodule Contributr.OrgUserView do
+  use Contributr.Web, :view
 
 end
+
+

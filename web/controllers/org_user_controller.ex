@@ -14,20 +14,37 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
-defmodule Contributr.ApplicationController do
-  @moduledoc """
-    The main functionality of contributr lives here.
-  """
+defmodule Contributr.OrgUserController do
   use Contributr.Web, :controller
+
+  alias Contributr.User
   alias Contributr.Organization
+  alias Contributr.OrganizationsUsers
+  alias Contributr.Role
+
+  plug :scrub_params, "user" when action in [:create, :update]
   
   plug Contributr.Plugs.OrganizationExists 
   plug Contributr.Plugs.Authorized 
   plug :put_layout, "organization.html"
 
-  def index(conn, %{"organization" => orgname}) do
-    role = get_session(conn, :role)
-    render conn, "index.html", org_name: orgname, role: role.name
-  end
 
+  def index(conn, %{"organization" => org} ) do
+    role = get_session(conn, :role)
+    case role do 
+      %Role{name: "Manager"} = r -> 
+        users = Repo.all from u in User,
+                join: ou in assoc(u, :organizations_users),
+                join: o in assoc(ou, :org),
+                where: o.url == ^org,
+                order_by: [asc: u.name],
+                select: u
+        render(conn, "index.html", users: users, role: r.name)
+      _ -> 
+        conn
+        |> put_flash(:error, "You do not have permission to see users")
+        |> redirect(to: "/" <> org)
+    end
+  end
 end
+

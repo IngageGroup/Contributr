@@ -27,11 +27,11 @@
     <%= error_tag f, :active %>
   </div>
 
-  <%#<div class="form-group">%>
-    <%#<%= label f, :manager_id, class: "control-label" %>%>
-    <%#<%= select f, :manager_id, users_for_select(@users), class: "form-control" %>%>
-    <%#<%= error_tag f, :manager %>%>
-  <%#</div>%>
+  <div class="form-group">
+    <%= label f, :manager_id, class: "control-label" %>
+    <%= select f, :manager_id, users_for_select(@users), class: "form-control" %>
+    <%= error_tag f, :manager %>
+  </div>
 
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>

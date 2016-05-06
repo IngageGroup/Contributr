@@ -13,7 +13,9 @@
         <td> <%= org.name %> </td>
         <td> <%= org.active %> </td>
         <td>  
-         <%= manager_for_org(@manager) %>
+          <%= if org.manager != nil do %>
+            <%= org.manager.name %>
+          <% end %>
         </td>
         <td class="text-right">
           <%= link "Show", to: org_path(@conn, :show, org), class: "btn btn-default btn-xs" %>

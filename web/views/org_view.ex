@@ -24,10 +24,4 @@ defmodule Contributr.OrgView do
     |> List.flatten
   end
 
-  def manager_for_org(manager) do
-    if (manager) do 
-      hd(manager).name
-    end
-  end
-
 end

@@ -25,11 +25,9 @@ defmodule Contributr.OrgController do
   plug Contributr.Plugs.Authenticated 
   
   def index(conn, _params) do
-    orgs = Organization |> Repo.all
-    manager = Repo.all assoc(orgs, :manager)
-    render(conn, "index.html", 
-          orgs: orgs, 
-          manager: manager )
+    orgs = Repo.all from o in Organization , preload: [:manager]
+    IO.inspect orgs
+    render(conn, "index.html", orgs: orgs)
   end
 
   def new(conn, _params) do

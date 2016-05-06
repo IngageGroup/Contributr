@@ -25,7 +25,7 @@ defmodule UserFromAuth do
     {:ok, basic_info(auth)}
   end
 
-  def create_or_update(conn, user) do
+  def create_or_update(_conn, user) do
     #user = get_session(conn, :current_user)
     #user = %{name: user.name, uid: user.id, avatar_url: user.avatar, email: user.email }
     changeset = Contributr.User.changeset(%Contributr.User{}, user)
@@ -43,9 +43,9 @@ defmodule UserFromAuth do
         #update = %{uid: user.uid, access_token: user.access_token}
         changeset = Contributr.User.changeset(u, user)
         case Repo.update(changeset) do
-          {:ok, user} ->
+          {:ok, _user} ->
             Logger.debug "Successfully update record" 
-          {:error, changeset} ->
+          {:error, _changeset} ->
             Logger.error "Unable to update the user record"
         end
     end

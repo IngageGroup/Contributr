@@ -28,7 +28,6 @@ defmodule Contributr.Plugs.Authorized do
 
   def call(%Plug.Conn{params: %{"organization" => org}} = conn, _auth) do 
     # is current user a member of this organization?
-    IO.puts(_auth);
     user = Repo.get_by(Contributr.User, email: get_session(conn, :current_user).email) 
 
     query = from ou in OrganizationsUsers,

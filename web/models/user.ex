@@ -17,6 +17,7 @@
 
 defmodule Contributr.User do
   use Contributr.Web, :model
+  import Ecto.Query
 
   schema "users" do
     field :name, :string
@@ -46,5 +47,15 @@ defmodule Contributr.User do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
+  end
+
+  @spec users_in_org(Ecto.Query.t, String.t) :: [Ecto.Query.t]
+  def users_in_org(query, orgname) do 
+    from u in query,
+      join: ou in assoc(u, :organizations_users),
+      join: o in assoc(ou, :org),
+      where: o.url == ^orgname,
+      order_by: [asc: u.name],
+      select: u
   end
 end

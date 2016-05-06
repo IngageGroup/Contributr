@@ -40,4 +40,15 @@ defmodule Contributr.OrganizationsUsers do
     model
     |> cast(params, @required_fields, @optional_fields)
   end
+
+  def from_org(query, org) do 
+    from ou in query,
+      join: u in assoc(ou, :user),
+      join: r in assoc(ou, :role),
+      join: o in assoc(ou, :org),
+      where: o.url == ^org,
+      order_by: [asc: u.name],
+      preload: [:role, :user],
+      select: ou
+  end
 end

@@ -4,22 +4,19 @@
     <tr>
       <th>Name</th>
       <th>Email</th>
+      <th>Role</th>
       <th>Avatar</th>
-      <th></th>
+      <th> </th>
     </tr>
   </thead>
   <tbody>
 <%= for user <- @users do %>
     <tr>
-      <td><%= user.name %></td>
-      <td><%= user.email %></td>
-      <td><img src="<%= user.avatar_url %>"> </td>
+      <td><%= user.user.name %></td>
+      <td><%= user.user.email %></td>
+      <td><%= user.role.name %></td>
+      <td><img src="<%= user.user.avatar_url %>"> </td>
       
-      <td class="text-right">
-        <%= link "Show", to: user_path(@conn, :show, user), class: "btn btn-default btn-xs" %>
-        <%= link "Edit", to: user_path(@conn, :edit, user), class: "btn btn-default btn-xs" %>
-        <%= link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
-      </td>
     </tr>
 <% end %>
   </tbody>

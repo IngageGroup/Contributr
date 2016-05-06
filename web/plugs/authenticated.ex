@@ -25,9 +25,11 @@ defmodule Contributr.Plugs.Authenticated do
   import Plug.Conn
   use Contributr.Web, :controller
 
-  def init(default), do: default
+  def init(opts) do
+    opts 
+  end
 
-  def call(conn, _default) do
+  def call(conn, _opts) do
     case get_session(conn, :current_user) do
       nil ->
         conn |> put_flash(:error, "Unauthorized!") |> redirect(to: "/") |> halt

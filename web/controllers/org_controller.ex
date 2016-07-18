@@ -26,7 +26,6 @@ defmodule Contributr.OrgController do
   
   def index(conn, _params) do
     orgs = Repo.all from o in Organization , preload: [:manager]
-    IO.inspect orgs
     render(conn, "index.html", orgs: orgs)
   end
 
@@ -46,6 +45,12 @@ defmodule Contributr.OrgController do
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+  end
+  
+  def show(conn, %{"id" => org_id} = params) do
+    query = from o in Organization, where: o.id == ^org_id
+    org = Repo.all query
+    render(conn, "show.html", org: org)
   end
 
 end

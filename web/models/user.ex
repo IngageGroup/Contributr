@@ -28,6 +28,7 @@ defmodule Contributr.User do
     field :expires_at, :integer
     field :eligible_to_recieve, :boolean, default: false
     field :eligible_to_give, :float
+    field :setup_admin, :boolean, default: false
     
     has_many :orgs, Contributr.Organization
     has_many :organizations_users, Contributr.OrganizationsUsers
@@ -36,7 +37,7 @@ defmodule Contributr.User do
   end
 
   @required_fields ~w(name email)
-  @optional_fields ~w(uid access_token expires_at avatar_url eligible_to_recieve eligible_to_give)
+  @optional_fields ~w(uid access_token expires_at avatar_url eligible_to_recieve eligible_to_give setup_admin)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
@@ -44,7 +45,7 @@ defmodule Contributr.User do
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
-  def changeset(model, params \\ :empty) do
+  def changeset(model, params \\ %{}) do
     model
     |> cast(params, @required_fields, @optional_fields)
   end

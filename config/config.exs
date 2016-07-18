@@ -8,7 +8,6 @@ use Mix.Config
 # Configures the endpoint
 config :contributr, Contributr.Endpoint,
   url: [host: "localhost"],
-  root: Path.dirname(__DIR__),
   secret_key_base: "XBI6919dN7VbYIB1DASLayDH+WB5ycdH1XWY44roC90D+DroyuOmGClLxJ1TVjOH",
   render_errors: [accepts: ~w(html json)],
   pubsub: [name: Contributr.PubSub,
@@ -19,9 +18,7 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+config :contributr, ecto_repos: [Contributr.Repo]
 
 # Configure phoenix generators
 config :phoenix, :generators,
@@ -37,3 +34,8 @@ config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: System.get_env("GOOGLE_CLIENT_ID"),
   client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
   redirect_uri: System.get_env("GOOGLE_REDIRECT_URI")
+
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
+import_config "#{Mix.env}.exs"
+

@@ -2,7 +2,7 @@ defmodule Contributr.UserControllerTest do
   use Contributr.ConnCase
 
   alias Contributr.User
-  @valid_attrs %{avatar_url: "some content", email: "some content", name: "some content", uid: "some content", access_token: "whatever", expires_at: 1234}
+  @valid_attrs %{avatar_url: "some content", email: "some content", name: "some content", uid: "some content", access_token: "whatever", expires_at: 1234, "setup_admin": false}
   @invalid_attrs %{}
 
   test "lists all entries on index", %{conn: conn} do

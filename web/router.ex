@@ -38,7 +38,6 @@ defmodule Contributr.Router do
   #TODO: make a plug that only allows superadmins in here
   scope "/admin", Contributr do
     pipe_through :browser # Use the default browser stack
-
     resources "/users", UserController
     resources "/orgs", OrgController
     resources "/roles", RoleController
@@ -58,7 +57,7 @@ defmodule Contributr.Router do
 
     # the home page
     get "/", PageController, :index
-
+    get "/login", LoginController, :index
   end
 
   scope "/:organization", Contributr do 
@@ -69,8 +68,4 @@ defmodule Contributr.Router do
     resources "/users", OrgUserController 
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Contributr do
-  #   pipe_through :api
-  # end
 end

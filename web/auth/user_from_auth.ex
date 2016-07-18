@@ -11,23 +11,22 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 defmodule UserFromAuth do
   alias Ueberauth.Auth
-  
+
   require Logger
 
   use Contributr.Web, :controller
-  
-  def find_or_create(%Auth{} = auth) do
-    {:ok, basic_info(auth)}
+
+  def convert_to_user(%Auth{} = auth) do
+    info = basic_info(auth)
+    {:ok, info}
   end
 
   def create_or_update(_conn, user) do
-    #user = get_session(conn, :current_user)
-    #user = %{name: user.name, uid: user.id, avatar_url: user.avatar, email: user.email }
     changeset = Contributr.User.changeset(%Contributr.User{}, user)
     case Repo.get_by(Contributr.User, email: user.email) do 
       nil ->
@@ -40,7 +39,6 @@ defmodule UserFromAuth do
             Logger.error "unable to insert record" <> changeset
         end 
       %Contributr.User{} = u -> 
-        #update = %{uid: user.uid, access_token: user.access_token}
         changeset = Contributr.User.changeset(u, user)
         case Repo.update(changeset) do
           {:ok, _user} ->
@@ -52,17 +50,16 @@ defmodule UserFromAuth do
   end
 
   defp basic_info(auth) do
-    #IO.inspect(auth)
-  	%{uid: auth.uid, 
-      name: name_from_auth(auth), 
-      avatar_url: auth.info.image, 
-      email: auth.info.email, 
+    %{uid: auth.uid,
+      name: name_from_auth(auth),
+      avatar_url: auth.info.image,
+      email: auth.info.email,
       access_token: auth.extra.raw_info.token.access_token,
       expires_at: auth.extra.raw_info.token.expires_at
     }
   end
-	
-	defp name_from_auth(auth) do
+
+  defp name_from_auth(auth) do
     if auth.info.name do
       auth.info.name
     else

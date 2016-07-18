@@ -1,22 +1,7 @@
 <div class="jumbotron">
   <h2><%= gettext "Welcome to %{name}", name: "Contributr" %></h2>
   <p class="lead"> A tool to help give back to your co-workers </p>
+
+  <a href="<%= org_user_path(@conn, :index, "ingage") %>" > Ingage Partners </a>
 </div>
 
-
-
-<div class="row marketing">
-  <div class="col-lg-6">
-    <h4> </h4>
-    <ul>
-
-    </ul>
-  </div>
-
-  <div class="col-lg-6">
-    <h4> </h4>
-    <ul>
-
-    </ul>
-  </div>
-</div>

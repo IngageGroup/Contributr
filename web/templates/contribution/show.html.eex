@@ -1,0 +1,23 @@
+<h2>Show contribution</h2>
+
+<ul>
+
+  <li>
+    <strong>Contr to:</strong>
+    <%= @contribution.contr_to %>
+  </li>
+
+  <li>
+    <strong>Amount:</strong>
+    <%= @contribution.amount %>
+  </li>
+
+  <li>
+    <strong>Comments:</strong>
+    <%= @contribution.comments %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: contribution_path(@conn, :edit, @contribution) %>
+<%= link "Back", to: contribution_path(@conn, :index) %>

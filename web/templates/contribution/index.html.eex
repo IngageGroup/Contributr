@@ -1,0 +1,30 @@
+<h2>Listing contributions</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Contribute to</th>     
+      <th>Amount</th>
+      <th>Comments</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for contribution <- @contributions do %>
+    <tr>
+      <td><%= contribution.contr_to %></td>      
+      <td><%= contribution.amount %></td>
+      <td><%= contribution.comments %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: contribution_path(@conn, :show, contribution), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: contribution_path(@conn, :edit, contribution), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: contribution_path(@conn, :delete, contribution), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New contribution", to: contribution_path(@conn, :new) %>

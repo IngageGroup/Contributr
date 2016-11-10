@@ -16,6 +16,8 @@
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
 defmodule Contributr.Plugs.OrganizationExists do
+  require Logger
+
   @moduledoc """
     Plug to determine if an organization exists 
   """
@@ -27,6 +29,7 @@ defmodule Contributr.Plugs.OrganizationExists do
   def init(default), do: default
 
   def call(%Plug.Conn{params: %{"organization" => org}} = conn, _default) do 
+            Logger.info "Var value: #{inspect(conn.params["organization"])}"
     case Repo.get_by(Organization, url: conn.params["organization"]) do 
           nil -> conn |> put_flash(:error, "Organization not found") |> redirect(to: "/") |> halt
           %Organization{} = org -> assign(conn, :organization, org)

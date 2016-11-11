@@ -7,7 +7,7 @@
 
   <div class="form-group">
     <%= label f, :contr_to, class: "control-label" %>
-    <%= text_input f, :contr_to, class: "form-control" %>
+    <%= select f, :eligible_users, class: "mui-dropdown__menu--right" %>
     <%= error_tag f, :contr_to %>
   </div>
 

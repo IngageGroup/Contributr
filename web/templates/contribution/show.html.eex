@@ -3,8 +3,8 @@
 <ul>
 
   <li>
-    <strong>Contr to:</strong>
-    <%= @contribution.contr_to %>
+    <strong>Contribute to:</strong>
+    <%= @eligible_users %>
   </li>
 
   <li>

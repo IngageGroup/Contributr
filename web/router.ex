@@ -59,7 +59,7 @@ defmodule Contributr.Router do
     get "/", PageController, :index
     get "/login", LoginController, :index
 
-    resources "/contributions", ContributionController
+
   
   end
 
@@ -68,7 +68,8 @@ defmodule Contributr.Router do
     pipe_through [:browser,:organization]
 
     get "/", ApplicationController, :index
-    resources "/users", OrgUserController 
+    resources "/users", OrgUserController
+    resources "/contributions", ContributionController
   end
 
 end

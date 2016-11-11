@@ -1,8 +1,11 @@
 defmodule Contributr.ContributionController do
+require Logger
   use Contributr.Web, :controller
 
   alias Contributr.Contribution
-  plug Contributr.Plugs.Authenticated 
+  plug Contributr.Plugs.Authenticated
+
+
  
   def index(conn, _params) do
     contributions = Repo.all(Contribution)
@@ -10,13 +13,15 @@ defmodule Contributr.ContributionController do
   end
 
   def new(conn, _params) do
+    Logger.info "#{inspect(current_user(conn).name)}"
     changeset = Contribution.changeset(%Contribution{})
-    render(conn, "new.html", changeset: changeset)
+    users_in_org()
+    render(conn, "new.html", changeset: changeset, current_user: current_user(conn), all_users: [])
   end
 
   def create(conn, %{"contribution" => contribution_params}) do    
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
-    changeset = Contribution.changeset(%Contribution{contr_from: user.id}, contribution_params)
+    changeset = Contribution.changeset(%Contribution{from_user_id: user.id}, contribution_params)
     
     case Repo.insert(changeset) do
       {:ok, _contribution} ->
@@ -28,12 +33,14 @@ defmodule Contributr.ContributionController do
     end
   end
 
-  def show(conn, %{"id" => id}) do  
+  def show(conn, %{"id" => id}) do
     contribution = Repo.get!(Contribution, id)
     render(conn, "show.html", contribution: contribution)
   end
 
   def edit(conn, %{"id" => id}) do
+
+
     contribution = Repo.get!(Contribution, id)
     changeset = Contribution.changeset(contribution)
     render(conn, "edit.html", contribution: contribution, changeset: changeset)
@@ -55,13 +62,21 @@ defmodule Contributr.ContributionController do
 
   def delete(conn, %{"id" => id}) do
     contribution = Repo.get!(Contribution, id)
-
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
     Repo.delete!(contribution)
-
     conn
     |> put_flash(:info, "Contribution deleted successfully.")
     |> redirect(to: contribution_path(conn, :index))
+    end
+
+
+
+
+  def current_user(conn) do
+   Repo.get_by(Contributr.User , uid: get_session(conn, :current_user).uid)
   end
-end
+  end
+
+
+

@@ -13,13 +13,11 @@ require Logger
   end
 
   def new(conn, _params) do
-    Logger.info "#{inspect(current_user(conn).name)}"
-    changeset = Contribution.changeset(%Contribution{})
-    users_in_org()
+    changeset = Contribution.changeset(%Contribution{})    
     render(conn, "new.html", changeset: changeset, current_user: current_user(conn), all_users: [])
   end
 
-  def create(conn, %{"contribution" => contribution_params}) do    
+  def create(conn, %{"organization" => organization, "contribution" => contribution_params}) do    
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
     changeset = Contribution.changeset(%Contribution{from_user_id: user.id}, contribution_params)
     
@@ -27,7 +25,7 @@ require Logger
       {:ok, _contribution} ->
         conn
         |> put_flash(:info, "Contribution created successfully.")
-        |> redirect(to: contribution_path(conn, :index))
+        |> redirect(to: contribution_path(conn, :index, organization))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -46,7 +44,7 @@ require Logger
     render(conn, "edit.html", contribution: contribution, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "contribution" => contribution_params}) do
+  def update(conn, %{"organization" => organization, "id" => id, "contribution" => contribution_params}) do
     contribution = Repo.get!(Contribution, id)
     changeset = Contribution.changeset(contribution, contribution_params)
 
@@ -54,20 +52,20 @@ require Logger
       {:ok, contribution} ->
         conn
         |> put_flash(:info, "Contribution updated successfully.")
-        |> redirect(to: contribution_path(conn, :show, contribution))
+        |> redirect(to: contribution_path(conn, :show, organization, contribution))
       {:error, changeset} ->
         render(conn, "edit.html", contribution: contribution, changeset: changeset)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
+  def delete(conn, %{"organization" => organization, "id" => id}) do
     contribution = Repo.get!(Contribution, id)
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
     Repo.delete!(contribution)
     conn
     |> put_flash(:info, "Contribution deleted successfully.")
-    |> redirect(to: contribution_path(conn, :index))
+    |> redirect(to: contribution_path(conn, :index, organization))
     end
 
 

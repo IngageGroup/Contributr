@@ -20,4 +20,4 @@
 </ul>
 
 <%= link "Edit", to: contribution_path(@conn, :edit, @contribution) %>
-<%= link "Back", to: contribution_path(@conn, :index) %>
+<%= link "Back", to: contribution_path(@conn, :index, @organization) %>

@@ -27,4 +27,4 @@
   </tbody>
 </table>
 
-<%= link "New contribution", to: contribution_path(@conn, :new) %>
+<%= link "New contribution", to: contribution_path(@conn, :new, @organization) %>

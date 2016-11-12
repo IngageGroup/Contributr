@@ -58,9 +58,6 @@ defmodule Contributr.Router do
     # the home page
     get "/", PageController, :index
     get "/login", LoginController, :index
-
-
-  
   end
 
   scope "/:organization", Contributr do 

@@ -4,7 +4,7 @@
 
   <li>
     <strong>Contribute to:</strong>
-    <%= @eligible_users %>
+    <%= @contribution.to_user.name %>
   </li>
 
   <li>
@@ -19,5 +19,5 @@
 
 </ul>
 
-<%= link "Edit", to: contribution_path(@conn, :edit, @contribution) %>
+<%= link "Edit", to: contribution_path(@conn, :edit, @contribution, @organization) %>
 <%= link "Back", to: contribution_path(@conn, :index, @organization) %>

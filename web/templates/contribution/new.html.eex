@@ -1,5 +1,6 @@
 <h2>New contribution</h2>
 <%= render "form.html", changeset: @changeset,
-                        action: contribution_path(@conn, :create, @organization) %>
+                        action: contribution_path(@conn, :create, @organization),
+                        eligible_users: @eligible_users %>
 
 <%= link "Back", to: contribution_path(@conn, :index, @organization) %>

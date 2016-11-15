@@ -13,18 +13,18 @@
   <tbody>
 <%= for contribution <- @contributions do %>
     <tr>
-      <td><%= contribution.contr_to %></td>      
+      <td><%= contribution.to_user.name %></td>      
       <td><%= contribution.amount %></td>
       <td><%= contribution.comments %></td>
 
       <td class="text-right">
-        <%= link "Show", to: contribution_path(@conn, :show, contribution), class: "btn btn-default btn-xs" %>
-        <%= link "Edit", to: contribution_path(@conn, :edit, contribution), class: "btn btn-default btn-xs" %>
-        <%= link "Delete", to: contribution_path(@conn, :delete, contribution), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+        <%= link "Show", to: contribution_path(@conn, :show, @organization, contribution), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: contribution_path(@conn, :edit, @organization, contribution), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: contribution_path(@conn, :delete, @organization, contribution), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<%= link "New contribution", to: contribution_path(@conn, :new) %>
+<%= link "New contribution", to: contribution_path(@conn, :new, @organization) %>

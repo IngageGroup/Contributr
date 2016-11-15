@@ -22,9 +22,17 @@
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
           <%= if assigns[:current_user] do %>
-            <li> <a> Welcome <%= @current_user.name %> </a>  </li>
+            <li> <a> Welcome <%= @current_user.name %> </a></li>
+
+            <% if Map.has_key?(@current_user,:eligible_to_give) do %>
+                <li> <a href="<%= contribution_path(Contributr.Endpoint, :index, @organization)%>">
+                You have $ <%= @current_user.eligible_to_give || "0.00" %> remaining to contribute.</a>
+                </li>
+            <% else %>
+                <li> <a href='#!'> Sorry, you are not eligible to participate. </a> </li>
+            <% end %>
             <li>
-              <a  href="<%= auth_path(@conn, :delete) %>"> Logout </a>
+              <a href="<%= auth_path(@conn, :delete) %>"> Logout </a>
             </li>
           <% else %>  
             <li>

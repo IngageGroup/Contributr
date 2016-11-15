@@ -58,9 +58,6 @@ defmodule Contributr.Router do
     # the home page
     get "/", PageController, :index
     get "/login", LoginController, :index
-
-    resources "/contributions", ContributionController
-  
   end
 
   scope "/:organization", Contributr do 
@@ -68,7 +65,8 @@ defmodule Contributr.Router do
     pipe_through [:browser,:organization]
 
     get "/", ApplicationController, :index
-    resources "/users", OrgUserController 
+    resources "/users", OrgUserController
+    resources "/contributions", ContributionController
   end
 
 end

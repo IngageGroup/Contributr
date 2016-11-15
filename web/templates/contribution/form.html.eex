@@ -5,11 +5,14 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= label f, :contr_to, class: "control-label" %>
-    <%= text_input f, :contr_to, class: "form-control" %>
-    <%= error_tag f, :contr_to %>
-  </div>
+  <%= inputs_for f, :to_user, fn i -> %>
+    <div class="form-group">
+      <%= label i, :to_user, class: "control-label" %>
+      <%= select(i, :id, @eligible_users, class: "form-control") %>
+      <%= error_tag i, :to_user %>
+    </div>
+  <% end %>
+
 
   <div class="form-group">
     <%= label f, :amount, class: "control-label" %>

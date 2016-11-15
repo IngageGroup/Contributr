@@ -2,10 +2,11 @@ defmodule Contributr.Contribution do
   use Contributr.Web, :model
 
   schema "contributions" do
-    field :contr_to, :integer
-    field :contr_from, :integer
+    belongs_to :to_user, Contributr.User
+    belongs_to :from_user, Contributr.User
     field :amount, :float
     field :comments, :string
+
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule Contributr.Contribution do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:contr_to, :contr_from, :amount, :comments])
-    |> validate_required([:contr_to, :contr_from, :amount, :comments])
+    |> cast(params, [:to_user_id, :from_user_id, :amount, :comments])
+    |> validate_required([:to_user_id, :from_user_id, :amount, :comments])
   end
 end

@@ -1,5 +1,5 @@
 <h2>Previous contributions</h2>
-<div>You still have<%=Number.Currency.number_to_currency(@user.eligible_to_give)%> to give.</div>
+<h5>You have <%=@remaining%> to give.</h5>
 
 <table class="table">
   <thead>

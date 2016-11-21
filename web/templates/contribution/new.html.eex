@@ -1,4 +1,5 @@
 <h2>New contribution</h2>
+<h5>You have <%=@remaining%> to give.</h5>
 <%= render "form.html", changeset: @changeset,
                         action: contribution_path(@conn, :create, @organization),
                         eligible_users: @eligible_users %>

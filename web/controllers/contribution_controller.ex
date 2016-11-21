@@ -1,5 +1,6 @@
 defmodule Contributr.ContributionController do
-require Logger
+  import Number
+  require Number.Macros
   use Contributr.Web, :controller
 
   alias Contributr.Contribution
@@ -9,25 +10,32 @@ require Logger
   plug Contributr.Plugs.Authenticated
 
   def index(conn, %{"organization" => organization}) do
+
   user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
+  remaining = Number.Currency.number_to_currency(user.eligible_to_give)
     contributions = Repo.all(Contribution)
     |> Repo.preload(:to_user)
-    render(conn, "index.html", contributions: contributions, organization: organization, user: user)
+    render(conn, "index.html", contributions: contributions, organization: organization, remaining: remaining)
   end
 
   def new(conn,  %{"organization" => organization}) do
-  user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
+
     changeset = Contribution.changeset(%Contribution{})
     eligible_users = eligible_users(conn)
-    render(conn, "new.html", changeset: changeset, organization: organization, eligible_users: eligible_users, user: user)
+    user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
+    remaining = Number.Currency.number_to_currency(user.eligible_to_give)
+    render(conn, "new.html", changeset: changeset, organization: organization, eligible_users: eligible_users, remaining: remaining)
   end
 
   def create(conn, %{"organization" => organization, "contribution" => contribution_params}) do
-  #this whole method sucks.
+  #This whole method sucks because I couldnt figure out transactions fast enough.
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
+    remaining = Number.Currency.number_to_currency(user.eligible_to_give)
     to_user_id = parse_to_user(contribution_params)
     changeset = Contribution.changeset(%Contribution{from_user_id: user.id, to_user_id: to_user_id}, contribution_params)
-    if(deduct_from_user(contribution_params,user)) do
+    amount =  parse_to_amount(contribution_params)
+
+    if(deduct_from_user(amount,user)) do
         case Repo.insert(changeset) do
           {:ok, _contribution} ->
             conn
@@ -35,29 +43,30 @@ require Logger
             |> redirect(to: contribution_path(conn, :index, organization, user: user))
           {:error, changeset} ->
                   eligible_users = eligible_users(conn)
-                  render(conn, "new.html", changeset: changeset, organization: organization, eligible_users: eligible_users, user: user)
+                  render(conn, "new.html", changeset: changeset, organization: organization, eligible_users: eligible_users, remaining: remaining)
+                  add_to_user(amount,user)
         end
     else
        conn
         |> put_flash(:error, "Exceeded allowable amount")
-        |> redirect(to: contribution_path(conn, :new, organization))
+        |> redirect(to: contribution_path(conn, :new, organization, remaining: remaining))
     end
   end
 
   def show(conn, %{"organization" => organization, "id" => id}) do
     contribution = Repo.get!(Contribution, id)
     |> Repo.preload(:to_user)
- 
+
+    user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
+    remaining = Number.Currency.number_to_currency(user.eligible_to_give)
     eligible_users = eligible_users(conn)
-    render(conn, "show.html", contribution: contribution, organization: organization, eligible_users: eligible_users)
+    render(conn, "show.html", contribution: contribution, organization: organization, eligible_users: eligible_users, remaining: remaining)
   end
 
   def edit(conn, %{"organization" => organization, "id" => id}) do
-    contribution = Repo.get!(Contribution, id)
+    contribution = Repo.get!(Contribution, id: id["id"])
     |> Repo.preload(:to_user)
-
     eligible_users = eligible_users(conn)
-
     changeset = Contribution.changeset(contribution)
     render(conn, "edit.html", contribution: contribution, organization: organization, eligible_users: eligible_users, changeset: changeset)
   end
@@ -66,19 +75,34 @@ require Logger
     contribution = Repo.get!(Contribution, id)
     |> Repo.preload(:to_user)
 
+    user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
+    remaining = Number.Currency.number_to_currency(user.eligible_to_give)
+
     to_user_id = parse_to_user(contribution_params)
+    before_amount = contribution.amount
+    after_amount = parse_to_amount(contribution_params)
+
+    if(before_amount > after_amount) do
+      change = before_amount - after_amount
+      add_to_user(change, user)
+    else
+      change = after_amount - before_amount
+      deduct_from_user(change, user)
+    end
+
     
     changeset = Contribution.changeset(contribution, contribution_params)
     changeset = Ecto.Changeset.change(changeset, %{to_user_id: to_user_id})
+
 
     case Repo.update(changeset) do
       {:ok, contribution} ->
         conn
         |> put_flash(:info, "Contribution updated successfully.")
-        |> redirect(to: contribution_path(conn, :show, organization, contribution))
+        |> redirect(to: contribution_path(conn, :show, organization, contribution, remaining: remaining))
       {:error, changeset} ->
         eligible_users = eligible_users(conn)
-        render(conn, "edit.html", contribution: contribution, organization: organization, eligible_users: eligible_users, changeset: changeset)
+        render(conn, "edit.html", contribution: contribution, organization: organization, eligible_users: eligible_users, changeset: changeset, remaining: remaining)
     end
   end
 
@@ -95,15 +119,16 @@ require Logger
     add_to_user(contribution.amount,user)
   end
 
-  def deduct_from_user(params, user) do
+  def deduct_from_user(amount, user) do
     valid = false
-    amount =  parse_to_amount(params)
-    current_amount = user.eligible_to_give
-    new_amount = current_amount - amount
-    if new_amount >= 0 do
-        changeset = User.changeset(user,%{"eligible_to_give" => new_amount})
-        changeset = Repo.update(changeset)
-        valid = true
+    if amount do
+        current_amount = user.eligible_to_give
+        new_amount = current_amount - amount
+        if new_amount >= 0 do
+            changeset = User.changeset(user,%{"eligible_to_give" => new_amount})
+            changeset = Repo.update(changeset)
+            valid = true
+        end
     end
     valid
   end
@@ -136,7 +161,9 @@ require Logger
   end
   def parse_to_amount(params) do
      # TODO: See if there is a better way to get this
-     String.to_integer(params["amount"])
+     unless Number.Macros.is_blank params["amount"] do
+        String.to_float(params["amount"])
+     end
   end
 end
 

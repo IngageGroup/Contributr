@@ -48,6 +48,7 @@ defmodule Contributr.User do
   def changeset(model, params \\ %{}) do
     model
     |> cast(params, @required_fields, @optional_fields)
+    |> validate_number(:eligible_to_give, greater_than_or_equal_to: 0)
   end
 
   @spec users_in_org(Ecto.Query.t, String.t) :: [Ecto.Query.t]

@@ -1,4 +1,5 @@
-<h2>Listing contributions</h2>
+<h2>Previous contributions</h2>
+<div>You still have<%=Number.Currency.number_to_currency(@user.eligible_to_give)%> to give.</div>
 
 <table class="table">
   <thead>

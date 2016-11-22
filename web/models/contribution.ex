@@ -18,8 +18,7 @@ defmodule Contributr.Contribution do
     struct
     |> cast(params, [:to_user_id, :from_user_id, :amount, :comments])
     |> validate_required([:to_user_id, :from_user_id, :amount, :comments])
-    |> validate_length(:comments, min: 20)
+    |> validate_length(:comments, min: 20, max: 255)
+    |> validate_number(:amount, greater_than_or_equal_to: 0)
   end
-
-
 end

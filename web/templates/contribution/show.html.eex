@@ -1,23 +1,29 @@
-<h2>Show contribution</h2>
+<div class="mui-panel">
+    <span class="mui--text-headline">Previous contributions:</span>
+    <span class="mui--text-subhead pull-right"><%=Number.Currency.number_to_currency(@remaining)%> remaining.</span>
+</div>
 
+<div class="highlight" style="height:100px;">
 <ul>
-
   <li>
-    <strong>Contribute to:</strong>
+    <strong>Give to:</strong>
     <%= @contribution.to_user.name %>
   </li>
-
   <li>
     <strong>Amount:</strong>
-    <%= @contribution.amount %>
+    <%= Number.Currency.number_to_currency(@contribution.amount) %>
   </li>
-
   <li>
     <strong>Comments:</strong>
     <%= @contribution.comments %>
   </li>
-
 </ul>
+</div>
 
-<%= link "Edit", to: contribution_path(@conn, :edit, @contribution, @organization) %>
-<%= link "Back", to: contribution_path(@conn, :index, @organization) %>
+<div class="mui-panel">
+    <span>
+        <%= link "Edit", to: contribution_path(@conn, :edit,  @organization, @contribution), class: "mui-btn mui-btn--primary" %>
+        <%= link "Back", to: contribution_path(@conn, :index, @organization), class: "mui-btn mui-btn--primary"%>
+    </span>
+</div>
+

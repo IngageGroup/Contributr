@@ -21,7 +21,7 @@ defmodule Contributr.ContributionController do
 
   def new(conn,  %{"organization" => organization}) do
     changeset = Contribution.changeset(%Contribution{})
-    eligible_users = eligible_users(conn)
+    eligible_users = eligible_users(conn, organization)
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
 
     funds_remaining = Number.Currency.number_to_currency(funds_remaining(user))
@@ -30,7 +30,6 @@ defmodule Contributr.ContributionController do
   end
 
   def create(conn, %{"organization" => organization, "contribution" => contribution_params}) do
-  #This whole method sucks because I couldnt figure out transactions fast enough.
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
     to_user_id = parse_to_user(contribution_params)
     changeset = Contribution.changeset(%Contribution{from_user_id: user.id, to_user_id: to_user_id}, contribution_params)
@@ -43,7 +42,7 @@ defmodule Contributr.ContributionController do
         |> put_flash(:info, "Contribution created successfully.")
         |> redirect(to: contribution_path(conn, :index, organization, user: user))
       {:error, changeset} ->
-          eligible_users = eligible_users(conn)
+          eligible_users = eligible_users(conn,organization)
           render(conn, "new.html", changeset: changeset, organization: organization, eligible_users: eligible_users, remaining: funds_remaining)
 
     end
@@ -55,7 +54,7 @@ defmodule Contributr.ContributionController do
 
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
     remaining = Number.Currency.number_to_currency(user.eligible_to_give)
-    eligible_users = eligible_users(conn)
+    eligible_users = eligible_users(conn,organization)
     funds_remaining = Number.Currency.number_to_currency(funds_remaining(user))
     render(conn, "show.html", contribution: contribution, organization: organization, eligible_users: eligible_users, remaining: funds_remaining)
   end
@@ -64,7 +63,7 @@ defmodule Contributr.ContributionController do
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
     contribution = Repo.get!(Contribution, id: id["id"])
     |> Repo.preload(:to_user)
-    eligible_users = eligible_users(conn)
+    eligible_users = eligible_users(conn,organization)
     changeset = Contribution.changeset(contribution)
     change_amount = changeset.get_field(:amount)
     funds_remaining = Number.Currency.number_to_currency(funds_remaining(user))
@@ -94,7 +93,7 @@ defmodule Contributr.ContributionController do
         |> put_flash(:info, "Contribution updated successfully.")
         |> redirect(to: contribution_path(conn, :show, organization, contribution, remaining: funds_remaining))
       {:error, changeset} ->
-        eligible_users = eligible_users(conn)
+        eligible_users = eligible_users(conn,organization)
         render(conn, "edit.html", contribution: contribution, organization: organization, eligible_users: eligible_users, changeset: changeset, remaining: funds_remaining)
     end
     else
@@ -124,20 +123,21 @@ defmodule Contributr.ContributionController do
     
     mycontributions = Repo.all(from c in Contributr.Contribution,
                               where: c.from_user_id == ^id,
-                              select: {c.amount})
+                              select: sum(c.amount))
+    result = List.first(mycontributions)
 
-    contributions = Enum.reduce(mycontributions, 0, fn(x, acc) -> x + acc end)
 
+    user.eligible_to_give - Number.Conversion.to_float(result)
 
-    user.eligible_to_give -  contributions
   end
 
-  def eligible_users(conn) do
+  def eligible_users(conn, orgname) do
     user = current_user(conn)
-
     Repo.all(  
       from u in Contributr.User,
-      where: u.eligible_to_recieve == true and u.id != ^user.id,
+      join: ou in assoc(u, :organizations_users),
+      join: o in assoc(ou, :org),
+      where: u.eligible_to_recieve == true and o.url == ^orgname and u.id != ^user.id,
       select: {u.name, u.id}
     )
   end

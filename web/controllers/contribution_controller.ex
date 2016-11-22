@@ -126,7 +126,7 @@ defmodule Contributr.ContributionController do
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
     remaining = Number.Currency.number_to_currency(user.eligible_to_give)
     eligible_users = eligible_users(conn,organization)
-    funds_remaining = Number.Currency.number_to_currency(funds_remaining(user))
+    funds_remaining = funds_remaining(user)
 
     render(conn,
             "show.html",
@@ -144,7 +144,7 @@ defmodule Contributr.ContributionController do
 
     eligible_users = eligible_users(conn,organization)
 
-    funds_remaining = Number.Currency.number_to_currency(funds_remaining(user))
+    funds_remaining = funds_remaining(user)
     changeset = Contribution.changeset(contribution)
 
     Ecto.Changeset.validate_number(changeset,:amount, less_than_or_equal_to: funds_remaining)

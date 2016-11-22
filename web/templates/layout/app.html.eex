@@ -18,39 +18,44 @@
   </head>
 
   <body>
-    <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-          <%= if assigns[:current_user] do %>
-          <li><img src="<%= @current_user.avatar_url %>" /> </li>
-            <li><a> Welcome <%= @current_user.name %> </a></li>
-            <% if Map.has_key?(@current_user,:eligible_to_give) do %>
-                <li> <a href="<%= contribution_path(Contributr.Endpoint, :index, @organization)%>">
-                You have $ <%= @current_user.eligible_to_give || "0.00" %> remaining to contribute.</a>
-                </li>
-            <% else %>
-                <li> <a href='#!'> Sorry, you are not eligible to participate. </a> </li>
-            <% end %>
-            <li><a href="<%= auth_path(@conn, :delete) %>"> Logout </a></li>
-          <% else %>  
-            <li><a class="btn btn-primary" href="<%= auth_path(@conn, :request, "google") %>"> Login </a></li>
-          <% end %>
-          </ul>
-        </nav>
-        <span class="logo">
-          <h4> CONTRIBUTR </h4>
-        </span>
-      </header>
+      <div class="mui-container-fluid mui--bg-primary-dark">
+            <nav role="navigation">
+              <div class="mui--pull-right">
+                  <%= if assigns[:current_user] do %>
 
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+                      <span><img src="<%= @current_user.avatar_url %>" /></span>
+                      <span>
+                        <a href="/">
+                            <span class="mui--text-white">Welcome <%= @current_user.name %></span>
+                        </a>
+                      </span>
+                      <span>
+                        <a href="<%= auth_path(@conn, :delete) %>">
+                            <span class="mui--text-white"> Logout</span>
+                        </a>
+                      </span>
 
-      <main role="main">
-        <%= render @view_module, @view_template, assigns %>
-      </main>
+                  <% else %>
+                    <span>
+                        <a class="btn btn-primary" href="<%= auth_path(@conn, :request, "google") %>">
+                            <span class="mui--text-white">  Login</span>
+                        </a>
+                    </span>
+                  <% end %>
+              </div>
+              <ul class="nav nav-pills brand">
+                  <li><a href="/"><span class="mui--text-display1 mui--text-white">CONTRIBUTR</span></a></li>
+              </ul>
+            </nav>
+      </div>
+      <div class="mui-container" style="padding-top: 10px">
+        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 
-    </div> <!-- /container -->
+        <main role="main">
+          <%= render @view_module, @view_template, assigns %>
+        </main>
+      </div> <!-- /container -->
     <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
     <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>

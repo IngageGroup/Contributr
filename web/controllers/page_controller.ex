@@ -19,6 +19,23 @@ defmodule Contributr.PageController do
   use Contributr.Web, :controller
 
   def index(conn, _params) do
-    render conn, "index.html", current_user: get_session(conn, :current_user)
+    current_user = get_session(conn, :current_user)
+    if current_user == nil do
+      # not logged in....
+      render conn, "index.html", user_id: "", org_name: "", org_url: "", current_user: current_user
+    else
+      uid = current_user.uid
+      user = Repo.get_by(Contributr.User, uid: uid)
+      orguser = Repo.get_by(Contributr.OrganizationsUsers, user_id: user.id)
+      org = Repo.get_by(Contributr.Organization, id: orguser.org_id)
+      render conn, "index.html",
+            user_id: user.id,
+            org_name: org.name,
+            org_url: org.url,
+            current_user: user,
+            organization: org
+    end
+
+
   end
 end

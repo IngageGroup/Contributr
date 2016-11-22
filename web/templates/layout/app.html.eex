@@ -10,6 +10,7 @@
       <%= tag :meta, name: "channel_token", content: Phoenix.Token.sign(@conn, "user", @current_user.uid) %>
     <% end %>
     <title> <%= assigns[:page_title] || "Home" %> |  Contributr </title>
+    <link href="//cdn.muicss.com/mui-latest/css/mui.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -22,8 +23,8 @@
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
           <%= if assigns[:current_user] do %>
-            <li> <a> Welcome <%= @current_user.name %> </a></li>
-
+          <li><img src="<%= @current_user.avatar_url %>" /> </li>
+            <li><a> Welcome <%= @current_user.name %> </a></li>
             <% if Map.has_key?(@current_user,:eligible_to_give) do %>
                 <li> <a href="<%= contribution_path(Contributr.Endpoint, :index, @organization)%>">
                 You have $ <%= @current_user.eligible_to_give || "0.00" %> remaining to contribute.</a>
@@ -31,17 +32,14 @@
             <% else %>
                 <li> <a href='#!'> Sorry, you are not eligible to participate. </a> </li>
             <% end %>
-            <li>
-              <a href="<%= auth_path(@conn, :delete) %>"> Logout </a>
-            </li>
+            <li><a href="<%= auth_path(@conn, :delete) %>"> Logout </a></li>
           <% else %>  
-            <li>
-							<a class="btn btn-primary" href="<%= auth_path(@conn, :request, "google") %>"> Login </a> </li>
+            <li><a class="btn btn-primary" href="<%= auth_path(@conn, :request, "google") %>"> Login </a></li>
           <% end %>
           </ul>
         </nav>
         <span class="logo">
-          <h1> CONTRIBUTR </h1> 
+          <h4> CONTRIBUTR </h4>
         </span>
       </header>
 
@@ -53,6 +51,8 @@
       </main>
 
     </div> <!-- /container -->
+    <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

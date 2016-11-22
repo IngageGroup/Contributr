@@ -46,7 +46,7 @@ defmodule Contributr.AuthController do
         UserFromAuth.create_or_update(conn, user)
         conn
         |> put_flash(:info, "Successfully authenticated.")
-        |> put_session(:current_user, user)
+        |>  put_session(:current_user, user)
         |> redirect(to: "/", token: token)
       {:error, reason} ->
         conn

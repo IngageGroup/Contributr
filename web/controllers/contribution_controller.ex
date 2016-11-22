@@ -35,7 +35,7 @@ defmodule Contributr.ContributionController do
     to_user_id = parse_to_user(contribution_params)
     changeset = Contribution.changeset(%Contribution{from_user_id: user.id, to_user_id: to_user_id}, contribution_params)
 
-    change_amount = changeset.get_field(:amount)
+
     funds_remaining = Number.Currency.number_to_currency(funds_remaining(user))
     case Repo.insert(changeset) do
       {:ok, _contribution} ->

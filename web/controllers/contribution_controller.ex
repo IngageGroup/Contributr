@@ -37,11 +37,6 @@ defmodule Contributr.ContributionController do
 
     change_amount = changeset.get_field(:amount)
     funds_remaining = Number.Currency.number_to_currency(funds_remaining(user))
-    if change_amount > funds_remaining do
-        changeset
-        |> add_error(:base, "Amount exceeds allowable amount.")
-    end
-
     case Repo.insert(changeset) do
       {:ok, _contribution} ->
         conn

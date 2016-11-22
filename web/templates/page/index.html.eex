@@ -1,7 +1,22 @@
-<div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}", name: "Contributr" %></h2>
-  <p class="lead"> A tool to help give back to your co-workers </p>
-
-  <a href="<%= org_user_path(@conn, :index, "ingage") %>" > Ingage Partners </a>
+<div class="mui-panel">
+    <div class="mui--text-headline center"><%= gettext "Welcome to %{name}", name: "Contributr", class: "mui--text-heading" %></div>
+    <div class="mui--text-subhead center">A tool to help give back to your co-workers </div>
 </div>
 
+<div class="highlight" style="height:100px;">
+  <span>
+    <div>
+        <a href="<%= org_user_path(@conn, :index, @org_url) %>" >
+                <span class=" mui--align-top  mui--text-dark-secondary mui--text-display1" style="text-transform: capitalize;"}">
+                    <div class="mui--text-center"><%="#{@org_name}"%></div>
+                </span>
+        </a>
+    </div>
+    <div class="mui--align-bottom mui--text-center mui--text-dark-secondary mui--text-headline">
+        <a href='<%="#{@org_name}/user/#{@user_id}"%>' >My Profile</a>
+    </div>
+  </span>
+</div>
+
+<div class="mui-panel">
+</div>

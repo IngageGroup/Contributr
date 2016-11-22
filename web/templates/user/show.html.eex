@@ -1,23 +1,13 @@
-<h2>Show user</h2>
+<div class="mui-panel"><div class="mui--text-display1"><%= @user.name %></div></div>
 
-<ul>
+<div class="highlight" style="height:100px;">
+  <span>
+    <span></span>
+    <span><a href="<%= contribution_path(@conn, :index, @organization)%>"><strong>Contribution Form:</strong></a></span>
+  </span>
+</div>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @user.name %>
-  </li>
-
-  <li>
-    <strong>Email:</strong>
-    <%= @user.email %>
-  </li>
-
-  <li>
-    <strong>Avatar:</strong>
-    <img src="<%= @user.avatar_url %>" />
-  </li>
-
-</ul>
-
-<%= link "Edit", to: user_path(@conn, :edit, @user) %>
-<%= link "Back", to: user_path(@conn, :index) %>
+<div class="mui-panel">
+<span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span>
+<span><%= link "Back", to: user_path(@conn, :index) %></span>
+</div>

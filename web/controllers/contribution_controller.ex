@@ -68,8 +68,7 @@ defmodule Contributr.ContributionController do
 
         end
     else
-        formatted_entry = Number.Currency.number_to_currency(entered_amount)
-        msg = "#{formatted_entry} exceeds allowable amount"
+        msg = "Entry exceeds allowable amount"
         eligible_users = eligible_users(conn,organization)
         conn
         |> put_flash(:error, msg)
@@ -98,7 +97,7 @@ defmodule Contributr.ContributionController do
           {:ok, contribution} ->
             conn
             |> put_flash(:info, "Contribution updated successfully.")
-            |> redirect(to: contribution_path(conn, :show, organization, contribution, remaining: funds_remaining))
+            |> redirect(to: contribution_path(conn, :show, organization, contribution, remaining: "#{funds_remaining}"))
           {:error, changeset} ->
             eligible_users = eligible_users(conn,organization)
             render(conn,

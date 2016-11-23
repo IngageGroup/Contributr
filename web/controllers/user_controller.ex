@@ -48,11 +48,13 @@ defmodule Contributr.UserController do
 
   def show(conn, %{"organization" => organization, "id" => id}) do
     user = Repo.get!(User, id)
+    check_auth(conn, user)
     render(conn, "show.html", user: user, current_user: user, organization: organization)
   end
 
   def edit(conn, %{"id" => id}) do
     user = Repo.get!(User, id)
+    check_auth(conn, user)
     changeset = User.changeset(user)
 
     render(conn, "edit.html", user: user, changeset: changeset, current_user: get_session(conn, :current_user))
@@ -60,6 +62,7 @@ defmodule Contributr.UserController do
 
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Repo.get!(User, id)
+    check_auth(conn, user)
     changeset = User.changeset(user, user_params)
 
     case Repo.update(changeset) do
@@ -74,6 +77,7 @@ defmodule Contributr.UserController do
 
   def delete(conn, %{"id" => id}) do
     user = Repo.get!(User, id)
+    check_auth(conn, user)
 
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
@@ -82,5 +86,15 @@ defmodule Contributr.UserController do
     conn
     |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: user_path(conn, :index))
+  end
+
+  def check_auth(conn, user) do
+      currentUser = Repo.get_by(Contributr.User , uid: get_session(conn, :current_user).uid)
+      if  user.id != currentUser.id do
+          msg = "You should not attempt to view that page. I'm watching you."
+          conn
+          |> put_flash(:error, msg)
+          |> redirect(to: "/")
+      end
   end
 end

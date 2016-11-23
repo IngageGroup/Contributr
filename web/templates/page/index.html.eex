@@ -6,14 +6,12 @@
 <div class="highlight" style="height:100px;">
   <span>
     <div>
-        <a href="<%= org_user_path(@conn, :index, @org_url) %>" >
-                <span class=" mui--align-top  mui--text-dark-secondary mui--text-display1" style="text-transform: capitalize;"}">
-                    <div class="mui--text-center"><%="#{@org_name}"%></div>
-                </span>
-        </a>
+        <span class=" mui--align-top  mui--text-dark-secondary mui--text-title" style="text-transform: capitalize;"}">
+            <div class="mui--text-center"><%="Logged in to #{@org_name}"%></div>
+        </span>
     </div>
     <div class="mui--align-bottom mui--text-center mui--text-dark-secondary mui--text-headline">
-        <a href='<%="#{@org_name}/user/#{@user_id}"%>' >My Profile</a>
+        <a href='<%=contribution_path(@conn, :index, @org_name)%>' >Start contributing</a>
     </div>
   </span>
 </div>

@@ -13,7 +13,7 @@
 # GNU General Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+# along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
 defmodule Contributr.UserController do
   use Contributr.Web, :controller
@@ -21,6 +21,7 @@ defmodule Contributr.UserController do
   alias Contributr.User
 
   plug :scrub_params, "user" when action in [:create, :update]
+  plug Contributr.Plugs.Authenticated
 
   def index(conn, _params) do
     users = Repo.all(User)
@@ -45,14 +46,15 @@ defmodule Contributr.UserController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"organization" => organization, "id" => id}) do
     user = Repo.get!(User, id)
-    render(conn, "show.html", user: user, current_user: get_session(conn, :current_user))
+    render(conn, "show.html", user: user, current_user: user, organization: organization)
   end
 
   def edit(conn, %{"id" => id}) do
     user = Repo.get!(User, id)
     changeset = User.changeset(user)
+
     render(conn, "edit.html", user: user, changeset: changeset, current_user: get_session(conn, :current_user))
   end
 

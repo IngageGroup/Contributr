@@ -11,7 +11,8 @@ config :contributr, Contributr.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin"]]
+  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
+    cd: Path.expand("../", __DIR__)]]
 
 # Watch static and templates for browser reloading.
 config :contributr, Contributr.Endpoint,
@@ -36,7 +37,7 @@ config :phoenix, :stacktrace_depth, 20
 config :contributr, Contributr.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "postgres",
+  password: "password",
   database: "contributr_dev",
   hostname: "localhost",
   pool_size: 10

@@ -1,0 +1,16 @@
+<div class="mui-panel mui--clearfix">
+    <div class="mui--text-headline">New contribution</div>
+    <span class="mui--text-subhead pull-right"><%=Number.Currency.number_to_currency(@remaining)%> remaining.</span>
+</div>
+
+<div class="highlight mui--clearfix">
+        <%= render "form.html", changeset: @changeset,
+                        action: contribution_path(@conn, :create, @organization),
+                        eligible_users: @eligible_users%>
+</div>
+<div class="mui-panel mui--clearfix">
+    <div class="mui-col-md-10" >
+       <%= link "Back", to: contribution_path(@conn, :index, @organization, class: "mui-btn mui-btn--primary") %>
+    </div>
+</div>
+

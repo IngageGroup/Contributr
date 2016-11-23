@@ -20,13 +20,15 @@ defmodule Contributr.Organization do
 
   schema "orgs" do
     field :name, :string
+    field :url, :string
     field :active, :boolean, default: false
     belongs_to :manager, Contributr.User
 
+    has_many :organizations_users, Contributr.OrganizationsUsers
     timestamps
   end
 
-  @required_fields ~w(name active)
+  @required_fields ~w(name active url)
   @optional_fields ~w(manager_id)
 
   @doc """
@@ -35,8 +37,10 @@ defmodule Contributr.Organization do
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
-  def changeset(model, params \\ :empty) do
+  def changeset(model, params \\ %{}) do
     model
     |> cast(params, @required_fields, @optional_fields)
+    |> validate_format(:url, ~r/[a-z0-9_]/)
+    |> unique_constraint(:url)
   end
 end

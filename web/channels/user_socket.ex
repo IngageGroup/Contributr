@@ -13,31 +13,37 @@
 # GNU General Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+# along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
 defmodule Contributr.UserSocket do
   use Phoenix.Socket
+  alias Contributr.User
+  import Ecto.Query 
 
   ## Channels
   # channel "rooms:*", Contributr.RoomChannel
+  channel "organization:*", Contributr.OrganizationChannel
 
   ## Transports
-  transport :websocket, Phoenix.Transports.WebSocket
+  transport :websocket, Phoenix.Transports.WebSocket,
+    timeout: 45_000
   # transport :longpoll, Phoenix.Transports.LongPoll
 
-  # Socket params are passed from the client and can
-  # be used to verify and authenticate a user. After
-  # verification, you can put default assigns into
-  # the socket that will be set for all channels, ie
-  #
-  #     {:ok, assign(socket, :user_id, verified_user_id)}
-  #
-  # To deny connection, return `:error`.
-  #
-  # See `Phoenix.Token` documentation for examples in
-  # performing token verification on connect.
-  def connect(_params, socket) do
-    {:ok, socket}
+  def connect(%{"token" => token}, socket) do
+    IO.puts token
+    case Phoenix.Token.verify(socket, "user", token, max_age: 1209600) do
+      {:ok, user_id} ->
+        query = from u in User, where: u.uid == ^user_id, select: u
+        user = Contributr.Repo.all query
+        if user do
+          socket = assign(socket, :user, user) 
+          {:ok, socket}
+        else
+          :error
+        end
+      {:error, _} ->
+        :error
+    end
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:

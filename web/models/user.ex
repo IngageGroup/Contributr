@@ -13,10 +13,11 @@
 # GNU General Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+# along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
 defmodule Contributr.User do
   use Contributr.Web, :model
+  import Ecto.Query
 
   schema "users" do
     field :name, :string
@@ -25,14 +26,18 @@ defmodule Contributr.User do
     field :avatar_url, :string
     field :access_token, :string
     field :expires_at, :integer
+    field :eligible_to_recieve, :boolean, default: false
+    field :eligible_to_give, :float
+    field :setup_admin, :boolean, default: false
     
     has_many :orgs, Contributr.Organization
+    has_many :organizations_users, Contributr.OrganizationsUsers
 
     timestamps
   end
 
   @required_fields ~w(name email)
-  @optional_fields ~w(uid access_token expires_at avatar_url)
+  @optional_fields ~w(uid access_token expires_at avatar_url eligible_to_recieve eligible_to_give setup_admin)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
@@ -40,8 +45,19 @@ defmodule Contributr.User do
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
-  def changeset(model, params \\ :empty) do
+  def changeset(model, params \\ %{}) do
     model
     |> cast(params, @required_fields, @optional_fields)
+    |> validate_number(:eligible_to_give, greater_than_or_equal_to: 0)
+  end
+
+  @spec users_in_org(Ecto.Query.t, String.t) :: [Ecto.Query.t]
+  def users_in_org(query, orgname) do 
+    from u in query,
+      join: ou in assoc(u, :organizations_users),
+      join: o in assoc(ou, :org),
+      where: o.url == ^orgname,
+      order_by: [asc: u.name],
+      select: u
   end
 end

@@ -1,0 +1,3 @@
+<div>
+  <%= assigns[:org].name %>
+</div>

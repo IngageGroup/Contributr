@@ -17,4 +17,17 @@
 
 defmodule Contributr.LayoutView do
   use Contributr.Web, :view
+
+  def org_name(organization) do
+    organization.name
+  end
+
+  def showManageMenu(nil) do 
+    false
+  end
+
+  def showManageMenu(role) do 
+    String.downcase(role) == "manager" 
+  end
+
 end

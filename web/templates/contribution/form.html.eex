@@ -1,0 +1,32 @@
+<div class="mui--clearfix">
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+  <div class="mui-panel mui--clearfix">
+      <%= inputs_for f, :to_user, fn i -> %>
+        <div class="mui-col-md-8 mui-select ">
+          <%= label i, :to_user %>
+          <%= select(i, :id, @eligible_users) %>
+          <%= error_tag i, :to_user %>
+        </div>
+      <% end %>
+
+
+      <div class="mui-col-md-8 mui-textfield ">
+        <%= label f, :amount  %>
+        <%= number_input f, :amount %>
+        <%= error_tag f, :amount %>
+      </div>
+
+      <div class="mui-col-md-8 mui-textfield " style: "height:75px">
+        <%= label f, :comments %>
+        <%= text_input f, :comments%>
+        <%= error_tag f, :comments %>
+      </div>
+  </div>
+  <%= submit "Submit", class: "mui-btn mui-btn--raised mui-btn--primary" %>
+<% end %>
+</div>

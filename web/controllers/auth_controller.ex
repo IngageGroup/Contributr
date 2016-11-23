@@ -13,7 +13,7 @@
 # GNU General Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+# along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
 defmodule Contributr.AuthController do
 
@@ -40,13 +40,14 @@ defmodule Contributr.AuthController do
   end
 
  	def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    case UserFromAuth.find_or_create(auth) do
+    case UserFromAuth.convert_to_user(auth) do
       {:ok, user} ->
+        token = Phoenix.Token.sign(conn, "user", user.uid)
         UserFromAuth.create_or_update(conn, user)
         conn
         |> put_flash(:info, "Successfully authenticated.")
-        |> put_session(:current_user, user)
-        |> redirect(to: "/")
+        |>  put_session(:current_user, user)
+        |> redirect(to: "/", token: token)
       {:error, reason} ->
         conn
         |> put_flash(:error, reason)

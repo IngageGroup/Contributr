@@ -1,11 +1,12 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Contributr.Repo.insert!(%Contributr.SomeModel{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+alias Contributr.Repo
+alias Contributr.User
+alias Contributr.Role
+
+superadmin = %Role{}
+              |> Role.changeset(%{name: "Superadmin", description: "Superadmin has access to everything"})
+              |> Repo.insert!
+
+manager = %Role{}
+          |> Role.changeset(%{name: "Manager", description: "The manager(s) of an organization"})
+          |> Repo.insert!
+

@@ -1,0 +1,35 @@
+<div class="mui-panel">
+    <span class="mui--text-headline">Previous contributions:</span>
+    <span class="mui--text-subhead pull-right"><%=Number.Currency.number_to_currency(@remaining)%> remaining.</span>
+</div>
+
+    <table class="mui-table mui-table--bordered">
+      <thead>
+        <tr>
+          <th>Giving to</th>
+          <th>Amount</th>
+          <th>Comments</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+    <%= for contribution <- @contributions do %>
+        <tr>
+          <td><%= contribution.to_user.name %></td>
+          <td><%= Number.Currency.number_to_currency(contribution.amount) %></td>
+          <td><%= contribution.comments %></td>
+
+          <td class="text-right">
+            <%= link "Show", to: contribution_path(@conn, :show, @organization, contribution), class: "btn btn-default btn-xs" %>
+            <%= link "Edit", to: contribution_path(@conn, :edit, @organization, contribution), class: "btn btn-default btn-xs" %>
+            <%= link "Delete", to: contribution_path(@conn, :delete, @organization, contribution), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+          </td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+<div class="mui-panel">
+    <span>
+        <%= link  "New", to: contribution_path(@conn, :new, @organization), class: "mui-btn mui-btn--primary"%>
+    </span>
+</div>

@@ -3,8 +3,8 @@ defmodule Contributr.OrganizationTest do
 
   alias Contributr.Organization
 
-  @valid_attrs %{active: true, name: "some content"}
-  @invalid_attrs %{}
+  @valid_attrs %{active: true, name: "some content", url: "asdf89_"}
+  @invalid_attrs %{url: "sdf asdfa "}
 
   test "changeset with valid attributes" do
     changeset = Organization.changeset(%Organization{}, @valid_attrs)

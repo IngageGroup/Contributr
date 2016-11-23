@@ -3,7 +3,7 @@ defmodule Contributr.UserTest do
 
   alias Contributr.User
 
-  @valid_attrs %{avatar_url: "some content", email: "some content", name: "some content", uid: "some content", access_token: "some content", expires_at: 1234}
+  @valid_attrs %{avatar_url: "some content", email: "some content", name: "some content", uid: "some content", access_token: "some content", expires_at: 1234, setup_admin: false}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

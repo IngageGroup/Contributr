@@ -22,31 +22,35 @@ defmodule Contributr.OrgController do
   alias Contributr.Organization
 
   plug :scrub_params, "organization" when action in [:create, :update]
+  plug Contributr.Plugs.Authenticated 
   
   def index(conn, _params) do
-    orgs = Organization |> Repo.all |> Repo.preload [:manager]
-    render(conn, "index.html", orgs: orgs, current_user: get_session(conn, :current_user))
+    orgs = Repo.all from o in Organization , preload: [:manager]
+    render(conn, "index.html", orgs: orgs)
   end
 
   def new(conn, _params) do
     changeset = Organization.changeset(%Organization{})
     register_users = User |> Repo.all
-    render(conn, "new.html", changeset: changeset, current_user: get_session(conn, :current_user), users: register_users)
+    render(conn, "new.html", changeset: changeset, users: register_users)
   end
 
   def create(conn, %{"organization" => org_params}) do
     changeset = Organization.changeset(%Organization{}, org_params)
-    IO.inspect(changeset)
     case Repo.insert(changeset) do
       {:ok, _org} ->
         conn
         |> put_flash(:info, "Organization created successfully.")
         |> redirect(to: org_path(conn, :index))
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset, current_user: get_session(conn, :current_user))
+        render(conn, "new.html", changeset: changeset)
     end
   end
-
-
+  
+  def show(conn, %{"id" => org_id} = params) do
+    query = from o in Organization, where: o.id == ^org_id
+    org = Repo.all query
+    render(conn, "show.html", org: org)
+  end
 
 end

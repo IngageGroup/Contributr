@@ -148,7 +148,7 @@ defmodule Contributr.ContributionController do
 
   def edit(conn, %{"organization" => organization, "id" => id}) do
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
-    contribution = Repo.get_by(Contribution, id)
+    contribution = Repo.get(Contribution, id)
     |> Repo.preload(:to_user)
 
     #TODO handle this with guardian, for now this will work.

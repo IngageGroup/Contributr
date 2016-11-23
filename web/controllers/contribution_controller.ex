@@ -121,7 +121,7 @@ defmodule Contributr.ContributionController do
         eligible_users = eligible_users(conn,organization)
         conn
         |> put_flash(:error, msg)
-        |> render(contribution_path(conn, :edit, organization, contribution, remaining: "#{funds_remaining}"))
+        |> redirect(to: contribution_path(conn, :edit, organization, contribution))
     end
   end
 

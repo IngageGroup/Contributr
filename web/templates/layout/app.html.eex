@@ -10,12 +10,7 @@
       <%= tag :meta, name: "channel_token", content: Phoenix.Token.sign(@conn, "user", @current_user.uid) %>
     <% end %>
     <title> <%= assigns[:page_title] || "Home" %> |  Contributr </title>
-    <link href="//cdn.muicss.com/mui-latest/css/mui.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.cyan-light_blue.min.css">
-  </head>
+   </head>
 
   <body>
       <div class="mui-container-fluid mui--bg-primary-dark">
@@ -23,7 +18,7 @@
               <div class="mui--pull-right">
                   <%= if assigns[:current_user] do %>
 
-                      <span><img src="<%= @current_user.avatar_url %>" /></span>
+                      <span class="circle"><img src="<%= @current_user.avatar_url %>" /></span>
                       <span>
                         <a href="/">
                             <span class="mui--text-white">Welcome <%= @current_user.name %></span>
@@ -43,9 +38,9 @@
                     </span>
                   <% end %>
               </div>
-              <ul class="nav nav-pills brand">
-                  <li><a href="/"><span class="mui--text-display1 mui--text-white">CONTRIBUTR</span></a></li>
-              </ul>
+              <div class="mui--pull-left mui--align-middle" style="pagging-top: 20px;">
+                  <a href="/"><div class="mui--text-display1 mui--text-white">CONTRIBUTR</div></a>
+              </div>
             </nav>
       </div>
       <div class="mui-container" style="padding-top: 10px">
@@ -59,6 +54,12 @@
     <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
     <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <link href="//cdn.muicss.com/mui-latest/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.cyan-light_blue.min.css">
+    <link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous">
   </body>
 </html>
 

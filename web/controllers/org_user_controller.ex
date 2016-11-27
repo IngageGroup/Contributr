@@ -15,12 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
+
 defmodule Contributr.OrgUserController do
   use Contributr.Web, :controller
 
   alias Contributr.User
   alias Contributr.OrganizationsUsers
   alias Contributr.Role
+  alias Contributr.Contribution
 
   plug :scrub_params, "user" when action in [:create, :update]
 
@@ -32,9 +34,12 @@ defmodule Contributr.OrgUserController do
 
   def index(conn, %{"organization" => org} ) do
     role = get_session(conn, :role)
+
+  
     case role do 
       %Role{name: "Manager"} = r -> 
-        users = OrganizationsUsers |> OrganizationsUsers.from_org(org) |> Repo.all
+        users = OrganizationsUsers |> OrganizationsUsers.from_org(org) |> Repo.all 
+        Enum.each(users, fn(x)-> x.user.contr=Contribution.funds_spent(x.user.id)  end)
         render(conn, "index.html", users: users, role: r.name)
       _ -> 
         conn

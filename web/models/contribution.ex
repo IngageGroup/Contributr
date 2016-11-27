@@ -21,4 +21,11 @@ defmodule Contributr.Contribution do
     |> validate_length(:comments, min: 20, max: 255)
     |> validate_number(:amount, greater_than_or_equal_to: 0)
   end
+
+  def funds_spent(id) do
+     from c in Contributr.Contribution,
+     where: c.from_user_id == ^id,
+     select: sum(c.amount)
+  end
+
 end

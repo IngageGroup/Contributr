@@ -7,7 +7,6 @@ defmodule Contributr.Contribution do
     field :amount, :float
     field :comments, :string
 
-
     timestamps()
   end
 
@@ -34,5 +33,14 @@ defmodule Contributr.Contribution do
      from c in query,
      where: c.from_user_id == ^id,
      select: sum(c.amount)
+  end
+
+  @spec given_by(Ecto.Query.t) :: [Ecto.Query.t]
+  def given_by(query) do
+     from u in query,
+     join: c in Contributr.Contribution, on: c.from_user_id == u.id,
+     group_by: [u.name, u.eligible_to_give],
+     select:  %{name: u.name, contributed: sum(c.amount), allowed: u.eligible_to_give},
+     order_by: [asc: u.name]
   end
 end

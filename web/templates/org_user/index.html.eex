@@ -3,29 +3,22 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Email</th>
-      <th>Role</th>
-      <th>Eligible To Give</th>
       <th>Amount Given</th>
+      <th>Eligible To Give</th>
       <th>Amount Left</th>
 
       <th> </th>
     </tr>
   </thead>
   <tbody>
-<%= for user <- @users do %>
-    <tr>
-      <td><%= user.user.name %></td>
-      <td><%= user.user.email %></td>
-      <td><%= user.role.name %></td>
-      <td><%= user.user.eligible_to_give %> </td>
-      <td><%= user.user.contr %></td>
-      <td><%= user.user.eligible_to_give - user.user.contr %></td>
-     
-      
-    </tr>
-<% end %>
-
+    <%= for user <- @users do %>
+        <tr>
+          <td><%= user.name %></td>
+          <td><%= user.contributed %></td>
+          <td><%= user.allowed%></td>
+          <td><%= user.allowed - user.contributed %></td>
+        </tr>
+    <% end %>
   </tbody>
 </table>
 

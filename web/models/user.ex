@@ -51,13 +51,11 @@ defmodule Contributr.User do
     |> validate_number(:eligible_to_give, greater_than_or_equal_to: 0)
   end
 
-  @spec users_in_org(Ecto.Query.t, String.t) :: [Ecto.Query.t]
-  def users_in_org(query, orgname) do 
-    from u in query,
+  @spec in_org(String.t) :: [Ecto.Query.t]
+  def in_org(org_url) do
+    from u in Contributr.User,
       join: ou in assoc(u, :organizations_users),
       join: o in assoc(ou, :org),
-      where: o.url == ^orgname,
-      order_by: [asc: u.name],
-      select: u
+      where: u.eligible_to_recieve == true and o.url == ^org_url
   end
 end

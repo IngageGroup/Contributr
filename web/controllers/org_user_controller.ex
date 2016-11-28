@@ -20,6 +20,7 @@ defmodule Contributr.OrgUserController do
   use Contributr.Web, :controller
 
   alias Contributr.User
+  alias Contributr.Organization
   alias Contributr.OrganizationsUsers
   alias Contributr.Role
   alias Contributr.Contribution
@@ -34,17 +35,21 @@ defmodule Contributr.OrgUserController do
 
   def index(conn, %{"organization" => org} ) do
     role = get_session(conn, :role)
+    uid = get_session(conn, :current_user).uid
 
-  
-    case role do 
-      %Role{name: "Manager"} = r -> 
-        users = OrganizationsUsers |> OrganizationsUsers.from_org(org) |> Repo.all 
-        Enum.each(users, fn(x)-> x.user.contr=Contribution.funds_spent(x.user.id)  end)
-        render(conn, "index.html", users: users, role: r.name)
-      _ -> 
+    user_id = Repo.get_by(Contributr.User, uid: uid ).id
+
+    contributions_by_user = User.in_org(org)
+    |> Contribution.given_by
+    |> Repo.all
+
+    case role do
+      %Role{name: "Admin"} = r ->
+        render(conn, "index.html", users: contributions_by_user, role: r.name)
+      _ ->
         conn
         |> put_flash(:error, "You do not have permission to see users")
-        |> redirect(to: "/" <> org)
+        |> redirect(to: "/")
     end
   end
 end

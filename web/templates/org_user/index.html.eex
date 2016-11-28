@@ -12,11 +12,14 @@
   </thead>
   <tbody>
     <%= for user <- @users do %>
+        <% view_allowed = user.allowed  || 0 %>
+        <% view_contrib = user.contributed || 0 %>
+        <% view_remaining = view_allowed - view_contrib  %>
         <tr>
           <td><%= user.name %></td>
-          <td><%= user.contributed %></td>
-          <td><%= user.allowed%></td>
-          <td><%= user.allowed - user.contributed %></td>
+          <td><%= Number.Currency.number_to_currency(view_contrib)%></td>
+          <td><%= Number.Currency.number_to_currency(view_allowed)%></td>
+          <td><%= Number.Currency.number_to_currency(view_remaining)%></td>
         </tr>
     <% end %>
   </tbody>

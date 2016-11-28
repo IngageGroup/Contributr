@@ -40,7 +40,8 @@ defmodule Contributr.OrgUserController do
     user_id = Repo.get_by(Contributr.User, uid: uid ).id
 
     contributions_by_user = User.in_org(org)
-    |> Contribution.given_by
+    |> User.eligible_to_give_more_than(0)
+    |> User.contributions_from
     |> Repo.all
 
     case role do

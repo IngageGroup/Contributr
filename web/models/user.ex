@@ -56,6 +56,36 @@ defmodule Contributr.User do
     from u in Contributr.User,
       join: ou in assoc(u, :organizations_users),
       join: o in assoc(ou, :org),
-      where: u.eligible_to_recieve == true and o.url == ^org_url
+      where: o.url == ^org_url
+  end
+
+  @spec eligible_to_recieve(Ecto.Query.t, Boolean.t) :: [Ecto.Query.t]
+  def eligible_to_recieve(query, status) do
+    from u in query,
+      where: u.eligible_to_recieve == ^status
+  end
+
+  @spec eligible_to_give_more_than(Ecto.Query.t, Integer.t) :: [Ecto.Query.t]
+  def eligible_to_give_more_than(query, amount) do
+    from u in query,
+      where: u.eligible_to_give > ^amount
+  end
+
+  @spec contributions_from(Ecto.Query.t) :: [Ecto.Query.t]
+  def contributions_from(query) do
+     from u in query,
+         left_join: c in Contributr.Contribution,  on: c.from_user_id == u.id,
+         group_by: [u.name, u.eligible_to_give],
+         select:  %{name: u.name, contributed: sum(c.amount), allowed: u.eligible_to_give},
+         order_by: [asc: u.name]
+  end
+
+  @spec contributions_to(Ecto.Query.t) :: [Ecto.Query.t]
+  def contributions_to(query) do
+     from u in query,
+         left_join: c in Contributr.Contribution,  on: c.to_user_id == u.id,
+         group_by: [u.name, u.eligible_to_give],
+         select:  %{name: u.name, contributed: sum(c.amount), allowed: u.eligible_to_give},
+         order_by: [asc: u.name]
   end
 end

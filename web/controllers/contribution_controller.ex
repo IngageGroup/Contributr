@@ -189,7 +189,7 @@ defmodule Contributr.ContributionController do
     id = user.id
     org_id = o.id
     
-    mycontributions = Repo.all(Contribution.funds_spent(id))
+    mycontributions = Repo.all(Contribution.funds_spent(Contribution, id))
 
 
     result = List.first(mycontributions)

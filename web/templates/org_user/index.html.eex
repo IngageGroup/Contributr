@@ -1,13 +1,12 @@
 <h1> Users </h1>
-<table class="table">
+<table class="mui-table mui-table--bordered">
   <thead>
     <tr>
       <th>Name</th>
       <th>Amount Given</th>
       <th>Eligible To Give</th>
       <th>Amount Left</th>
-
-      <th> </th>
+      <th>Percent complete</th>
     </tr>
   </thead>
   <tbody>
@@ -15,11 +14,13 @@
         <% view_allowed = user.allowed  || 0 %>
         <% view_contrib = user.contributed || 0 %>
         <% view_remaining = view_allowed - view_contrib  %>
+        <% view_percent = if (view_allowed == 0), do: "n/a", else: (view_contrib/view_allowed) * 100 %>
         <tr>
           <td><%= user.name %></td>
           <td><%= Number.Currency.number_to_currency(view_contrib)%></td>
           <td><%= Number.Currency.number_to_currency(view_allowed)%></td>
           <td><%= Number.Currency.number_to_currency(view_remaining)%></td>
+          <td><%= Number.Percentage.number_to_percentage(view_percent,  precision: 1)%></td>
         </tr>
     <% end %>
   </tbody>

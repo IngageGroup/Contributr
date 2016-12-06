@@ -22,18 +22,19 @@ defmodule Contributr.PageController do
     current_user = get_session(conn, :current_user)
     if current_user == nil do
       # not logged in....
-      render conn, "index.html", user_id: "", org_name: "", org_url: "", current_user: current_user
+      conn
+      |> put_flash(:error, "You must log in first")
+      |> redirect(to: "/login")
     else
       uid = current_user.uid
       user = Repo.get_by(Contributr.User, uid: uid)
       orguser = Repo.get_by(Contributr.OrganizationsUsers, user_id: user.id)
+      role = Repo.get_by(Contributr.Role, id: orguser.role_id)
       org = Repo.get_by(Contributr.Organization, id: orguser.org_id)
       render conn, "index.html",
-            user_id: user.id,
-            org_name: org.name,
-            org_url: org.url,
             current_user: user,
-            organization: org
+            organization: org,
+            role: role
     end
 
 

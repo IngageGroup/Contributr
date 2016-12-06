@@ -15,12 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
+
 defmodule Contributr.OrgUserController do
   use Contributr.Web, :controller
 
   alias Contributr.User
+  alias Contributr.Organization
   alias Contributr.OrganizationsUsers
   alias Contributr.Role
+  alias Contributr.Contribution
 
   plug :scrub_params, "user" when action in [:create, :update]
 
@@ -32,14 +35,24 @@ defmodule Contributr.OrgUserController do
 
   def index(conn, %{"organization" => org} ) do
     role = get_session(conn, :role)
-    case role do 
-      %Role{name: "Manager"} = r -> 
-        users = OrganizationsUsers |> OrganizationsUsers.from_org(org) |> Repo.all
-        render(conn, "index.html", users: users, role: r.name)
-      _ -> 
+    uid = get_session(conn, :current_user).uid
+
+    user_id = Repo.get_by(Contributr.User, uid: uid ).id
+
+    contributions_by_user = User.in_org(org)
+    |> User.eligible_to_give_more_than(0)
+    |> User.contributions_from
+    |> Repo.all
+
+
+
+    case role do
+      %Role{name: "Admin"} = r ->
+        render(conn, "status_report.html", users: contributions_by_user, role: r.name)
+      _ ->
         conn
         |> put_flash(:error, "You do not have permission to see users")
-        |> redirect(to: "/" <> org)
+        |> redirect(to: "/")
     end
   end
 end

@@ -189,9 +189,7 @@ defmodule Contributr.ContributionController do
     id = user.id
     org_id = o.id
     
-    mycontributions = Repo.all(from c in Contributr.Contribution,
-                              where: c.from_user_id == ^id,
-                              select: sum(c.amount))
+    mycontributions = Repo.all(Contribution.funds_spent(Contribution, id))
 
 
     result = List.first(mycontributions)
@@ -212,7 +210,6 @@ defmodule Contributr.ContributionController do
       select: {u.name, u.id}
     )
   end
-
 
   def current_user(conn) do
    Repo.get_by(Contributr.User , uid: get_session(conn, :current_user).uid)

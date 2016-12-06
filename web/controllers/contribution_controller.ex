@@ -14,8 +14,10 @@ defmodule Contributr.ContributionController do
 
   user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
   funds_remaining = funds_remaining(user)
-    contributions = Repo.all(Contribution)
-    |> Repo.preload(:to_user)
+  contributions = Repo.all(from c in Contributr.Contribution,
+                        where: c.from_user_id == ^user.id,
+                        select: c)
+  |> Repo.preload(:to_user)
 
     render(conn,
     "index.html",
@@ -65,7 +67,6 @@ defmodule Contributr.ContributionController do
                             organization: organization,
                             eligible_users: eligible_users,
                             remaining: funds_remaining)
-
         end
     else
         msg = "Entry exceeds allowable amount"
@@ -78,10 +79,16 @@ defmodule Contributr.ContributionController do
   end
 
   def update(conn, %{"organization" => organization, "id" => id, "contribution" => contribution_params}) do
+
     contribution = Repo.get!(Contribution, id)
     |> Repo.preload(:to_user)
 
+
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
+    contributionToUpdate = Repo.get(Contribution, id)
+
+    #TODO handle this with guardian, for now this will work.
+    check_ownership(conn, contributionToUpdate)
 
     to_user_id = parse_to_user(contribution_params)
 
@@ -110,17 +117,21 @@ defmodule Contributr.ContributionController do
         end
     else
         formatted_entry = Number.Currency.number_to_currency(entered_amount)
-        msg = "#{formatted_entry} exceeds allowable amount"
+        msg = "#{formatted_entry} exceeds allowable amount."
         eligible_users = eligible_users(conn,organization)
         conn
         |> put_flash(:error, msg)
-        |> redirect(to: contribution_path(conn, :new, organization, user: user))
+        |> redirect(to: contribution_path(conn, :edit, organization, contribution))
     end
   end
 
   def show(conn, %{"organization" => organization, "id" => id}) do
+
     contribution = Repo.get!(Contribution, id)
     |> Repo.preload(:to_user)
+
+    #TODO handle this with guardian, for now this will work.
+    check_ownership(conn, contribution)
 
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
     remaining = Number.Currency.number_to_currency(user.eligible_to_give)
@@ -137,9 +148,11 @@ defmodule Contributr.ContributionController do
 
   def edit(conn, %{"organization" => organization, "id" => id}) do
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
-    contribution = Repo.get_by(Contribution, id: id)
+    contribution = Repo.get(Contribution, id)
     |> Repo.preload(:to_user)
 
+    #TODO handle this with guardian, for now this will work.
+    check_ownership(conn, contribution)
 
     eligible_users = eligible_users(conn,organization)
 
@@ -159,6 +172,8 @@ defmodule Contributr.ContributionController do
   def delete(conn, %{"organization" => organization, "id" => id}) do
 
     contribution = Repo.get!(Contribution, id)
+    #TODO handle this with guardian, for now this will work.
+    check_ownership(conn, contribution)
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
     Repo.delete!(contribution)
@@ -174,9 +189,7 @@ defmodule Contributr.ContributionController do
     id = user.id
     org_id = o.id
     
-    mycontributions = Repo.all(from c in Contributr.Contribution,
-                              where: c.from_user_id == ^id,
-                              select: sum(c.amount))
+    mycontributions = Repo.all(Contribution.funds_spent(Contribution, id))
 
 
     result = List.first(mycontributions)
@@ -205,6 +218,16 @@ defmodule Contributr.ContributionController do
   def parse_to_user(params) do
     # TODO: See if there is a better way to get this
     String.to_integer(params["to_user"]["id"])
+  end
+
+  def check_ownership(conn, contribution) do
+    user = current_user(conn)
+    if  user.id != contribution.from_user_id do
+        msg = "You must own the contribution in order to edit or view it. I'm watching you."
+        conn
+        |> put_flash(:error, msg)
+        |> redirect(to: "/")
+    end
   end
 end
 

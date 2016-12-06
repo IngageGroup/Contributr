@@ -43,4 +43,12 @@ defmodule Contributr.Organization do
     |> validate_format(:url, ~r/[a-z0-9_]/)
     |> unique_constraint(:url)
   end
+
+  @spec has_user(Ecto.Query.t, String.t, String.t) :: [Ecto.Query.t]
+  def has_user(query, user_id, org_url) do
+    from u in query,
+      join: ou in assoc(u, :organizations_users),
+      join: o in assoc(ou, :org),
+      where: u.id == ^user_id and o.url == ^org_url
+  end
 end

@@ -1,0 +1,41 @@
+<div class="mui-panel">
+    <span class="mui--text-headline">Contribution status</span>
+</div>
+<div class="mui-container">
+    <table class="mui-table mui-table--bordered" data-sortable>
+      <thead>
+        <tr>
+          <th><a>Participant <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+          <th><a>Dollars Given <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+          <th><a>Eligible To Give <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+          <th><a>Dollars Left <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+          <th><a>Percent complete <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for user <- @users do %>
+            <% view_allowed = user.allowed  || 0 %>
+            <% view_contrib = user.contributed || 0 %>
+            <% view_remaining = view_allowed - view_contrib  %>
+            <% view_percent = if (view_allowed == 0), do: "n/a", else: (view_contrib/view_allowed) * 100 %>
+            <tr>
+              <td><%= user.name %></a></td>
+              <td><%= Number.Currency.number_to_currency(view_contrib)%></td>
+              <td><%= Number.Currency.number_to_currency(view_allowed)%></td>
+              <td><%= Number.Currency.number_to_currency(view_remaining)%></td>
+              <td><%= Number.Percentage.number_to_percentage(view_percent,  precision: 1)%></td>
+              <td>
+                <a class="mui-bg--primary" href="mailto:<%=user.email%>?subject=Please complete your contributions&body=You have given <%= Number.Percentage.number_to_percentage(view_percent,  precision: 1)%> of your available funds. Please log in and complete your contributions today.">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                </a>
+              </td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+</div>
+<div class="mui-panel">
+    <div class="mui--text-caption"><b>Note:</b> Email links may not work in Chrome, or if you have not set up a default mail client for your browser.</div>
+    <div class="mui--text-caption">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp If they do not, right click the link and select "copy email address" and craft your own email. </div>
+</div>

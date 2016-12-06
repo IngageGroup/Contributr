@@ -3,6 +3,6 @@ defmodule Contributr.PageControllerTest do
 
   test "GET /" do
     conn = get build_conn, "/"
-    assert html_response(conn, 200) =~ "CONTRIBUTR"
+    assert html_response(conn, 302) =~ "redirected"
   end
 end

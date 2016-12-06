@@ -68,6 +68,7 @@ defmodule Contributr.Router do
     resources "/user", UserController
     resources "/orgusers", OrgUserController
     resources "/contributions", ContributionController
+    resources "/comments", OrgUserCommentController
   end
 
 end

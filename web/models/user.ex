@@ -84,8 +84,8 @@ defmodule Contributr.User do
   def contributions_to(query) do
      from u in query,
          left_join: c in Contributr.Contribution,  on: c.to_user_id == u.id,
-         group_by: [u.name, u.eligible_to_give],
-         select:  %{name: u.name, contributed: sum(c.amount), allowed: u.eligible_to_give, email: u.email},
+         group_by: [u.name, u.eligible_to_recieve, u.email],
+         select:  %{name: u.name, contributed: sum(c.amount), allowed: u.eligible_to_recieve, email: u.email},
          order_by: [asc: u.name]
   end
 end

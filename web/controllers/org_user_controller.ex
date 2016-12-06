@@ -44,9 +44,11 @@ defmodule Contributr.OrgUserController do
     |> User.contributions_from
     |> Repo.all
 
+
+
     case role do
       %Role{name: "Admin"} = r ->
-        render(conn, "index.html", users: contributions_by_user, role: r.name)
+        render(conn, "status_report.html", users: contributions_by_user, role: r.name)
       _ ->
         conn
         |> put_flash(:error, "You do not have permission to see users")

@@ -7,14 +7,19 @@
   <span>
     <div>
         <span class=" mui--align-top  mui--text-dark-secondary mui--text-title" style="text-transform: capitalize;"}">
-            <div class="mui--text-center"><%="Logged in to #{@org_name}"%></div>
+            <div class="mui--text-center"><%="Logged in to #{@organization.name}"%></div>
         </span>
     </div>
-    <div class="mui--align-bottom mui--text-center mui--text-dark-secondary mui--text-headline">
-        <a href='<%=contribution_path(@conn, :index, @org_name)%>' >Start contributing</a>
+    <div class="mui--align-bottom mui--text-center mui--text-dark-secondary mui--text-headline mui--clearfix">
+        <a href='<%=contribution_path(@conn, :index, @organization.name)%>' >Start contributing</a>
+      <%= if @role.name == "Admin" do %>
+        <div ><a href='<%=contribution_path(@conn, :index, @organization.name)%>' >Status Report</a><div>
+      <% end %>
     </div>
+
   </span>
+
 </div>
 
-<div class="mui-panel">
+<div class="mui-panel mui--clearfix">
 </div>

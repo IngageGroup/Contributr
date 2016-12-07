@@ -17,6 +17,12 @@
 
 defmodule Contributr.OrgUserCommentView do
   use Contributr.Web, :view
+
+  def comments_for_user(id) do
+    Contributr.Contribution
+      |> Contributr.Contribution.comments_for(id)
+      |> Contributr.Repo.all
+  end
 end
 
 

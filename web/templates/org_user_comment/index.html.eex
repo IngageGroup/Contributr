@@ -1,20 +1,23 @@
+
 <div class="mui-panel">
-    <span class="mui--text-headline">Contribution status</span>
+    <div class="mui--clearfix">
+        <div class="mui--text-headline mui--pull-left">User Reports</div>
+        <div class="mui--pull-right"><a href="javascript:if(window.print)window.print()">
+            <i class="fa fa-print fa-3x" aria-hidden="true"></i></a>
+        </div>
+    </div>
+    <span >Reports will begin on next page. Disable double sided printing.</span>
 </div>
-<div class="mui-container">
-  <%= for user <- @users do %>
-    <table class="mui-table mui-table--bordered" data-sortable>
-      <thead>
-        <tr>
-          <th><a>Comments for <%= user.name %><i class="fa fa-sort" aria-hidden="true"></i></a></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><%= user.name %></a></td>
-        </tr>
-      </tbody>
-    </table>
-    <p style="page-break-after:always;"></p>
-  <% end %>
-</div>
+<div class="page-break"></div>
+<%= for user <- @users do %>
+    <div class="mui-panel">
+        <div class="mui--text-headline mui--divider-bottom"> <%= "#{user.name}" %></div>
+        <div style="padding-bottom:10px"></div>
+        <% comments = comments_for_user(user.id) %>
+            <%= for comment <- comments do %>
+                <div class="mui-col-xs-12" style="padding-bottom:10px"><%= "#{comment}" %></div>
+            <%= end %>
+        <div class="page-break"></div>
+    </div>
+<%= end %>
+

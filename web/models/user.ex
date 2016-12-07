@@ -74,9 +74,10 @@ defmodule Contributr.User do
   @spec contributions_from(Ecto.Query.t) :: [Ecto.Query.t]
   def contributions_from(query) do
      from u in query,
-         left_join: c in Contributr.Contribution,  on: c.from_user_id == u.id,
+         left_join: f in Contributr.Contribution,  on: f.from_user_id == u.id,
+         left_join: t in Contributr.Contribution,  on: t.to_user_id == u.id,
          group_by: [u.name, u.eligible_to_give, u.email],
-         select:  %{name: u.name, contributed: sum(c.amount), allowed: u.eligible_to_give, email: u.email},
+         select:  %{name: u.name, contributed: sum(f.amount), allowed: u.eligible_to_give, email: u.email, received: sum(t.amount)},
          order_by: [asc: u.name]
   end
 
@@ -86,6 +87,15 @@ defmodule Contributr.User do
          left_join: c in Contributr.Contribution,  on: c.to_user_id == u.id,
          group_by: [u.name, u.eligible_to_recieve, u.email],
          select:  %{name: u.name, contributed: sum(c.amount), allowed: u.eligible_to_recieve, email: u.email},
+         order_by: [asc: u.name]
+  end
+
+  @spec has_comments(Ecto.Query.t) :: [Ecto.Query.t]
+  def has_comments(query) do
+     from u in query,
+         inner_join: c in Contributr.Contribution,  on: c.to_user_id == u.id,
+         distinct: u.id,
+         select:  %{name: u.name, id: u.id},
          order_by: [asc: u.name]
   end
 end

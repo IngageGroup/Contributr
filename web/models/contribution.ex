@@ -34,4 +34,11 @@ defmodule Contributr.Contribution do
      where: c.from_user_id == ^id,
      select: sum(c.amount)
   end
+
+  @spec comments_for(Ecto.Query.t, String.t) :: [Ecto.Query.t]
+  def comments_for(query,id) do
+     from c in query,
+     where: c.to_user_id == ^id,
+     select: c.comments
+  end
 end

@@ -39,21 +39,43 @@ defmodule Contributr.OrgUserCommentController do
 
     user_id = Repo.get_by(Contributr.User, uid: uid ).id
 
-    contributions_to_user = User.in_org(org)
+    comments_for_user = User.in_org(org)
     |> User.eligible_to_recieve(true)
-    |> User.contributions_to()
+    |> User.has_comments()
     |> Repo.all
 
-    contributions_to_user.abc
-
     case role do
-      %Role{name: "Superadmin"} = r ->
-        render(conn, "index.html", users: contributions_to_user, role: r.name)
+      %Role{name: "Admin"} = r ->
+        render(conn, "index.html", users: comments_for_user, role: r.name)
       _ ->
         conn
         |> put_flash(:error, "You do not have permission to see users")
         |> redirect(to: "/")
     end
   end
+
+
+    def show(conn, %{ "organization" => org , "id" => id }) do
+      role = get_session(conn, :role)
+      uid = get_session(conn, :current_user).uid
+
+      user = Repo.get_by(Contributr.User, id: id )
+
+      comments_for_user = Contributr.Contribution
+      |> Contribution.comments_for(id)
+      |> Repo.all
+
+
+
+      case role do
+        %Role{name: "Admin"} = r ->
+          render(conn, "show.html", comments: comments_for_user, user: user)
+        _ ->
+          conn
+          |> put_flash(:error, "You do not have permission to see users")
+          |> redirect(to: "/")
+      end
+    end
+
 end
 

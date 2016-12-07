@@ -7,6 +7,7 @@ defmodule Contributr.Contribution do
     field :amount, :float
     field :comments, :string
 
+
     timestamps()
   end
 

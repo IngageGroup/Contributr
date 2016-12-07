@@ -18,7 +18,7 @@
         <%= for user <- @users do %>
             <% view_allowed = user.allowed  || 0 %>
             <% view_contrib = user.contributed || 0 %>
-            <% view_received = user.received|| 0 %>
+            <% view_received = contributed_to_user(user.id)|| 0 %>
             <% view_remaining = view_allowed - view_contrib  %>
             <% view_percent = if (view_allowed == 0), do: "n/a", else: (view_contrib/view_allowed) * 100 %>
             <tr>

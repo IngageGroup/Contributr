@@ -6,7 +6,7 @@
             <i class="fa fa-print fa-3x" aria-hidden="true"></i></a>
         </div>
     </div>
-    <span >Reports will begin on next page. Disable double sided printing.</span>
+    <span >Each box will print on a separate page. It might be necessary to disable double sided printing to achieve the desired result.</span>
 </div>
 <div class="page-break"></div>
 <%= for user <- @users do %>

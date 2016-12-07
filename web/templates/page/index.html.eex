@@ -12,8 +12,9 @@
     </div>
     <div class="mui--align-bottom mui--text-center mui--text-dark-secondary mui--text-headline mui--clearfix">
         <a href='<%=contribution_path(@conn, :index, @organization.name)%>' >Start contributing</a>
-      <%= if @role.name == "Admin" do %>
-        <div ><a href='<%=org_user_path(@conn, :index, @organization.name)%>' >Status Report</a><div>
+      <%= if @role.name == "Admin" || @role.name == "Superadmin" do %>
+        <div ><a href='<%=org_user_path(@conn, :index, @organization.name)%>' >Contribution Status Report</a><div>
+        <div ><a href='<%=org_user_comment_path(@conn, :index, @organization.name)%>' >User Report</a><div>
       <% end %>
     </div>
 

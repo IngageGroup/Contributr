@@ -98,9 +98,9 @@ a.circle { color: transparent; }
 /* Some print stuff */
 
 @media all {
-    .page-break, .no-print	{ display: none; }
+    .no-print	{ display: none; }
 }
 
 @media print {
-    .page-break	{ display: block; page-break-before: always; }
+    .page-break	{ display: block; page-break-after: always;}
 }

@@ -6,7 +6,7 @@ defmodule Contributr.Contribution do
     belongs_to :from_user, Contributr.User
     field :amount, :float
     field :comments, :string
-
+    belongs_to :event, Contributr.Event
 
     timestamps()
   end

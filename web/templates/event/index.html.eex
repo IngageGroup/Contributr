@@ -1,0 +1,36 @@
+<div class="mui-panel">
+    <span class="mui--text-headline">Manage Events:</span>
+</div>
+
+    <table class="mui-table mui-table--bordered">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Default Bonus</th>
+          <th>Start Date</th>
+          <th>End Date</>
+        </tr>
+      </thead>
+      <tbody>
+    <%= for event <- @events do %>
+        <tr>
+          <td><%= event.name %></td>
+          <td><%= event.description %></td>
+          <td><%= event.default_bonus %></td>
+          <td><%= event.start_date %></td>
+          <td><%= event.end_date %></td>
+          <td class="text-right">
+<!--<%= link "", to: event_path(@conn, :show, @organization, event), class: "mui--text-dark fa fa-file-text-o fa-lg" %>-->
+            <%= link "", to: event_path(@conn, :edit, @organization, event), class: "mui--text-secondary fa fa-pencil-square-o fa-lg" %>
+            <%= link "", to: event_path(@conn, :delete, @organization, event), method: :delete, data: [confirm: "Are you sure?"], class: "mui--text-danger fa fa-trash-o fa-lg" %>
+          </td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+<div class="mui-panel">
+    <span>
+        <%= link  "New", to: event_path(@conn, :new, @organization), class: " small mui-btn mui-btn--primary"%>
+    </span>
+</div>

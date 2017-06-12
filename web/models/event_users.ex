@@ -25,8 +25,8 @@ defmodule Contributr.EventUsers do
 
   def from_event(query, event) do
     from eu in query,
-      join: u in assoc(ou, :user),
-      join: e in assoc(ou, :event),
+      join: u in assoc(eu, :user),
+      join: e in assoc(eu, :event),
       where: e.id == ^event,
       order_by: [asc: u.name],
       select: eu

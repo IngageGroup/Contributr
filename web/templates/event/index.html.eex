@@ -21,9 +21,6 @@
           <td><%= event.start_date %></td>
           <td><%= event.end_date %></td>
           <td class="text-right">
-<!--<%= link "", to: event_path(@conn, :show, @organization, event), class: "mui--text-dark fa fa-file-text-o fa-lg" %>-->
-            <%= link "", to: event_path(@conn, :edit, @organization, event), class: "mui--text-secondary fa fa-pencil-square-o fa-lg" %>
-            <%= link "", to: event_path(@conn, :delete, @organization, event), method: :delete, data: [confirm: "Are you sure?"], class: "mui--text-danger fa fa-trash-o fa-lg" %>
           </td>
         </tr>
     <% end %>
@@ -31,6 +28,5 @@
     </table>
 <div class="mui-panel">
     <span>
-        <%= link  "New", to: event_path(@conn, :new, @organization), class: " small mui-btn mui-btn--primary"%>
     </span>
 </div>

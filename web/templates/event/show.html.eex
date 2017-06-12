@@ -1,6 +1,5 @@
 <div class="mui-panel">
     <span class="mui--text-headline">Previous contributions:</span>
-    <span class="mui--text-subhead pull-right"><%=Number.Currency.number_to_currency(@remaining)%> remaining.</span>
 </div>
 
 <div class="highlight" style="height:100px;">

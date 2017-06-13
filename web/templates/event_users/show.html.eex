@@ -1,0 +1,28 @@
+<h2>Show event users</h2>
+
+<ul>
+
+  <li>
+    <strong>Event:</strong>
+    <%= @event_users.event_id %>
+  </li>
+
+  <li>
+    <strong>User:</strong>
+    <%= @event_users.user_id %>
+  </li>
+
+  <li>
+    <strong>Eligible to receive:</strong>
+    <%= @event_users.eligible_to_receive %>
+  </li>
+
+  <li>
+    <strong>Eligible to give:</strong>
+    <%= @event_users.eligible_to_give %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: event_users_path(@conn, :edit, @event_users) %>
+<%= link "Back", to: event_users_path(@conn, :index) %>

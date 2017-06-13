@@ -14,7 +14,7 @@ defmodule Contributr.Event do
     timestamps()
   end
 
-  @required_fields ~w(name default_bonus, start_date, end_date)
+  @required_fields ~w(name default_bonus start_date end_date)
   @optional_fields ~w(description)
 
   @doc """
@@ -23,7 +23,7 @@ defmodule Contributr.Event do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_fields, @optional_fields)
-    |> validate_length(:name, min: 10, max: 255)
+    |> validate_length(:name, min: 1, max: 255)
     |> validate_number(:default_bonus, greater_than_or_equal_to: 0)
   end
 

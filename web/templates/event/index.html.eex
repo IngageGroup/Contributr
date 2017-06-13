@@ -10,6 +10,7 @@
           <th>Default Bonus</th>
           <th>Start Date</th>
           <th>End Date</>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -17,10 +18,11 @@
         <tr>
           <td><%= event.name %></td>
           <td><%= event.description %></td>
-          <td><%= event.default_bonus %></td>
+          <td><%= Number.Currency.number_to_currency(event.default_bonus) %></td>
           <td><%= event.start_date %></td>
           <td><%= event.end_date %></td>
           <td class="text-right">
+            <%= link "Edit", to: event_path(@conn, :edit, @organization, event), class: "btn btn-default btn-xs" %>
           </td>
         </tr>
     <% end %>

@@ -1,28 +1,26 @@
 <div class="mui-panel">
-    <span class="mui--text-headline">Previous contributions:</span>
+    <span class="mui--text-headline"><%=@event.name %>:</span>
 </div>
 
 <div class="highlight" style="height:100px;">
 <ul>
   <li>
-    <strong>Give to:</strong>
-    <%= @contribution.to_user.name %>
+    <strong>Description:</strong>
+    <%= @event.description %>
   </li>
   <li>
-    <strong>Amount:</strong>
-    <%= Number.Currency.number_to_currency(@contribution.amount) %>
+    <strong>Default Bonus:</strong>
+    <%= Number.Currency.number_to_currency(@event.default_bonus) %>
   </li>
   <li>
-    <strong>Comments:</strong>
-    <%= @contribution.comments %>
+    <strong>Start Date:</strong>
+    <%= @event.start_date %>
+  </li>
+  <li>
+    <strong>End Date:</strong>
+    <%= @event.end_date %>
   </li>
 </ul>
 </div>
 
-<div class="mui-panel">
-    <span>
-        <%= link "Edit", to: contribution_path(@conn, :edit,  @organization, @contribution), class: "mui-btn mui-btn--primary" %>
-        <%= link "Back", to: contribution_path(@conn, :index, @organization), class: "mui-btn mui-btn--primary"%>
-    </span>
-</div>
-
+<%= link "Back", to: event_path(@conn, :index, @organization) %>

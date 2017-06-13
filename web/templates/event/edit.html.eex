@@ -1,9 +1,6 @@
-<div class="mui-panel mui--clearfix">
-    <div class="mui--text-headline">New contribution</div>
-</div>
-<div class="highlight mui--clearfix">
-</div>
-<div class="mui-panel mui--clearfix">
-    <div class="mui-col-md-10" >
-    </div>
-</div>
+<h2>Edit event</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: event_path(@conn, :update, @event.id, @event) %>
+
+<%= link "Back", to: event_path(@conn, :index, @organization) %>

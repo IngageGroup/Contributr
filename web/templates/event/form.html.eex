@@ -9,7 +9,7 @@
 
       <div class="mui-col-md-8 mui-textfield ">
         <%= label f, :name  %>
-        <%= number_input f, :name %>
+        <%= text_input f, :name %>
         <%= error_tag f, :name %>
       </div>
 
@@ -21,7 +21,7 @@
 
       <div class="mui-col-md-8 mui-textfield " style: "height:75px">
         <%= label f, :default_bonus %>
-        <%= text_input f, :default_bonus%>
+        <%= number_input f, :default_bonus%>
         <%= error_tag f, :default_bonus %>
       </div>
 

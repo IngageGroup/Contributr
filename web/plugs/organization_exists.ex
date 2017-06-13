@@ -21,8 +21,7 @@ defmodule Contributr.Plugs.OrganizationExists do
   @moduledoc """
     Plug to determine if an organization exists 
   """
-  import Plug.Conn
-  use Contributr.Web, :controller
+ use Contributr.Web, :controller
 
   alias Contributr.Organization
   

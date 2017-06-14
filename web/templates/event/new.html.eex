@@ -3,9 +3,12 @@
 </div>
 
 <div class="highlight mui--clearfix">
+<%= render "form.html", changeset: @changeset,
+                        action: event_path(@conn, :create, @organization) %>
 </div>
 <div class="mui-panel mui--clearfix">
     <div class="mui-col-md-10" >
+        <%= link "Back", to: event_path(@conn, :index, @organization) %>
     </div>
 </div>
 

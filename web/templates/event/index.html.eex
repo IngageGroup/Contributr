@@ -30,5 +30,6 @@
     </table>
 <div class="mui-panel">
     <span>
+        <%= link "New Event", to: event_path(@conn, :new, @organization) %>
     </span>
 </div>

@@ -3,8 +3,17 @@ defmodule Contributr.EventUsersController do
 
   alias Contributr.EventUsers
 
-  def index(conn, _params) do
-    event_users = Repo.all(EventUsers)
+  def index(conn, _params) do  
+   
+    event_users = Repo.all(from eu in EventUsers,
+                           join: u in assoc(eu, :user),
+                           join: e in assoc(eu, :event),
+                           preload: [user: u],
+                           preload: [event: e]
+                           )
+                      
+
+
     render(conn, "index.html", event_users: event_users)
   end
 
@@ -62,4 +71,16 @@ defmodule Contributr.EventUsersController do
     |> put_flash(:info, "Event users deleted successfully.")
     |> redirect(to: event_users_path(conn, :index))
   end
+
+  
+  def org_events() do    
+    Repo.all(  
+      from e in Contributr.Event,
+      where: e.org_id == 2,
+      select: {e.name, e.event_id}
+    )
+  end
+
+
+
 end

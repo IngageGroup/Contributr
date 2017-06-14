@@ -1,6 +1,14 @@
-<h2>Listing event users</h2>
+<div class="mui-panel">
+    <span class="mui--text-headline">Manage Event Users:</span>
+</div>
 
-<table class="table">
+<select id="user_role" name="user[role]">
+    <option value="">Choose your role</option>
+    <option value="admin">Admin</option>
+    <option value="user">User</option>
+    </select>
+
+<table class="mui-table mui-table--bordered">
   <thead>
     <tr>
       <th>Event</th>
@@ -14,19 +22,18 @@
   <tbody>
 <%= for event_users <- @event_users do %>
     <tr>
-      <td><%= event_users.event_id %></td>
-      <td><%= event_users.user_id %></td>
+      <td><%= event_users.event.name %></td>
+      <td><%= event_users.user.name %></td>
       <td><%= event_users.eligible_to_receive %></td>
-      <td><%= event_users.eligible_to_give %></td>
+      <td><%= Number.Currency.number_to_currency(event_users.eligible_to_give) %></td>
 
       <td class="text-right">
-        <%= link "Show", to: event_users_path(@conn, :show, event_users), class: "btn btn-default btn-xs" %>
-        <%= link "Edit", to: event_users_path(@conn, :edit, event_users), class: "btn btn-default btn-xs" %>
-        <%= link "Delete", to: event_users_path(@conn, :delete, event_users), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+        <%= link "", to: event_users_path(@conn, :edit, event_users), class: "mui--text-secondary fa fa-pencil-square-o fa-lg" %>
+        <%= link "", to: event_users_path(@conn, :delete, event_users), method: :delete, data: [confirm: "Are you sure?"], class: "mui--text-danger fa fa-trash-o fa-lg"  %>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<%= link "New event users", to: event_users_path(@conn, :new) %>
+<%= link "Add", to: event_users_path(@conn, :new) %>

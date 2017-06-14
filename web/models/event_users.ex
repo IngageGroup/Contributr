@@ -2,8 +2,8 @@ defmodule Contributr.EventUsers do
   use Contributr.Web, :model
 
   schema "event_users" do
-    field :event_id, :integer
-    field :user_id, :integer
+    belongs_to :event, Contributr.Event
+    belongs_to :user, Contributr.User
     field :eligible_to_receive, :boolean, default: false
     field :eligible_to_give, :float
 

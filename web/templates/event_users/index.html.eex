@@ -3,9 +3,9 @@
 </div>
 
 <select id="user_role" name="user[role]">
-    <option value="">Choose your role</option>
-    <option value="admin">Admin</option>
-    <option value="user">User</option>
+    <option value="">Select event</option>
+    <option value="2">testA</option>
+    <option value="3">Other Event</option>
     </select>
 
 <table class="mui-table mui-table--bordered">

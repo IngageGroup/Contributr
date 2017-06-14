@@ -41,13 +41,14 @@ defmodule Contributr.EventUsersController do
   end
 
   def edit(conn, %{"id" => id}) do
-    event_users = Repo.get!(EventUsers, id)
+
+    event_users = Repo.get!(EventUsers, id) |> Repo.preload([:event])|> Repo.preload([:user])
     changeset = EventUsers.changeset(event_users)
     render(conn, "edit.html", event_users: event_users, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "event_users" => event_users_params}) do
-    event_users = Repo.get!(EventUsers, id)
+    event_users = Repo.get!(EventUsers, id) |> Repo.preload([:event])|> Repo.preload([:user])
     changeset = EventUsers.changeset(event_users, event_users_params)
 
     case Repo.update(changeset) do
@@ -56,7 +57,7 @@ defmodule Contributr.EventUsersController do
         |> put_flash(:info, "Event users updated successfully.")
         |> redirect(to: event_users_path(conn, :show, event_users))
       {:error, changeset} ->
-        render(conn, "edit.html", event_users: event_users, changeset: changeset)
+        render(conn, "edit.html", event_users: event_users, changeset: changeset) 
     end
   end
 

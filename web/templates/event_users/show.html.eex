@@ -1,16 +1,7 @@
-<h2>Show event users</h2>
+<h2>Confirmation</h2>
 
 <ul>
 
-  <li>
-    <strong>Event:</strong>
-    <%= @event_users.event_id %>
-  </li>
-
-  <li>
-    <strong>User:</strong>
-    <%= @event_users.user_id %>
-  </li>
 
   <li>
     <strong>Eligible to receive:</strong>

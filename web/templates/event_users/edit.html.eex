@@ -1,4 +1,4 @@
-<h2>Edit event users</h2>
+<h2>Edit user <%= @event_users.user.name %> for event <%= @event_users.event.name %> </h2>
 
 <%= render "form.html", changeset: @changeset,
                         action: event_users_path(@conn, :update, @event_users) %>

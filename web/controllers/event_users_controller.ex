@@ -8,8 +8,9 @@ defmodule Contributr.EventUsersController do
 
   plug Contributr.Plugs.Authenticated
 
-  def index(conn, %{"organization" => organization, "id" => id}) do
-    event_users = load_users_by_event(id)
+
+  def index(conn, %{"event_id" => event_id}) do
+    event_users = load_users_by_event(event_id)
     render(conn, "index.html", event_users: event_users)
   end
 
@@ -31,8 +32,9 @@ defmodule Contributr.EventUsersController do
        preload: [event: e]
     )
   end
-
+  
   def new(conn, _params) do
+    # TODO: It doesn't look like this knows event_id to assign to correct event
     changeset = EventUsers.changeset(%EventUsers{})
     render(conn, "new.html", changeset: changeset)
   end
@@ -44,7 +46,7 @@ defmodule Contributr.EventUsersController do
       {:ok, _event_users} ->
         conn
         |> put_flash(:info, "Event users created successfully.")
-        |> redirect(to: event_users_path(conn, :index))
+        |> redirect(to: event_users_path(conn, :index, event_id: event_users_params.event_id))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -85,9 +87,7 @@ defmodule Contributr.EventUsersController do
 
     conn
     |> put_flash(:info, "Event users deleted successfully.")
-    |> redirect(to: event_users_path(conn, :index))
+    |> redirect(to: event_users_path(conn, :index, event_id: event_users.event_id))
   end
-
-
 
 end

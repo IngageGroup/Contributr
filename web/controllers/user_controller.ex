@@ -46,10 +46,10 @@ defmodule Contributr.UserController do
     end
   end
 
-  def show(conn, %{"organization" => organization, "id" => id}) do
+  def show(conn, %{"organization" => organization, "event_id" => event_id, "id" => id}) do
     user = Repo.get!(User, id)
     check_auth(conn, user)
-    render(conn, "show.html", user: user, current_user: user, organization: organization)
+    render(conn, "show.html", user: user, current_user: user, organization: organization, event_id: event_id)
   end
 
   def edit(conn, %{"id" => id}) do

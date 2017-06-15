@@ -16,6 +16,6 @@ defmodule Contributr.Repo.Migrations.Add_Events do
 
      alter table(:contributions) do
         add :event_id, references(:event, on_delete: :nothing)
-     end &
+     end
   end
 end

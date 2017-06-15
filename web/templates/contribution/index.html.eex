@@ -20,9 +20,9 @@
           <td><%= contribution.comments %></td>
 
           <td class="text-right">
-            <%= link "", to: contribution_path(@conn, :show, @organization, contribution), class: "mui--text-dark fa fa-file-text-o fa-lg" %>
-            <%= link "", to: contribution_path(@conn, :edit, @organization, contribution), class: "mui--text-secondary fa fa-pencil-square-o fa-lg" %>
-            <%= link "", to: contribution_path(@conn, :delete, @organization, contribution), method: :delete, data: [confirm: "Are you sure?"], class: "mui--text-danger fa fa-trash-o fa-lg" %>
+            <%= link "", to: contribution_path(@conn, :show, @organization, @event_id, contribution), class: "mui--text-dark fa fa-file-text-o fa-lg" %>
+            <%= link "", to: contribution_path(@conn, :edit, @organization, @event_id, contribution), class: "mui--text-secondary fa fa-pencil-square-o fa-lg" %>
+            <%= link "", to: contribution_path(@conn, :delete, @organization, @event_id, contribution), method: :delete, data: [confirm: "Are you sure?"], class: "mui--text-danger fa fa-trash-o fa-lg" %>
           </td>
         </tr>
     <% end %>
@@ -30,6 +30,6 @@
     </table>
 <div class="mui-panel">
     <span>
-        <%= link  "New", to: contribution_path(@conn, :new, @organization), class: " small mui-btn mui-btn--primary"%>
+        <%= link  "New", to: contribution_path(@conn, :new, @organization, @event_id), class: " small mui-btn mui-btn--primary"%>
     </span>
 </div>

@@ -11,7 +11,7 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -31,9 +31,17 @@ defmodule Contributr.PageController do
       orguser = Repo.get_by(Contributr.OrganizationsUsers, user_id: user.id)
       role = Repo.get_by(Contributr.Role, id: orguser.role_id)
       org = Repo.get_by(Contributr.Organization, id: orguser.org_id)
+
+      event = Repo.one(
+        from e in Contributr.Event, 
+        where: e.org_id == ^orguser.org_id,
+        order_by: [desc: e.end_date], 
+        limit: 1)
+
       render conn, "index.html",
             current_user: user,
             organization: org,
+            event_id: event.id,
             role: role
     end
 

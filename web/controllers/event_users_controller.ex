@@ -1,20 +1,35 @@
 defmodule Contributr.EventUsersController do
+  import Number
+  require Number.Macros
   use Contributr.Web, :controller
 
+  alias Contributr.Event
   alias Contributr.EventUsers
 
-  def index(conn, _params) do  
-   
-    event_users = Repo.all(from eu in EventUsers,
-                           join: u in assoc(eu, :user),
-                           join: e in assoc(eu, :event),
-                           preload: [user: u],
-                           preload: [event: e]
-                           )
-                      
+  plug Contributr.Plugs.Authenticated
 
-
+  def index(conn, %{"organization" => organization, "id" => id}) do
+    event_users = load_users_by_event(id)
     render(conn, "index.html", event_users: event_users)
+  end
+
+  def load_users_by_event(event_id) do
+    Repo.all(from eu in EventUsers,
+        join: u in assoc(eu, :user),
+        join: e in assoc(eu, :event),
+        where: e.id == ^event_id,
+        preload: [user: u],
+        preload: [event: e]
+    )
+  end
+
+  def load_all_users do
+    Repo.all(from eu in EventUsers,
+       join: u in assoc(eu, :user),
+       join: e in assoc(eu, :event),
+       preload: [user: u],
+       preload: [event: e]
+    )
   end
 
   def new(conn, _params) do

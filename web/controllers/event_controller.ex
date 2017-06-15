@@ -6,6 +6,7 @@ defmodule Contributr.EventController do
   alias Contributr.Event
   alias Contributr.User
   alias Contributr.Organization
+  alias Contributr.EventUsers
 
   plug Contributr.Plugs.Authenticated
 

@@ -2,12 +2,6 @@
     <span class="mui--text-headline">Manage Event Users:</span>
 </div>
 
-<select id="user_role" name="user[role]">
-    <option value="">Select event</option>
-    <option value="2">testA</option>
-    <option value="3">Other Event</option>
-    </select>
-
 <table class="mui-table mui-table--bordered">
   <thead>
     <tr>

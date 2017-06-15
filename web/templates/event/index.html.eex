@@ -23,7 +23,8 @@
           <td><%= event.end_date %></td>
           <td class="text-right">
             <%= link "Edit", to: event_path(@conn, :edit, @organization, event), class: "btn btn-default btn-xs" %>
-            <%= link "Users", to: event_users_path(@conn, :index, event_id: event.id), class: "btn btn-default btn-xs" %>
+             |
+            <%= link "View Users", to: event_users_path(@conn, :index, event_id: event.id), class: "btn btn-default btn-xs" %>
           </td>
         </tr>
     <% end %>

@@ -11,7 +11,7 @@ defmodule Contributr.EventUsersController do
 
   def index(conn, %{"event_id" => event_id}) do
     event_users = load_users_by_event(event_id)
-    render(conn, "index.html", event_users: event_users)
+    render(conn, "index.html", event_users: event_users, event_id: event_id)
   end
 
   def load_users_by_event(event_id) do
@@ -33,9 +33,9 @@ defmodule Contributr.EventUsersController do
     )
   end
   
-  def new(conn, _params) do
+  def new(conn, %{ "event_id" => event_id }) do
     # TODO: It doesn't look like this knows event_id to assign to correct event
-    changeset = EventUsers.changeset(%EventUsers{})
+    changeset = EventUsers.changeset(%EventUsers{event_id: event_id})
     render(conn, "new.html", changeset: changeset)
   end
 

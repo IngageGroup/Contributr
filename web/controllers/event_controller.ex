@@ -19,8 +19,7 @@ defmodule Contributr.EventController do
     Repo.all(
       from e in Contributr.Event,
       join: o in assoc(e, :org),
-      # TODO: Should o.name be o.url to keep consistent with other places in the code?
-      where: o.name == ^orgname,
+      where: o.url == ^orgname,
       select: e
     )
   end
@@ -36,7 +35,7 @@ defmodule Contributr.EventController do
   end
 
   def create(conn, %{"organization" => organization, "event" => event_params}) do
-    org = Repo.get_by!(Organization, name: organization)
+    org = Repo.get_by!(Organization, url: organization)
 
     changeset = Event.changeset(%Event{org_id: org.id}, event_params)
 
@@ -65,7 +64,7 @@ defmodule Contributr.EventController do
       {:ok, event} ->
         conn
         |> put_flash(:info, "Event updated successfully.")
-        |> redirect(to: event_path(conn, :index, event.org.name))
+        |> redirect(to: event_path(conn, :index, event.org.url))
       {:error, changeset} ->
         render(conn, "edit.html", event: event, changeset: changeset, current_user: get_session(conn, :current_user))
     end

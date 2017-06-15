@@ -19,6 +19,7 @@ defmodule Contributr.EventController do
     Repo.all(
       from e in Contributr.Event,
       join: o in assoc(e, :org),
+      # TODO: Should o.name be o.url to keep consistent with other places in the code?
       where: o.name == ^orgname,
       select: e
     )

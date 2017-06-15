@@ -33,7 +33,7 @@ defmodule Contributr.OrgUserCommentController do
   plug :put_layout, "organization.html"
 
 
-  def index(conn, %{"organization" => org} ) do
+  def index(conn, %{"organization" => org, "event_id" => event_id} ) do
     role = get_session(conn, :role)
     uid = get_session(conn, :current_user).uid
 

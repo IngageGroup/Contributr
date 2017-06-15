@@ -67,9 +67,9 @@ defmodule Contributr.Router do
 
     get "/", ApplicationController, :index
     resources "/user", UserController
-    resources "/orgusers", OrgUserController
-    resources "/contributions", ContributionController
-    resources "/comments", OrgUserCommentController
+    resources "/orgusers/:event_id", OrgUserController
+    resources "/contributions/:event_id", ContributionController
+    resources "/comments/:event_id", OrgUserCommentController
 
     resources "/admin/events", EventController
   end

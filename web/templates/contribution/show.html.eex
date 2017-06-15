@@ -22,8 +22,8 @@
 
 <div class="mui-panel">
     <span>
-        <%= link "Edit", to: contribution_path(@conn, :edit,  @organization, @contribution), class: "mui-btn mui-btn--primary" %>
-        <%= link "Back", to: contribution_path(@conn, :index, @organization), class: "mui-btn mui-btn--primary"%>
+        <%= link "Edit", to: contribution_path(@conn, :edit,  @organization, @event_id, @contribution), class: "mui-btn mui-btn--primary" %>
+        <%= link "Back", to: contribution_path(@conn, :index, @organization, @event_id), class: "mui-btn mui-btn--primary"%>
     </span>
 </div>
 

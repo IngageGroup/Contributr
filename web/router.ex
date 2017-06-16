@@ -11,7 +11,7 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 defmodule Contributr.Router do
@@ -31,7 +31,7 @@ defmodule Contributr.Router do
   end
 
   pipeline :organization do
-    # eventually figure out how to create plugs 
+    # eventually figure out how to create plugs
     # that I can add here
   end
 
@@ -41,7 +41,6 @@ defmodule Contributr.Router do
     resources "/users", UserController
     resources "/orgs", OrgController
     resources "/roles", RoleController
-    resources "/event_users", EventUsersController
   end
 
   scope "/auth", Contributr do
@@ -61,7 +60,7 @@ defmodule Contributr.Router do
     get "/login", LoginController, :index
   end
 
-  scope "/:organization", Contributr do 
+  scope "/:organization", Contributr do
 
     pipe_through [:browser,:organization]
 
@@ -70,7 +69,7 @@ defmodule Contributr.Router do
     resources "/orgusers/:event_id", OrgUserController
     resources "/contributions/:event_id", ContributionController
     resources "/comments/:event_id", OrgUserCommentController
-
+    resources "/admin/events/:event_id/users", EventUsersController
     resources "/admin/events", EventController
   end
 

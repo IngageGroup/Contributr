@@ -8,7 +8,7 @@ defmodule Contributr.ContributionController do
   alias Ecto.Changeset
 
   plug Contributr.Plugs.Authenticated
-  
+
 
   def index(conn, %{"organization" => organization, "event_id" => event_id}) do
 
@@ -188,12 +188,15 @@ defmodule Contributr.ContributionController do
 
   def funds_remaining(user, event_id) do
     eu  = Repo.get_by(Contributr.EventUsers, user_id: user.id, event_id: event_id)
-    eligible = eu.eligible_to_give
+    eligible = 0
+    unless eu == nil do
+      eligible = eu.eligible_to_give
+    end
     ou = Repo.get_by(Contributr.OrganizationsUsers, user_id: user.id)
     o = Repo.get_by(Contributr.Organization, id: ou.org_id)
     id = user.id
     org_id = o.id
-    
+
     mycontributions = Repo.all(Contribution.funds_spent(Contribution, id))
 
     result = List.first(mycontributions)
@@ -201,13 +204,13 @@ defmodule Contributr.ContributionController do
     unless result == nil do
       eligible = eligible - Number.Conversion.to_float(result)
     end
-    
+
     eligible
   end
 
   def eligible_users(conn, orgname, event_id) do
     user = current_user(conn)
-    Repo.all(  
+    Repo.all(
       from u in Contributr.User,
       join: ou in assoc(u, :organizations_users),
       join: o in assoc(ou, :org),

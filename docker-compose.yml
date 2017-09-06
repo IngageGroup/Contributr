@@ -4,25 +4,23 @@ web:
   env_file: .env # Set environment variables from an `.env` file, if needed
   command: mix phoenix.server # Start the server if no other command is specified
   environment:
-    - MIX_ENV=dev # That's the environment mode, you know
+    - MIX_ENV=${MIX_ENV}
     - PORT=4000
-    - PG_HOST=postgres
-    - PG_USERNAME=postgres
     - GOOGLE_CLIENT_ID=${GCLIENT_ID}
     - GOOGLE_CLIENT_SECRET=${GSECRET}
+    - DATABASE_URL=${DB_URL}
   volumes:
     - .:/app # Here we're mounting our project's root directory inside the container
   ports:
     - "4000:4000"
   links:
     - postgres
-    
-# Not ideal, would like to set this up such that the environment is dynamic.
 postgres:
   image: postgres:9.6.3-alpine # https://hub.docker.com/_/postgres/
   ports:
     - "5432"
   environment:
-    - POSTGRES_USER:'postgres'
-    - POSTGRES_PASSWORD:'password'
-    - POSTGRES_DB:'contributr_dev'
+    - POSTGRES_USER=${PGUSER}
+    - POSTGRES_PASSWORD=${PGPW}
+    - POSTGRES_DB=${PGDB}
+    - PGDATA:=${PG_DATA}

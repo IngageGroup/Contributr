@@ -1,8 +1,10 @@
 FROM elixir:1.4.4
 
+# <> is not Dockerfile notation, just noting that they need to be replaced.
 ENV DEBIAN_FRONTEND=noninteractive
-ENV GOOGLE_CLIENT_ID = <SOME_ID>
-ENV GOOGLE_CLIENT_SECRET = <SOME_SECRET>
+ENV GOOGLE_CLIENT_ID=<SOME_ID>
+ENV GOOGLE_CLIENT_SECRET=<SOME_SECRET>
+ENV DATABASE_URL=<PG_URL>
 
 # Install hex
 RUN mix local.hex --force

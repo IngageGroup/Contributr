@@ -26,8 +26,6 @@ defmodule Contributr.User do
     field :avatar_url, :string
     field :access_token, :string
     field :expires_at, :integer
-    field :eligible_to_recieve, :boolean, default: false
-    field :eligible_to_give, :float
     field :setup_admin, :boolean, default: false
     
     has_many :orgs, Contributr.Organization
@@ -37,7 +35,7 @@ defmodule Contributr.User do
   end
 
   @required_fields ~w(name email)
-  @optional_fields ~w(uid access_token expires_at avatar_url eligible_to_recieve eligible_to_give setup_admin)
+  @optional_fields ~w(uid access_token expires_at avatar_url setup_admin)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
@@ -48,7 +46,7 @@ defmodule Contributr.User do
   def changeset(model, params \\ %{}) do
     model
     |> cast(params, @required_fields, @optional_fields)
-    |> validate_number(:eligible_to_give, greater_than_or_equal_to: 0)
+ #   |> validate_number(:eligible_to_give, greater_than_or_equal_to: 0)
   end
 
   @spec in_org(String.t) :: [Ecto.Query.t]
@@ -59,31 +57,31 @@ defmodule Contributr.User do
       where: o.url == ^org_url
   end
 
-  @spec eligible_to_recieve(Ecto.Query.t, Boolean.t) :: [Ecto.Query.t]
-  def eligible_to_recieve(query, status) do
-    from u in query,
-      where: u.eligible_to_recieve == ^status
-  end
+#  @spec eligible_to_recieve(Ecto.Query.t, Boolean.t) :: [Ecto.Query.t]
+#  def eligible_to_recieve(query, status) do
+#    from u in query,
+#      where: u.eligible_to_recieve == ^status
+#  end
+#
+#  @spec eligible_to_give_more_than(Ecto.Query.t, Integer.t) :: [Ecto.Query.t]
+#  def eligible_to_give_more_than(query, amount) do
+#    from u in query,
+#      where: u.eligible_to_give > ^amount
+#  end
 
-  @spec eligible_to_give_more_than(Ecto.Query.t, Integer.t) :: [Ecto.Query.t]
-  def eligible_to_give_more_than(query, amount) do
-    from u in query,
-      where: u.eligible_to_give > ^amount
-  end
-
-  @spec contributions_from(Ecto.Query.t) :: [Ecto.Query.t]
-  def contributions_from(query) do
-     from u in query,
-         left_join: c in Contributr.Contribution,  on: c.from_user_id == u.id ,
-         group_by: [u.name, u.id, u.eligible_to_give, u.email],
-         select:  %{
-                    id: u.id,
-                    name: u.name,
-                    contributed: sum(c.amount),
-                    allowed: u.eligible_to_give,
-                    email: u.email, received: sum(c.amount)},
-         order_by: [asc: u.name]
-  end
+#  @spec contributions_from(Ecto.Query.t) :: [Ecto.Query.t]
+#  def contributions_from(query) do
+#     from u in query,
+#         left_join: c in Contributr.Contribution,  on: c.from_user_id == u.id ,
+#         group_by: [u.name, u.id, u.eligible_to_give, u.email],
+#         select:  %{
+#                    id: u.id,
+#                    name: u.name,
+#                    contributed: sum(c.amount),
+#                    allowed: u.eligible_to_give,
+#                    email: u.email, received: sum(c.amount)},
+#         order_by: [asc: u.name]
+#  end
 
   @spec contributions_to(Ecto.Query.t, String.t) :: [Ecto.Query.t]
   def contributions_to(query, id) do

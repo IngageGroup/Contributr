@@ -9,8 +9,8 @@ defmodule Contributr.Mixfile do
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     aliases: aliases,
-     deps: deps]
+     aliases: aliases(),
+     deps: deps()]
   end
 
   # Configuration for the OTP application.
@@ -41,8 +41,9 @@ defmodule Contributr.Mixfile do
      {:ueberauth, "~> 0.2"},
      {:ueberauth_google, "~> 0.2"},
      {:dialyxir, "~> 0.3", only: [:dev]},
-     {:number, "~> 0.4.2"}
-   ]
+     {:number, "~> 0.4.2"},
+     {:uuid, "~> 1.1"}
+    ]
   end
 
   # Aliases are shortcut or tasks specific to the current project.

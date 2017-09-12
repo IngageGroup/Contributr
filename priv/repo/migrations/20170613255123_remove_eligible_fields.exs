@@ -1,4 +1,4 @@
-defmodule Contributr.Repo.Migrations.MigrateContributions do
+defmodule Contributr.Repo.Migrations.RemoveEligibleFields do
   use Ecto.Migration
 
   def change do

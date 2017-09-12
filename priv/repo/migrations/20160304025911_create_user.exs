@@ -8,7 +8,7 @@ defmodule Contributr.Repo.Migrations.CreateUser do
       add :uid, :string
       add :avatar_url, :string
 
-      timestamps
+      timestamps()
     end
 
   end

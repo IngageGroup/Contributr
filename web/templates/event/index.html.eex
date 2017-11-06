@@ -1,5 +1,8 @@
 <div class="mui-panel">
-    <span class="mui--text-headline">Manage Events:</span>
+    <span class="mui--text-headline">Manage Events: </span>
+    <span class="mui--text-headline mui--pull-right" >
+         <%= link "New Event", to: event_path(@conn, :new, @organization.name) %>
+    </span>
 </div>
 
     <table class="mui-table mui-table--bordered">
@@ -31,7 +34,5 @@
       </tbody>
     </table>
 <div class="mui-panel">
-    <span>
-        <%= link "New Event", to: event_path(@conn, :new, @organization) %>
-    </span>
+
 </div>

@@ -41,6 +41,7 @@ defmodule Contributr.Router do
     resources "/users", UserController
     resources "/orgs", OrgController
     resources "/roles", RoleController
+    resources "/:organization/events", EventController
   end
 
   scope "/auth", Contributr do
@@ -70,7 +71,7 @@ defmodule Contributr.Router do
     resources "/contributions/:event_id", ContributionController
     resources "/comments/:event_id", OrgUserCommentController
     resources "/admin/events/:event_id/users", EventUsersController
-    resources "/admin/events", EventController
+
   end
 
 end

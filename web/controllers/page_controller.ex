@@ -33,18 +33,23 @@ defmodule Contributr.PageController do
       org = Repo.get_by(Contributr.Organization, id: orguser.org_id)
 
       event = Repo.one(
-        from e in Contributr.Event, 
+        from e in Contributr.Event,
         where: e.org_id == ^orguser.org_id,
-        order_by: [desc: e.end_date], 
+        order_by: [desc: e.end_date],
         limit: 1)
 
-      render conn, "index.html",
-            current_user: user,
-            organization: org,
-            event_id: event.id,
-            role: role
+      if event != nil do
+        render conn, "index.html",
+               current_user: user,
+               organization: org,
+               event_id: event.id,
+               role: role
+      else
+        conn
+        |> put_flash(:error, "User has no assigned events")
+        |> redirect(to: "/login")
+
+      end
     end
-
-
   end
 end

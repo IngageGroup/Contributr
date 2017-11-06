@@ -11,15 +11,16 @@ defmodule Contributr.EventController do
   plug Contributr.Plugs.Authenticated
 
   def index(conn, %{"organization" => organization}) do
+    org = org = Repo.get_by!(Organization, name: organization)
     events = org_events(organization)
-    render(conn, "index.html", events: events, organization: organization)
+    render(conn, "index.html", events: events, organization: org)
   end
 
   def org_events(orgname) do
     Repo.all(
       from e in Contributr.Event,
       join: o in assoc(e, :org),
-      where: o.url == ^orgname,
+      where: o.name == ^orgname,
       select: e
     )
   end
@@ -35,7 +36,7 @@ defmodule Contributr.EventController do
   end
 
   def create(conn, %{"organization" => organization, "event" => event_params}) do
-    org = Repo.get_by!(Organization, url: organization)
+    org = Repo.get_by!(Organization, name: organization)
 
     changeset = Event.changeset(%Event{org_id: org.id}, event_params)
 

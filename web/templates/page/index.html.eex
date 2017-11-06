@@ -1,26 +1,20 @@
 <div class="mui-panel">
-    <div class="mui--text-headline center"><%= gettext "Welcome to %{name}", name: "Contributr", class: "mui--text-heading" %></div>
+    <div class="mui--text-headline center"><%= gettext "Contribution bonus for %{name}", name: @organization.name, class: "mui--text-heading" %></div>
     <div class="mui--text-subhead center">A tool to help give back to your co-workers </div>
 </div>
 
 <div class="highlight" style="height:100px;">
   <span>
-    <div>
-        <span class=" mui--align-top  mui--text-dark-secondary mui--text-title" style="text-transform: capitalize;"}">
-            <div class="mui--text-center"><%="Logged in to #{@organization.name}"%></div>
-        </span>
-    </div>
     <div class="mui--align-bottom mui--text-center mui--text-dark-secondary mui--text-headline mui--clearfix">
-        <a href='<%=contribution_path(@conn, :index, @organization.name, @event_id)%>' >Start contributing</a>
+    <div class="mui--align-bottom mui--text-left">Choose an action:</div>
       <%= if @role.name == "Admin" || @role.name == "Superadmin" do %>
-        <div ><a href='<%=org_user_path(@conn, :index, @organization.name, @event_id)%>' >Contribution Status Report</a><div>
-        <div ><a href='<%=org_user_comment_path(@conn, :index, @organization.name, @event_id)%>' >User Report</a><div>
+        <div ><a href='<%=org_user_path(@conn, :index, @organization.name, @event_id)%>' >Contribution Status Report</a></div>
+        <div ><a href='<%=org_user_comment_path(@conn, :index, @organization.name, @event_id)%>' >User Report</a></div>
+        <% else %>
+        <div ><a href='<%=contribution_path(@conn, :index, @organization.name, @event_id)%>' >Start contributing</a></div >
       <% end %>
     </div>
-
   </span>
-
 </div>
-
 <div class="mui-panel mui--clearfix">
 </div>

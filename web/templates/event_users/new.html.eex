@@ -1,6 +1,6 @@
 <h2>New event users</h2>
 
 <%= render "form.html", changeset: @changeset,
-                        action: event_users_path(@conn, :create, @organization_id, @event_id) %>
+                        action: event_users_path(@conn, :create, @organization_id, @event_id),  users: @users %>
 
 <%= link "Back", to: event_users_path(@conn, :index, @organization_id, @event_id) %>

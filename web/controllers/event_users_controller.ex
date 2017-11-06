@@ -5,6 +5,7 @@ defmodule Contributr.EventUsersController do
   alias Contributr.Event
   alias Contributr.EventUsers
   alias Contributr.Organization
+  alias Contributr.User
 
   plug Contributr.Plugs.Authenticated
 
@@ -12,25 +13,39 @@ defmodule Contributr.EventUsersController do
   def index(conn, %{"organization" => organization, "event_id" => event_id}) do
     event_users = load_users_by_event(event_id)
     render(conn, "index.html", organization: organization,event_id: event_id, event_users: event_users)
-    #render(conn, "index.html", @organization, event_users: event_users)
   end
 
   def load_users_by_event(event_id) do
-    Repo.all(from eu in EventUsers,
-        join: u in assoc(eu, :user),
-        join: e in assoc(eu, :event),
-        where: e.id == ^event_id,
-        preload: [user: u],
-        preload: [event: e]
+    Repo.all(
+      from eu in EventUsers,
+             join: u in assoc(eu, :user),
+             join: e in assoc(eu, :event),
+             where: e.id == ^event_id,
+             preload: [user: u],
+             preload: [event: e]
     )
   end
 
-  def load_all_users do
+  def all_unassigned_users(org_id, event_id) do
+    Repo.all(
+      from u in Contributr.User,
+      join: ou in assoc(u, :organizations_users),
+      join: o in assoc(ou, :org),
+      left_join: eu in Contributr.EventUsers,
+      on: eu.user_id == u.id,
+      where: eu.event_id == ^event_id,
+      where: o.id == ^org_id,
+      where: u.user_id  != eu.user_id,
+      select: {u.name, u.id}
+    )
+  end
+
+  def load_all_users(org_id) do
     Repo.all(from eu in EventUsers,
-       join: u in assoc(eu, :user),
-       join: e in assoc(eu, :event),
-       preload: [user: u],
-       preload: [event: e]
+             join: u in assoc(eu, :user),
+             join: e in assoc(eu, :event),
+             preload: [user: u],
+             preload: [event: e]
     )
   end
 
@@ -38,11 +53,17 @@ defmodule Contributr.EventUsersController do
     # TODO: Load all users, and subtract users in the current event and pass that list to this page so that the admin can pick
     # from users who are not participating in this event.
     changeset = EventUsers.changeset(%EventUsers{event_id: event_id})
+    org_users = all_unassigned_users(organization_id,event_id )
+
     render(conn, "new.html",
-                organization_id: organization_id,
-                event_id: event_id,
-                changeset: changeset)
+      organization_id: organization_id,
+      event_id: event_id,
+      users: org_users,
+      changeset: changeset)
   end
+
+
+
 
   def create(conn, %{"event_users" => event_users_params}) do
     changeset = EventUsers.changeset(%EventUsers{}, event_users_params)
@@ -67,10 +88,10 @@ defmodule Contributr.EventUsersController do
     event_users = Repo.get!(EventUsers, id) |> Repo.preload([:event])|> Repo.preload([:user])
     changeset = EventUsers.changeset(event_users)
     render(conn, "edit.html",
-    organization: organization,
-    event_id: id,
-    event_users: event_users,
-    changeset: changeset)
+      organization: organization,
+      event_id: id,
+      event_users: event_users,
+      changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "event_users" => event_users_params}) do

@@ -6,6 +6,13 @@
     </div>
   <% end %>
   <div class="mui-panel mui--clearfix">
+      <%= inputs_for f, :user, fn i -> %>
+        <div class="mui-col-md-8 mui-select ">
+          <%= label i, :user %>
+          <%= select(i, :id, @users) %>
+          <%= error_tag i, :user %>
+        </div>
+      <% end %>
       <div class="mui-col-md-8 mui-textfield"  style: "height:75px">
         <%= label f, :eligible_to_give %>
         <%= number_input f, :eligible_to_give, step: "any" %>

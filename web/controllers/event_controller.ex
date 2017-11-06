@@ -4,6 +4,7 @@ defmodule Contributr.EventController do
   use Contributr.Web, :controller
 
   alias Contributr.Event
+  alias Contributr.EventUsers
   alias Contributr.User
   alias Contributr.Organization
   alias Contributr.EventUsers
@@ -38,16 +39,39 @@ defmodule Contributr.EventController do
   def create(conn, %{"organization" => organization, "event" => event_params}) do
     org = Repo.get_by!(Organization, name: organization)
 
+    #create event
     changeset = Event.changeset(%Event{org_id: org.id}, event_params)
 
     case Repo.insert(changeset) do
       {:ok, _event} ->
+        default_event_users(organization,_event)
         conn
         |> put_flash(:info, "Event created successfully.")
         |> redirect(to: event_path(conn, :index, organization))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset, organization: organization)
     end
+  end
+
+  def default_event_users(org_name, event) do
+    query = org_user_query org_name
+    event_id =  Map.get(event, :id)
+    event_bonus = Map.get(event, :default_bonus)
+    inserted_at = Map.get(event, :inserted_at)
+    params = %{event_id: event_id,  eligible_to_give: event_bonus,  eligible_to_receive: true, inserted_at: inserted_at, updated_at: inserted_at}
+    user_ids = Repo.all(query)
+    users = Enum.map(user_ids, fn(u) -> Enum.concat(u, params) end)
+    IO.inspect("INSPECT!!!!!!!!!")
+    IO.inspect(users)
+    Repo.insert_all(EventUsers,users)
+  end
+
+  def org_user_query(org_name) do
+    from u in Contributr.User,
+         join: ou in assoc(u, :organizations_users),
+         join: o in assoc(ou, :org),
+         where: o.name == ^org_name,
+         select: %{user_id: u.id}
   end
 
   def edit(conn, %{"organization" => organization, "id" => id}) do

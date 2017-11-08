@@ -1,6 +1,15 @@
-<h2>Edit user <%= @event_users.user.name %> for event <%= @event_users.event.name %> </h2>
+<div class="mui-panel mui--clearfix">
+    <div class="mui--text-headline">Editing event user <%= @users.user.name %> for event <%= @users.event.name %> </div>
+</div>
 
-<%= render "form.html", changeset: @changeset,
-                        action: event_users_path(@conn, :update, :organization,  :event_id, :event_users ) %>
+<div class="highlight mui--clearfix">
+    <%= render "form.html", changeset: @changeset,
+                            action: event_users_path(@conn, :update, @organization_id, @event_id),  users: @users %>
 
-<%= link "Back", to: event_users_path(@conn, :index, :organization, event_id: @event_users.event.id) %>
+</div>
+<div class="mui-panel mui--clearfix">
+    <div class="mui-col-md-10" >
+        <%= link "Back", to: event_users_path(@conn, :index, @organization_id, @event_id), class: "mui-btn mui-btn--primary" %>
+    </div>
+</div>
+

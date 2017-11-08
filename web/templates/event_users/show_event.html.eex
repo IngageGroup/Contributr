@@ -1,0 +1,36 @@
+<div class="mui-panel">
+    <span class="mui--text-headline">Manage Event Users:</span>
+</div>
+
+<table class="mui-table mui-table--bordered">
+  <thead>
+    <tr>
+      <th>Event</th>
+      <th>User</th>
+      <th>Eligible to receive</th>
+      <th>Eligible to give</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for event_user <- @event_users do %>
+    <tr>
+      <td><%= event_user[:event_name] %></td>
+      <td><%= event_user[:user_name] %></td>
+      <td><%= event_user[:eligible_to_receive] %></td>
+      <td><%= Number.Currency.number_to_currency(event_user[:eligible_to_give]) %></td>
+    </tr>
+<% end %>
+  </tbody>
+  <div>
+</table>
+<div class="mui-panel">
+    <div class="mui-col-sm-2">
+    <%= link "Add User", to: event_users_path(@conn, :new_event_user,  @organization, @event), class: "mui-btn mui-btn--raised mui-btn--primary" %>
+    </div>
+    <div class="mui-col-sm-2">
+        <%= link "Back", to: event_path(@conn, :index, @organization), class: "mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" %>
+    </div>
+</div>
+
+

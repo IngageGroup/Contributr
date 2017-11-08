@@ -1,6 +1,13 @@
-<h2>New event users</h2>
+<div class="mui-panel mui--clearfix">
+    <div class="mui--text-headline">Adding user to event</div>
+</div>
 
-<%= render "form.html", changeset: @changeset,
-                        action: event_users_path(@conn, :create, @organization_id, @event_id),  users: @users %>
-
-<%= link "Back", to: event_users_path(@conn, :index, @organization_id, @event_id) %>
+<div class="highlight mui--clearfix">
+    <%= render "form.html", changeset: @changeset, users: @users,
+                            action: event_users_path(@conn, :create_event_user, @organization, @event) %>
+</div>
+<div class="mui-panel mui--clearfix">
+    <div class="mui-col-md-10" >
+        <%= link "Back", to: event_users_path(@conn, :list, @organization, @event), class: "mui-btn mui-btn--primary" %>
+    </div>
+</div>

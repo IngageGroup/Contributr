@@ -28,5 +28,13 @@
 <% end %>
   </tbody>
 </table>
+<div class="mui-panel">
+    <div class="mui-col-sm-2">
+    <%= link "Add User", to: event_users_path(@conn, :new,  @organization, @event_id), class: "mui-btn mui-btn--raised mui-btn--primary" %>
+    </div>
+    <div class="mui-col-sm-2">
+    <%= link "Back", to: event_path(@conn, :index, @organization), class: "mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" %>
+    </div>
+</div>
 
-<%= link "Add", to: event_users_path(@conn, :new, @organization, @event_id) %>
+

@@ -18,7 +18,6 @@
           <td><%= contribution.to_user.name %></td>
           <td><%= Number.Currency.number_to_currency(contribution.amount) %></td>
           <td><%= contribution.comments %></td>
-
           <td class="text-right">
             <%= link "", to: contribution_path(@conn, :show, @organization, @event_id, contribution), class: "mui--text-dark fa fa-file-text-o fa-lg" %>
             <%= link "", to: contribution_path(@conn, :edit, @organization, @event_id, contribution), class: "mui--text-secondary fa fa-pencil-square-o fa-lg" %>

@@ -5,24 +5,28 @@
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
+
   <div class="mui-panel mui--clearfix">
-      <%= inputs_for f, :user, fn i -> %>
+        <%= inputs_for f, :user, fn i -> %>
         <div class="mui-col-md-8 mui-select ">
           <%= label i, :user %>
           <%= select(i, :id, @users) %>
           <%= error_tag i, :user %>
         </div>
-      <% end %>
-      <div class="mui-col-md-8 mui-textfield"  style: "height:75px">
-        <%= label f, :eligible_to_give %>
-        <%= number_input f, :eligible_to_give, step: "any" %>
-        <%= error_tag f, :eligible_to_give %>
-      </div>
-      <div class="mui-col-md-8 mui-checkbox mui--text-left"  style: "height:75px">
-        <%= label f, :eligible_to_receive%>
-        <%= checkbox f, :eligible_to_receive %>
-        <%= error_tag f, :eligible_to_receive %>
-      </div>
+        <% end %>
+
+        <div class="mui-col-md-8 mui-textfield"  style: "height:75px">
+            <%= label f, :eligible_to_give %>
+            <%= number_input f, :eligible_to_give, [value: round(f.data.eligible_to_give)] %>
+            <%= error_tag f, :eligible_to_give %>
+        </div>
+
+        <div class="mui-col-md-8 mui-checkbox mui--text-left"  style: "height:75px">
+            <%= label f, :eligible_to_receive%>
+            <%= checkbox f, :eligible_to_receive %>
+            <%= error_tag f, :eligible_to_receive %>
+        </div>
+
   </div>
   <%= submit "Submit", class: "mui-btn mui-btn--raised mui-btn--primary" %>
 <% end %>

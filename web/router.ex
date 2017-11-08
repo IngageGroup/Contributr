@@ -42,11 +42,16 @@ defmodule Contributr.Router do
     resources "/orgs", OrgController
     resources "/roles", RoleController
     resources "/:organization/events", EventController
+    resources "/:organization/users", EventUsersController
+    get "/:organization/event_users/:event_id", EventUsersController, :list
+    get "/:organization/event_users/:event_id/new", EventUsersController, :new_event_user
+    get "/:organization/event_users/:event_id/:id/edit", EventUsersController, :edit_event_user
+    post "/:organization/event_users/:event_id", EventUsersController, :create_event_user
+
   end
 
   scope "/auth", Contributr do
     pipe_through [:browser]
-
     get "/logout", AuthController, :delete
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
@@ -70,7 +75,7 @@ defmodule Contributr.Router do
     resources "/orgusers/:event_id", OrgUserController
     resources "/contributions/:event_id", ContributionController
     resources "/comments/:event_id", OrgUserCommentController
-    resources "/admin/events/:event_id/users", EventUsersController
+
 
   end
 

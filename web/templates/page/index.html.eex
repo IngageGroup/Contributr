@@ -8,6 +8,8 @@
     <div class="mui--align-bottom mui--text-center mui--text-dark-secondary mui--text-headline mui--clearfix">
     <div class="mui--align-bottom mui--text-left">Choose an action:</div>
       <%= if @role.name == "Admin" || @role.name == "Superadmin" do %>
+      <div ><a href='<%=user_path(@conn, :new)%>' >Add New User</a></div>
+        <div ><a href='<%=event_path(@conn, :index, @organization.name)%>' >Manage Events</a></div>
         <div ><a href='<%=org_user_path(@conn, :index, @organization.name, @event_id)%>' >Contribution Status Report</a></div>
         <div ><a href='<%=org_user_comment_path(@conn, :index, @organization.name, @event_id)%>' >User Report</a></div>
         <% else %>
@@ -15,6 +17,7 @@
       <% end %>
     </div>
   </span>
+  <div class="mui-panel mui--clearfix">
+  </div>
 </div>
-<div class="mui-panel mui--clearfix">
-</div>
+

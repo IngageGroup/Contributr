@@ -12,18 +12,20 @@ defmodule Contributr.EventController do
   plug Contributr.Plugs.Authenticated
 
   def index(conn, %{"organization" => organization}) do
-    org = org = Repo.get_by!(Organization, name: organization)
-    events = org_events(organization)
-    render(conn, "index.html", events: events, organization: org)
+    org = Repo.get_by!(Organization, name: organization)
+    events = org_events(org)
+    render(conn, "index.html", events: events, organization: organization)
   end
 
-  def org_events(orgname) do
+  def org_events(org) do
     Repo.all(
       from e in Contributr.Event,
       join: o in assoc(e, :org),
-      where: o.name == ^orgname,
-      select: e
-    )
+      join: eu in assoc(e, :event_users),
+      where: o.id == ^org.id,
+      select: e,
+      preload: [org: o],
+      preload: [event_users: eu])
   end
 
   def show(conn, %{"organization" => organization, "id" => id}) do
@@ -61,8 +63,6 @@ defmodule Contributr.EventController do
     params = %{event_id: event_id,  eligible_to_give: event_bonus,  eligible_to_receive: true, inserted_at: inserted_at, updated_at: inserted_at}
     user_ids = Repo.all(query)
     users = Enum.map(user_ids, fn(u) -> Enum.concat(u, params) end)
-    IO.inspect("INSPECT!!!!!!!!!")
-    IO.inspect(users)
     Repo.insert_all(EventUsers,users)
   end
 
@@ -74,9 +74,23 @@ defmodule Contributr.EventController do
          select: %{user_id: u.id}
   end
 
+  def dashboard(conn, %{"organization" => organization, "id" => id}) do
+    event = Repo.get!(Event, id)
+    changeset = Event.changeset(event)
+    event_users = load_users_by_event(id)
+    event_users_changeset = EventUsers.changeset(event_users)
+
+    render(conn, "dashboard.html",
+      event: event,
+      event_changeset: changeset,
+      event_users_changeset: event_users_changeset,
+      organization: organization)
+  end
+
   def edit(conn, %{"organization" => organization, "id" => id}) do
     event = Repo.get!(Event, id)
     changeset = Event.changeset(event)
+
 
     render(conn, "edit.html", event: event, changeset: changeset, organization: organization)
   end
@@ -89,9 +103,20 @@ defmodule Contributr.EventController do
       {:ok, event} ->
         conn
         |> put_flash(:info, "Event updated successfully.")
-        |> redirect(to: event_path(conn, :index, event.org.url))
+        |> redirect(to: event_path(conn, :index, event.org.name))
       {:error, changeset} ->
         render(conn, "edit.html", event: event, changeset: changeset, current_user: get_session(conn, :current_user))
     end
+  end
+
+  def load_users_by_event(event_id) do
+
+    Repo.all(
+      from eu in EventUsers,
+      join: u in assoc(eu, :user),
+      join: e in assoc(eu, :event),
+      where: eu.event_id == ^event_id,
+      select: eu
+    )
   end
 end

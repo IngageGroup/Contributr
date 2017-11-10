@@ -89,13 +89,4 @@ defmodule Contributr.User do
          left_join: c in Contributr.Contribution,  on: c.to_user_id == ^id,
          select:  sum(c.amount)
   end
-
-  @spec has_comments(Ecto.Query.t) :: [Ecto.Query.t]
-  def has_comments(query) do
-     from u in query,
-         inner_join: c in Contributr.Contribution,  on: c.to_user_id == u.id,
-         distinct: u.id,
-         select:  %{name: u.name, id: u.id},
-         order_by: [asc: u.name]
-  end
 end

@@ -32,24 +32,48 @@ defmodule Contributr.PageController do
       role = Repo.get_by(Contributr.Role, id: orguser.role_id)
       org = Repo.get_by(Contributr.Organization, id: orguser.org_id)
 
-      event = Repo.one(
-        from e in Contributr.Event,
-        where: e.org_id == ^orguser.org_id,
-        order_by: [desc: e.end_date],
-        limit: 1)
+      event_data = user_events(org.id, user.id, role)
 
-      if event != nil do
+      if event_data != nil do
         render conn, "index.html",
                current_user: user,
                organization: org,
-               event_id: event.id,
-               role: role
+               events: event_data,
+               role: check_role(role)
       else
         conn
-        |> put_flash(:error, "User has no assigned events")
+        |> put_flash(:error, "Use has no assigned events")
         |> redirect(to: "/login")
 
       end
     end
+  end
+
+  def user_events(org_id, user_id, role) do
+    today = Ecto.Date.from_erl(Date.to_erl(Date.utc_today))
+    query =
+      if check_role(role) == "elevated" do
+        from eu in Contributr.EventUsers,
+             join: e in assoc(eu, :event),
+             where: e.org_id == ^org_id,
+             distinct: e.id,
+             select: e
+      else
+        from eu in Contributr.EventUsers,
+             join: e in assoc(eu, :event),
+             where: eu.user_id == ^user_id and e.end_date <= ^today,
+             select: e
+
+      end
+    Repo.all(query)
+  end
+
+  def check_role(role) do
+    if role.name == "Superadmin" || role.name == "Admin" do
+      "elevated"
+    else
+      "user"
+    end
+
   end
 end

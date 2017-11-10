@@ -17,17 +17,6 @@ defmodule Contributr.EventController do
     render(conn, "index.html", events: events, organization: organization)
   end
 
-  def org_events(org) do
-    Repo.all(
-      from e in Contributr.Event,
-      join: o in assoc(e, :org),
-      join: eu in assoc(e, :event_users),
-      where: o.id == ^org.id,
-      select: e,
-      preload: [org: o],
-      preload: [event_users: eu])
-  end
-
   def show(conn, %{"organization" => organization, "id" => id}) do
     event = Repo.get!(Event, id)
     render(conn, "show.html", event: event, organization: organization)
@@ -110,7 +99,6 @@ defmodule Contributr.EventController do
   end
 
   def load_users_by_event(event_id) do
-
     Repo.all(
       from eu in EventUsers,
       join: u in assoc(eu, :user),
@@ -118,5 +106,24 @@ defmodule Contributr.EventController do
       where: eu.event_id == ^event_id,
       select: eu
     )
+  end
+
+  def org_events(org) do
+    Repo.all(
+      from e in Contributr.Event,
+      join: o in assoc(e, :org),
+      join: eu in assoc(e, :event_users),
+      where: o.id == ^org.id,
+      select: e,
+      preload: [org: o],
+      preload: [event_users: eu])
+  end
+
+  def contributions_to_user_query(user_id, event_id) do
+    from eu in Contributr.EventUsers,
+         join: c in Contributr.Contribution,
+         where: c.to_user_id == ^user_id,
+         where: eu.event_id == ^event_id,
+         select: c
   end
 end

@@ -42,7 +42,8 @@ defmodule Contributr.Mixfile do
      {:ueberauth_google, "~> 0.2"},
      {:dialyxir, "~> 0.3", only: [:dev]},
      {:number, "~> 0.4.2"},
-     {:uuid, "~> 1.1"}
+     {:uuid, "~> 1.1"},
+      {:plug, "~> 1.3"}
     ]
   end
 

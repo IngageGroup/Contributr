@@ -10,11 +10,11 @@ defmodule Contributr.EventUsersController do
   plug Contributr.Plugs.Authenticated
 
 
-#  def index(conn, %{"organization" => organization, "event_id" => event_id}) do
-#
-#    event_users = load_users_by_event(event_id)
-#    render(conn, "index.html", organization: organization, event_id: event_id, event_users: event_users)
-#  end
+  #  def index(conn, %{"organization" => organization, "event_id" => event_id}) do
+  #
+  #    event_users = load_users_by_event(event_id)
+  #    render(conn, "index.html", organization: organization, event_id: event_id, event_users: event_users)
+  #  end
 
 
   def list(conn, %{"organization" => organization, "event_id" => event_id}) do
@@ -90,7 +90,6 @@ defmodule Contributr.EventUsersController do
   end
 
   def load_users_by_event(event_id) do
-
     Repo.all(
       from eu in EventUsers,
       join: u in assoc(eu, :user),
@@ -98,6 +97,7 @@ defmodule Contributr.EventUsersController do
       where: eu.event_id == ^event_id,
       select: %{
         event_user: eu,
+        event_user_id: eu.id,
         event_name: e.name,
         user_name: u.name,
         user_id: u.id,

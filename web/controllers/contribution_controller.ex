@@ -30,11 +30,9 @@ defmodule Contributr.ContributionController do
   def new(conn,  %{"organization" => organization, "event_id" => event_id}) do
     eligible_users = eligible_users(conn, organization, event_id)
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
-
     funds_remaining = funds_remaining(user, event_id)
-    changeset = Contribution.changeset(%Contribution{})
+    changeset = Contribution.changeset(%Contribution{event_id: event_id})
     Ecto.Changeset.validate_number(changeset,:amount, less_than_or_equal_to: funds_remaining)
-
 
     render(conn,
         "new.html",
@@ -49,7 +47,12 @@ defmodule Contributr.ContributionController do
     user = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
     to_user_id = parse_to_user(contribution_params)
 
-    changeset = Contribution.changeset(%Contribution{from_user_id: user.id, to_user_id: to_user_id}, contribution_params)
+    changeset = Contribution.changeset(%Contribution{from_user_id: user.id,
+      to_user_id: to_user_id,
+      event_id: String.to_integer(event_id)},
+      contribution_params)
+
+
     funds_remaining = funds_remaining(user, event_id)
 
     entered_amount = Number.Conversion.to_float(contribution_params["amount"])
@@ -58,8 +61,7 @@ defmodule Contributr.ContributionController do
         case Repo.insert(changeset) do
           {:ok, _contribution} ->
             conn
-            |> put_flash(:info, "Contribution created successfully.")
-            |> redirect(to: contribution_path(conn, :index, organization, user: user))
+            |> redirect(to: contribution_path(conn, :index, organization, event_id))
           {:error, changeset} ->
               eligible_users = eligible_users(conn, organization, event_id)
               render(conn, "new.html",
@@ -74,7 +76,7 @@ defmodule Contributr.ContributionController do
         eligible_users = eligible_users(conn, organization, event_id)
         conn
         |> put_flash(:error, msg)
-        |> redirect(to: contribution_path(conn, :new, organization, user: user, event_id: event_id))
+        |> redirect(to: contribution_path(conn, :new, organization, event_id))
 
     end
   end
@@ -183,7 +185,7 @@ defmodule Contributr.ContributionController do
     Repo.delete!(contribution)
     conn
     |> put_flash(:info, "Contribution deleted successfully.")
-    |> redirect(to: contribution_path(conn, :index, organization, event_id: event_id,))
+    |> redirect(to: contribution_path(conn, :index, organization, event_id))
   end
 
   def funds_remaining(user, event_id) do
@@ -197,7 +199,7 @@ defmodule Contributr.ContributionController do
     id = user.id
     org_id = o.id
 
-    mycontributions = Repo.all(Contribution.funds_spent(Contribution, id))
+    mycontributions = Repo.all(Contribution.funds_spent(Contribution, id, event_id))
 
     result = List.first(mycontributions)
 
@@ -211,15 +213,13 @@ defmodule Contributr.ContributionController do
   def eligible_users(conn, orgname, event_id) do
     user = current_user(conn)
     Repo.all(
-      from u in Contributr.User,
-      join: ou in assoc(u, :organizations_users),
-      join: o in assoc(ou, :org),
-      left_join: eu in Contributr.EventUsers,
-      on: eu.user_id == u.id,
-      where: eu.eligible_to_receive == true and o.url == ^orgname and u.id != ^user.id and eu.event_id == ^event_id,
+      from eu in Contributr.EventUsers,
+      join: u in assoc(eu, :user),
+      where: eu.eligible_to_receive == true  and eu.event_id == ^event_id and eu.user_id != ^user.id,
       select: {u.name, u.id}
     )
   end
+
 
   def current_user(conn) do
    Repo.get_by(Contributr.User , uid: get_session(conn, :current_user).uid)
@@ -233,7 +233,7 @@ defmodule Contributr.ContributionController do
   def check_ownership(conn, contribution) do
     user = current_user(conn)
     if  user.id != contribution.from_user_id do
-        msg = "You must own the contribution in order to edit or view it. I'm watching you."
+        msg = "You must own the contribution in order to edit or view it"
         conn
         |> put_flash(:error, msg)
         |> redirect(to: "/")

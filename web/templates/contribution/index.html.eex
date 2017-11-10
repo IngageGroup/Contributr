@@ -1,5 +1,5 @@
 <div class="mui-panel">
-    <span class="mui--text-headline">Previous contributions:</span>
+    <span class="mui--text-headline">Contributions:</span>
     <span class="mui--text-subhead pull-right"><%=Number.Currency.number_to_currency(@remaining)%> remaining.</span>
 </div>
 
@@ -28,7 +28,10 @@
       </tbody>
     </table>
 <div class="mui-panel">
+<% dest = if(@remaining > 0) do contribution_path(@conn, :new, @organization, @event_id) else "#" end  %>
+<% class = "small mui-btn mui-btn--primary" %>
+<% unless(@remaining > 0) do class = class <> " mui--is-disabled" end  %>
     <span>
-        <%= link  "New", to: contribution_path(@conn, :new, @organization, @event_id), class: " small mui-btn mui-btn--primary"%>
+        <%= link  "New", to: dest, class: class %>
     </span>
 </div>

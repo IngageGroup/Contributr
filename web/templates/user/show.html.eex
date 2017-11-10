@@ -3,7 +3,7 @@
 <div class="highlight" style="height:100px;">
   <span>
     <span></span>
-    <span><a href="<%= contribution_path(@conn, :index, @organization)%>"><strong>Contribution Form:</strong></a></span>
+    <span><a href="<%= contribution_path(@conn, :index, @organization, @event_id)%>"><strong>Contribution Form:</strong></a></span>
   </span>
 </div>
 

@@ -17,4 +17,9 @@
 
 defmodule Contributr.PageView do
   use Contributr.Web, :view
+  def days_left(event) do
+    today = Date.utc_today
+    end_date = Date.from_iso8601!(Ecto.Date.to_iso8601(event.end_date))
+    days_left  = Date.diff(today,end_date)
+  end
 end

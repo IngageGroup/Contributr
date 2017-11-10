@@ -1,0 +1,41 @@
+<div class="mui-panel">
+    <span class="mui--text-headline">Manage Events: </span>
+    <span class="mui--text-headline mui--pull-right" >
+         <%= link "New Event", to: event_path(@conn, :new, @organization), class: "mui-btn mui-btn--primary" %>
+    </span>
+</div>
+
+    <table class="mui-table mui-table--bordered">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Default Bonus</th>
+          <th>Start Date</th>
+          <th>End Date</>
+          <th>Participants</>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+    <%= for event <- @events do %>
+    <% participant_count = Enum.count(event.event_users) %>
+        <tr>
+          <td><%= event.name %></td>
+          <td><%= event.description %></td>
+          <td><%= Number.Currency.number_to_currency(event.default_bonus) %></td>
+          <td><%= event.start_date %></td>
+          <td><%= event.end_date %></td>
+          <td>
+            <%= link  participant_count , to: event_users_path(@conn, :list, @organization, event), class: "btn btn-default btn-xs" %>
+          </td>
+          <td class="text-right">
+            <%= link "Edit", to: event_path(@conn, :edit, @organization, event), class: "btn btn-default btn-xs" %>
+          </td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+<div class="mui-panel">
+    <%= link "Back", to: page_path(@conn, :index), class: "mui-btn mui-btn--primary" %>
+</div>

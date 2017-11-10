@@ -20,6 +20,12 @@ To start your the app:
   * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
   * Install Node.js dependencies with `npm install`
   * Start Phoenix endpoint with `mix phoenix.server`
+  
+  
+With docker:
+
+  * Edit .env to reflect the correct values
+  * docker-compose up -d   
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 

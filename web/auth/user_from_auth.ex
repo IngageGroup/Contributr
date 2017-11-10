@@ -31,13 +31,6 @@ defmodule UserFromAuth do
     case Repo.get_by(Contributr.User, email: user.email) do 
       nil ->
         Logger.debug "no results found"
-        # create record
-        case Repo.insert(changeset) do 
-          {:ok, _user} ->
-            Logger.debug "inserted record!"
-          {:error, changeset} ->
-            Logger.error "unable to insert record" <> changeset
-        end 
       %Contributr.User{} = u -> 
         changeset = Contributr.User.changeset(u, user)
         case Repo.update(changeset) do

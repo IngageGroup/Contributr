@@ -1,0 +1,26 @@
+<div class="mui-panel">
+    <span class="mui--text-headline"><%=@event.name %>:</span>
+</div>
+
+<div class="highlight" style="height:100px;">
+<ul>
+  <li>
+    <strong>Description:</strong>
+    <%= @event.description %>
+  </li>
+  <li>
+    <strong>Default Bonus:</strong>
+    <%= Number.Currency.number_to_currency(@event.default_bonus) %>
+  </li>
+  <li>
+    <strong>Start Date:</strong>
+    <%= @event.start_date %>
+  </li>
+  <li>
+    <strong>End Date:</strong>
+    <%= @event.end_date %>
+  </li>
+</ul>
+</div>
+
+<%= link "Back", to: event_path(@conn, :index, @organization) %>

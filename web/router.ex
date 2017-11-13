@@ -46,6 +46,9 @@ defmodule Contributr.Router do
     get "/:organization/event_users/:event_id", EventUsersController, :list
     get "/:organization/event_users/:event_id/new", EventUsersController, :new_event_user
     get "/:organization/event_users/:event_id/:id/edit", EventUsersController, :edit_event_user
+    get "/:organization/event_users/:event_id/:id/delete", EventUsersController, :delete_event_user
+    put "/:organization/event_users/:event_id/:id/update", EventUsersController, :update
+    patch "/:organization/event_users/:event_id/:id/update", EventUsersController, :update
     post "/:organization/event_users/:event_id", EventUsersController, :create_event_user
 
   end

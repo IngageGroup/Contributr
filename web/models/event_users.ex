@@ -1,4 +1,4 @@
-defmodule Contributr.EventUsers do
+defmodule  Contributr.EventUsers do
   use Contributr.Web, :model
 
   schema "event_users" do

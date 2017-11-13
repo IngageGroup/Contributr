@@ -1,10 +1,12 @@
 defmodule Contributr.EventUsersController do
   import Number
   require Number.Macros
+  require Logger
   use Contributr.Web, :controller
   alias Contributr.EventUsers
   alias Contributr.Event
   alias Contributr.Organization
+  alias Contributr.Contribution
   alias Contributr.User
 
   plug Contributr.Plugs.Authenticated
@@ -34,13 +36,21 @@ defmodule Contributr.EventUsersController do
       changeset: changeset)
   end
 
-  def edit_event_user(conn, %{"organization" => organization, "event_id" => event_id, "event_user_id" => event_user_id }) do
-    event_user = Repo.get!(EventUsers, event_user_id) |> Repo.preload([:event])|> Repo.preload([:user])
+  def edit_event_user(conn, _params) do
+    current_user = get_session(conn, :current_user)
+    user_id = _params["id"]
+    Logger.info(user_id)
+    event_id = _params["event_id"]
+    Logger.info(event_id)
+    event_user = Repo.get!(EventUsers, user_id) |> Repo.preload([:event])|> Repo.preload([:user])
+    user = event_user.user
     changeset = EventUsers.changeset(event_user)
+    users = selected_user(event_user)
+
     render(conn, "edit.html",
-      organization: organization,
+      organization_id: current_user.org_id,
       event_id: event_id,
-      event_users: event_user,
+      users: users,
       changeset: changeset)
   end
 
@@ -64,29 +74,55 @@ defmodule Contributr.EventUsersController do
     render(conn, "show.html", event_id: id, event_users: event_users)
   end
 
-  def update(conn, %{"organization" => organization,"id" => id, "event_users" => event_users_params}) do
-    event_users = Repo.get!(EventUsers, id) |> Repo.preload([:event])|> Repo.preload([:user])
-    changeset = EventUsers.changeset(event_users, event_users_params)
+  def update(conn, _params) do
+
+    current_user = get_session(conn, :current_user)
+    event_id = _params["id"]
+    event_user = _params["event_users"]
+    event_user_user = event_user["user"]
+    event_user_id = String.to_integer(event_user_user["id"])
+    IO.inspect(event_user_id)
+    updated_etg = elem(Float.parse(event_user["eligible_to_give"]), 0)
+    updated_etr = event_user["eligible_to_receive"]
+
+    changes_params = %{eligible_to_receive: updated_etr,eligible_to_give: updated_etg}
+
+
+    event_users = Repo.get!(EventUsers, event_user_id)
+    changeset = EventUsers.changeset(event_users, changes_params)
     case Repo.update(changeset) do
       {:ok, event_users} ->
         conn
         |> put_flash(:info, "Event users updated successfully.")
-        |> redirect(to: event_users_path(conn, :show, event_id: id, event_users: event_users))
+        |> redirect(to:  event_users_path(conn, :list,current_user.org_name, event_id))
       {:error, changeset} ->
         render(conn, "edit.html", event_users: event_users, changeset: changeset)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    event_users = Repo.get!(EventUsers, id)
+  def delete_event_user(conn, _params) do
+    IO.inspect(_params)
+    current_user = get_session(conn, :current_user)
+    event_user_id = String.to_integer(_params["id"])
+    event_users = Repo.get!(EventUsers, event_user_id) |> Repo.preload([:event])|> Repo.preload([:user])
+    user = event_users.user
+    event = event_users.event
+
+
+
+
+    Repo.delete_all(from c in Contribution,
+                     where: c.to_user_id == ^user.id or c.from_user_id == ^user.id and c.event_id == ^event.id)
+
+
 
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
     Repo.delete!(event_users)
 
     conn
-    |> put_flash(:info, "Event users deleted successfully.")
-    |> redirect(to: event_users_path(conn, :index, event_id: event_users.event_id))
+    |> put_flash(:info, "Users deleted.")
+    |> redirect(to: event_users_path(conn, :list, current_user.org_name, event.id))
   end
 
   def load_users_by_event(event_id) do
@@ -95,6 +131,7 @@ defmodule Contributr.EventUsersController do
       join: u in assoc(eu, :user),
       join: e in assoc(eu, :event),
       where: eu.event_id == ^event_id,
+      order_by: [desc: eu.id],
       select: %{
         event_user: eu,
         event_user_id: eu.id,
@@ -113,7 +150,16 @@ defmodule Contributr.EventUsersController do
       join: eu in Contributr.EventUsers,
       join: u in assoc(ou, :user),
       where: ou.user_id != eu.user_id,
-      select: {u.name, u.id}
+      select: {u.name, eu.id}
+    )
+  end
+
+  def selected_user(user) do
+    Repo.all(
+      from eu in Contributr.EventUsers,
+      join: u in assoc(eu, :user),
+      where: eu.id == ^user.id,
+      select: {u.name, eu.id }
     )
   end
 

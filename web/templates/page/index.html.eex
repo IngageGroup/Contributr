@@ -3,28 +3,29 @@
         <div class="mui--align-bottom mui--text-center mui--text-dark-secondary mui-row mui--clearfix">
             <div class="mui--align-bottom mui--text-left mui--text-display1 mui-row mui-col-md-8">Events</div>
             <div class="mui-panel mui--appbar-line-height mui--invisible mui-col-md-8"></div>
-             <%= for event <- @events do %>
-                    <%days = days_left(event) %>
+            <% events = @current_user.events %>
+             <%= for event <- events do %>
+
                     <div class="mui-panel mui--clearfix mui--bg-primary-dark mui-col-md-8">
                         <div class="mui-panel mui--clearfix">
                             <span class="mui--align-bottom mui--pull-left mui--text-title"><b><%= event.name %></b></span>
-                            <span class="mui--align-bottom mui--pull-right mui--text-headline"> <%= days %> days left!</span>
+                            <span class="mui--align-bottom mui--pull-right mui--text-headline"><ul class="mui-list--inline"><li>days left</li><li><%= event.days_left%></li></ul>
                         </div>
                         <span class="mui--appbar-min-height">
-                       <%= if @role == "elevated" do %>
+                       <%= if  @current_user.role_name == "Superadmin" do %>
                            <!-- begin event admin section -->
                            <ul class="mui-list--inline mui--text-left">
-                           <li><a href='<%= event_path(@conn, :edit, @organization.name, event) %>' class='mui-btn mui-btn--small mui-btn--raised mui-btn--danger'>
+                           <li><a href='<%= event_path(@conn, :edit, @current_user.org_name, event.id) %>' class='mui-btn mui-btn--small mui-btn--raised mui-btn--danger'>
                               Edit
                            </a></li>
-                           <li><a href='<%=  event_users_path(@conn, :list, @organization, event) %>' class='mui-btn mui-btn--small mui-btn--raised mui-btn--danger'>
+                           <li><a href='<%=  event_users_path(@conn, :list, @current_user.org_name, event.id) %>' class='mui-btn mui-btn--small mui-btn--raised mui-btn--danger'>
                               Participants
                            </a></li>
                            </ul>
                            <!-- end event admin section -->
                        <% else %>
                            <!-- user options -->
-                           <a href='<%= contribution_path(@conn, :index, @organization.name, event) %>' class='mui-btn mui-btn--small mui-btn--raised mui-btn--accent'>
+                           <a href='<%= contribution_path(@conn, :index,@current_user.org_name, event.id) %>' class='mui-btn mui-btn--small mui-btn--raised mui-btn--accent'>
                               Open
                            </a>
                        <% end %>
@@ -32,7 +33,7 @@
                     </div>
              <% end %>
              <!-- begin application admin section -->
-             <%= if(@role == "elevated") do %>
+             <%= if(@current_user.role_name == "Superadmin") do %>
              <div class="mui--align-bottom mui--text-left mui--text-display1 mui-col-md-8">Manage</div>
              <div class="mui-panel mui--appbar-line-height mui--invisible"></div>
              <div class="mui--appbar-min-height mui-panel mui--clearfix mui--bg-primary-dark ">

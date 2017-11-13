@@ -1,0 +1,32 @@
+<div class="mui-panel mui--text-left">
+    <span class="mui--text-headline mui--text-left">Showing <%=Enum.count(@comments)%> Comments for <%=@event_user.user.name%></span>
+</div>
+
+<table class="mui-table mui-table--bordered">
+    <thead>
+        <tr>
+          <th class="mui--text-left">Comment</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%= if Enum.count(@comments) -1 > 0 do %>
+            <%= for comment <- @comments do %>
+            <tr>
+              <td class="mui--text-left"><%= comment %></td>
+            </tr>
+            <% end %>
+        <% else %>
+            <tr>
+              <td class="mui--text-left">No comments yet</td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+
+<div class="mui-panel">
+    <div class="mui-col-sm-2">
+        <%= link "Back", to: event_users_path(@conn, :list, @current_user.org_name, @event), class: "mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" %>
+    </div>
+</div>
+
+

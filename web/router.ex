@@ -44,6 +44,7 @@ defmodule Contributr.Router do
     resources "/:organization/events", EventController
     resources "/:organization/users", EventUsersController
     get "/:organization/event_users/:event_id", EventUsersController, :list
+    get "/:organization/event_users/:event_id/:id/comments", EventUsersController, :list_comments
     get "/:organization/event_users/:event_id/new", EventUsersController, :new_event_user
     get "/:organization/event_users/:event_id/:id/edit", EventUsersController, :edit_event_user
     get "/:organization/event_users/:event_id/:id/delete", EventUsersController, :delete_event_user

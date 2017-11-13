@@ -19,10 +19,27 @@ defmodule Contributr.EventUsersController do
   #  end
 
 
+
+
   def list(conn, %{"organization" => organization, "event_id" => event_id}) do
     event = Repo.get(Event, event_id)
-    event_users = load_users_by_event(event_id)
-    render(conn, "show_event.html", organization: organization, event: event, event_users: event_users)
+    user_info = Enum.map(load_users_by_event(event_id), fn (eu) ->
+      Enum.into(total_received(eu.event_user_id),
+        Enum.into(total_allocated(eu.event_user_id),
+          eu))end)
+    render(conn, "show_event.html", organization: organization, event: event, event_users: user_info)
+  end
+
+  def list_comments(conn, _params) do
+    current_user = get_session(conn, :current_user)
+    organization = current_user.org_name
+    IO.inspect("list_comments")
+    IO.inspect(_params)
+    eu_id = _params["id"]
+    event_id = _params["event_id"]
+    comments = comments_for(eu_id)
+    event_user = Repo.get(EventUsers, String.to_integer(eu_id))|> Repo.preload([:user])
+    render(conn, "show_comments.html", organization: organization, event: event_id,event_user: event_user, comments: comments)
   end
 
   def new_event_user(conn, %{"organization" => organization, "event_id" => event_id}) do
@@ -81,7 +98,6 @@ defmodule Contributr.EventUsersController do
     event_user = _params["event_users"]
     event_user_user = event_user["user"]
     event_user_id = String.to_integer(event_user_user["id"])
-    IO.inspect(event_user_id)
     updated_etg = elem(Float.parse(event_user["eligible_to_give"]), 0)
     updated_etr = event_user["eligible_to_receive"]
 
@@ -112,7 +128,7 @@ defmodule Contributr.EventUsersController do
 
 
     Repo.delete_all(from c in Contribution,
-                     where: c.to_user_id == ^user.id or c.from_user_id == ^user.id and c.event_id == ^event.id)
+                    where: c.to_user_id == ^user.id or c.from_user_id == ^user.id and c.event_id == ^event.id)
 
 
 
@@ -131,15 +147,14 @@ defmodule Contributr.EventUsersController do
       join: u in assoc(eu, :user),
       join: e in assoc(eu, :event),
       where: eu.event_id == ^event_id,
-      order_by: [desc: eu.id],
       select: %{
         event_user: eu,
         event_user_id: eu.id,
         event_name: e.name,
         user_name: u.name,
         user_id: u.id,
-        eligible_to_receive: eu.eligible_to_receive,
-        eligible_to_give: eu.eligible_to_give
+        eligible_to_give: eu.eligible_to_give,
+        eligible_to_receive: eu.eligible_to_receive
       }
     )
   end
@@ -172,4 +187,50 @@ defmodule Contributr.EventUsersController do
     )
   end
 
+  defp total_allocated(event_user_id) do
+    case Repo.all(from eu in EventUsers,
+                  join: u in assoc(eu, :user),
+                  join: e in assoc(eu, :event),
+                  join: c in Contribution,
+                  where: eu.id == ^event_user_id,
+                  where: c.from_user_id == u.id and c.event_id == e.id,
+                  select: sum(c.amount)) do
+      [nil]->
+        %{total_allocated: 0}
+      [] =  total ->
+        %{total_allocated: total}
+    end
+  end
+
+  defp comments_for(event_user_id) do
+    case Repo.all(from eu in EventUsers,
+                  join: u in assoc(eu, :user),
+                  join: e in assoc(eu, :event),
+                  join: c in Contribution,
+                  where: eu.id == ^event_user_id,
+                  where: c.to_user_id == u.id and c.event_id == e.id,
+                  select: c.comments) do
+
+      [nil]->
+        %{comments: []}
+      [] =  comments ->
+        %{comments: comments}
+    end
+
+  end
+
+  defp total_received(event_user_id) do
+    case Repo.all(from eu in EventUsers,
+                  join: u in assoc(eu, :user),
+                  join: e in assoc(eu, :event),
+                  join: c in Contribution,
+                  where: eu.id == ^event_user_id,
+                  where: c.to_user_id == u.id and c.event_id == e.id,
+                  select: sum(c.amount)) do
+      [nil]->
+        %{total_received: 0}
+      [] =  total ->
+        %{total_received: total}
+    end
+  end
 end

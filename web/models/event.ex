@@ -22,7 +22,7 @@ defmodule Contributr.Event do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @required_fields, @optional_fields)
+    |> cast(params, [:name, :description, :default_bonus, :start_date, :end_date, :org_id])
     |> validate_length(:name, min: 1, max: 255)
     |> validate_number(:default_bonus, greater_than_or_equal_to: 0)
   end

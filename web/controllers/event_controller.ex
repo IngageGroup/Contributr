@@ -85,14 +85,24 @@ defmodule Contributr.EventController do
   end
 
   def update(conn, %{"id" => id, "event" => event_params}) do
-    event = Repo.get!(Event, id) |> Repo.preload([:org])
-    changeset = Event.changeset(event, event_params)
+    current_user = get_session(conn, :current_user)
+    event = Repo.get!(Event, id)|> Repo.preload([:event_users])|> Repo.preload([:org])
+    default_bonus = elem(Float.parse(event_params["default_bonus"]),0)
+    desc = event_params["description"]
+    name = event_params["name"]
+    end_date = elem(Ecto.Date.cast(event_params["end_date"]),1)
+    s_date = elem(Ecto.Date.cast(event_params["start_date"]),1)
+
+    update = %{default_bonus: default_bonus, description: desc, name: name, end_date: end_date,start_date: s_date}
+    changeset = Event.changeset(event, update)
+    IO.inspect("updating")
 
     case Repo.update(changeset) do
-      {:ok, event} ->
+      {:ok, _event} ->
+      IO.inspect(_event)
         conn
         |> put_flash(:info, "Event updated successfully.")
-        |> redirect(to: event_path(conn, :index, event.org.name))
+        |> redirect(to: event_path(conn, :index, current_user.org_name))
       {:error, changeset} ->
         render(conn, "edit.html", event: event, changeset: changeset, current_user: get_session(conn, :current_user))
     end

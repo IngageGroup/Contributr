@@ -25,6 +25,10 @@ config :contributr, Contributr.Endpoint,
     ]
   ]
 
+config :pdf_generator,
+       command_prefix: "/usr/X11/bin/xvfb",
+       wkhtml_path: "/usr/local/bin/wkhtmltopdf"
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 

@@ -19,7 +19,7 @@ defmodule Contributr.Mixfile do
   def application do
     [mod: {Contributr, []},
       applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-        :phoenix_ecto, :postgrex, :ueberauth, :ueberauth_google, :number]]
+        :phoenix_ecto, :postgrex, :ueberauth, :ueberauth_google, :number,:pdf_generator]]
   end
 
   # Specifies which paths to compile per environment.
@@ -30,7 +30,7 @@ defmodule Contributr.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.2.0"},
+    [{:phoenix, "~> 1.3.0"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.0-rc"},
       {:postgrex, ">= 0.0.0"},
@@ -43,7 +43,8 @@ defmodule Contributr.Mixfile do
       {:dialyxir, "~> 0.3", only: [:dev]},
       {:number, "~> 0.4.2"},
       {:uuid, "~> 1.1"},
-      {:plug, "~> 1.3"}
+      {:pdf_generator, ">=0.3.5"}
+
     ]
   end
 

@@ -14,7 +14,7 @@ defmodule Contributr.EventUsersController do
   def list(conn, %{"organization" => organization, "event_id" => event_id}) do
     event = Repo.get(Event, event_id)
     user_info = Enum.map(load_users_by_event(event_id), fn (eu) ->
-      Enum.into(total_received(eu.event_user_id),
+      Enum.into(comments_for(eu.event_user_id),
         Enum.into(total_received(eu.event_user_id),
           Enum.into(total_allocated(eu.event_user_id),
             eu)))end)

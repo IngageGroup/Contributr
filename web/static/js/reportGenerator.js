@@ -81,7 +81,7 @@ function contributionsByUser(user){
     }else{
         addPage()
     }
-    let msg = "User: " + user.user_name + " received " + user.received_total;
+    let msg = "User: " + user.user_name + " received " + user.total_received;
     writeLine(msg);
 }
 
@@ -96,7 +96,7 @@ function initReport(){
 
 function commentReport(){
     let reportButton = $("#commentReport");
-    let data = JSON.parse(reportButton.attr("data-comments"));
+    let data = JSON.parse(reportButton.attr("data-report"));
     initReport();
     DOC = new jsPDF();
     data.forEach(commentsForUser);
@@ -105,7 +105,7 @@ function commentReport(){
 
 function contributionReport(){
     let reportButton = $("#contribReport");
-    let data = JSON.parse(reportButton.attr("data-contributions"));
+    let data = JSON.parse(reportButton.attr("data-report"));
     initReport();
     writeLine("Event: " +data[0].event_name);
     writeLine("Contributions to user: ");

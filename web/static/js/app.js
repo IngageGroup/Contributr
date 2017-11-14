@@ -19,7 +19,7 @@ import "jquery";
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
-import commentReport from "./commentReport.js";
+import commentReport from "./reportGenerator.js";
 
 jQuery(function($) {
     var $bodyEl = $('body'),

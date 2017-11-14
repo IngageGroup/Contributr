@@ -1,3 +1,6 @@
+<html>
+<body>
+
 <div class="mui-panel mui--text-left">
     <span class="mui--text-headline mui--text-left">Showing <%=Enum.count(@comments)%> Comments for <%=@event_user.user.name%></span>
 </div>
@@ -28,5 +31,7 @@
         <%= link "Back", to: event_users_path(@conn, :list, @current_user.org_name, @event), class: "mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" %>
     </div>
 </div>
+</body>
+</html>
 
 

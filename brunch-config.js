@@ -5,9 +5,13 @@ exports.config = {
             joinTo: "js/app.js"
         },
         stylesheets: {
-            joinTo: {
-                "css/app.css": /^(web\/static\/cs|node_modules|^nodemodules\/muicss-webcomp\/packages\/cdn\/css)/
+            joinTo: "css/app.css",
+            order: {
+                after: ["web/static/css/app.css"] // concat app.css last
             }
+        },
+        templates: {
+            joinTo: "js/app.js"
         }
     },
 
@@ -34,21 +38,21 @@ exports.config = {
     plugins: {
         babel: {
             // Do not use ES6 compiler in vendor code
-            ignore: [/web\/static\/vendor/]
+            ignore: [/(web\/static\/vendor)|node_modules/]
+        },
+        sass: {
+            options: {
+                includePaths: [
+                    "node_modules/font-awesome/scss",
+                    "node_modules/roboto-fontface/css/roboto/sass",
+                    "node_modules/muicss/lib/sass"], // tell sass-brunch where to look for files to @import
+            },
+            precision: 8 // minimum precision required by bootstrap-sass
         },
         copycat: {
-            "fonts": ["node_modules/material-design-icons/iconfont",
-                "node_modules/font-awesome/fonts",
-                "node_modules/roboto-fontface/fonts"]
-        },
-        postcss: {
-            processors: [
-                require('autoprefixer')(['last 8 versions']),
-                require('csswring')({
-                    map: true,
-                    preserveHacks: true
-                })
-            ]
+            "fonts": [
+                "node_modules/font-awesome/scss/",
+                "node_modules/roboto-fontface/css/roboto/sass/"]
         }
     },
 
@@ -63,8 +67,9 @@ exports.config = {
         globals: {
             $: 'jquery',
             jQuery: 'jquery',
-            'phoenix_html': 'phoenix_html',
-            muicss:'muicss-webcomp'
+            jsPDF: 'jspdf'
+        },
+        styles: {
         }
     }
 

@@ -26,18 +26,19 @@ defmodule Contributr.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :admin do
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   pipeline :organization do
-    # eventually figure out how to create plugs
-    # that I can add here
   end
 
   #TODO: make a plug that only allows superadmins in here
   scope "/admin", Contributr do
-    pipe_through :browser # Use the default browser stack
+    pipe_through [:browser, :admin] # Use the default browser stack
     resources "/users", UserController
     resources "/orgs", OrgController
     resources "/roles", RoleController
@@ -72,7 +73,7 @@ defmodule Contributr.Router do
 
   scope "/:organization", Contributr do
 
-    pipe_through [:browser,:organization]
+    pipe_through [:browser, :organization]
 
     get "/", ApplicationController, :index
     resources "/user", UserController

@@ -4,7 +4,7 @@ defmodule Contributr.Mixfile do
   def project do
     [app: :contributr,
       version: "0.0.1",
-      elixir: "~> 1.0",
+      elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       build_embedded: Mix.env == :prod,
@@ -19,7 +19,7 @@ defmodule Contributr.Mixfile do
   def application do
     [mod: {Contributr, []},
       applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-        :phoenix_ecto, :postgrex, :ueberauth, :ueberauth_google, :number,:pdf_generator]]
+        :phoenix_ecto, :postgrex, :ueberauth, :ueberauth_google, :number]]
   end
 
   # Specifies which paths to compile per environment.
@@ -43,8 +43,6 @@ defmodule Contributr.Mixfile do
       {:dialyxir, "~> 0.3", only: [:dev]},
       {:number, "~> 0.4.2"},
       {:uuid, "~> 1.1"},
-      {:pdf_generator, ">=0.3.5"}
-
     ]
   end
 

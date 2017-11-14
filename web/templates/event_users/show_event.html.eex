@@ -20,7 +20,7 @@
       <td class="mui--text-left">
           <%= link "Edit", to: event_users_path(@conn, :edit_event_user, @organization, @event.id, event_user[:event_user_id]) %> |
           <%= link "Remove", to: event_users_path(@conn, :delete_event_user, @organization, @event.id, event_user[:event_user_id]) %> |
-          <%=  link "Comments Received", to: event_users_path(@conn, :list_comments, @current_user.org_name, @event.id, event_user[:event_user_id]) %>
+          <%= link "Comments Received", to: event_users_path(@conn, :list_comments, @current_user.org_name, @event.id, event_user[:event_user_id]) %>
       </td>
       <td class="mui--text-left"><%= if event_user[:total_received] do Number.Currency.number_to_currency(event_user[:total_received]) else 0 end %></td>
       <td class="mui--text-left"><%= if event_user[:eligible_to_receive] do "Yes" else "No" end %></td>
@@ -37,6 +37,11 @@
     </div>
     <div class="mui-col-sm-2">
         <%= link "Back", to: "/", class: "mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" %>
+
+        <%= link "Contribution Report", to: "/", class: "mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" %>
+    </div>
+    <div class="mui-col-sm-4" >
+        <button  id="commentReport" id="commentReport" data-comments="<%=elem(@encoded,1)%>" class="mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" >Comment Report</button>
     </div>
 </div>
 

@@ -49,12 +49,9 @@ defmodule UserFromAuth do
       nil ->
         {:error, "No org configured for user"}
       %Contributr.OrganizationsUsers{} = ou ->
-
         {:ok, ou}
     end
   end
-
-
 
   defp basic_info(auth) do
     %{uid: auth.uid,
@@ -71,8 +68,6 @@ defmodule UserFromAuth do
     role = ou.role
     user = ou.user
     events = load_events(ou)
-    IO.inspect("PRELOADING")
-    IO.inspect(events)
 
     Map.merge(basic_info,
       %{org_id: org.id,
@@ -111,7 +106,6 @@ defmodule UserFromAuth do
   defp sort_by_time_left(e1, e2) do
     e1.days_left >= e2.days_left
   end
-
 
   defp days_left(from_date, end_date) do
     end_date = Date.from_iso8601!(Ecto.Date.to_iso8601(end_date))

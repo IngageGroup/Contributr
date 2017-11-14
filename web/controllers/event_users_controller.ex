@@ -11,30 +11,21 @@ defmodule Contributr.EventUsersController do
 
   plug Contributr.Plugs.Authenticated
 
-
-  #  def index(conn, %{"organization" => organization, "event_id" => event_id}) do
-  #
-  #    event_users = load_users_by_event(event_id)
-  #    render(conn, "index.html", organization: organization, event_id: event_id, event_users: event_users)
-  #  end
-
-
-
-
   def list(conn, %{"organization" => organization, "event_id" => event_id}) do
     event = Repo.get(Event, event_id)
     user_info = Enum.map(load_users_by_event(event_id), fn (eu) ->
       Enum.into(total_received(eu.event_user_id),
-        Enum.into(total_allocated(eu.event_user_id),
-          eu))end)
-    render(conn, "show_event.html", organization: organization, event: event, event_users: user_info)
+        Enum.into(total_received(eu.event_user_id),
+          Enum.into(total_allocated(eu.event_user_id),
+            eu)))end)
+    encoded_ui = Poison.encode(user_info)
+    IO.inspect(encoded_ui)
+    render(conn, "show_event.html", organization: organization, event: event, event_users: user_info, encoded: encoded_ui)
   end
 
   def list_comments(conn, _params) do
     current_user = get_session(conn, :current_user)
     organization = current_user.org_name
-    IO.inspect("list_comments")
-    IO.inspect(_params)
     eu_id = _params["id"]
     event_id = _params["event_id"]
     comments = comments_for(eu_id)
@@ -117,20 +108,14 @@ defmodule Contributr.EventUsersController do
   end
 
   def delete_event_user(conn, _params) do
-    IO.inspect(_params)
     current_user = get_session(conn, :current_user)
     event_user_id = String.to_integer(_params["id"])
     event_users = Repo.get!(EventUsers, event_user_id) |> Repo.preload([:event])|> Repo.preload([:user])
     user = event_users.user
     event = event_users.event
 
-
-
-
     Repo.delete_all(from c in Contribution,
                     where: c.to_user_id == ^user.id or c.from_user_id == ^user.id and c.event_id == ^event.id)
-
-
 
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
@@ -148,7 +133,6 @@ defmodule Contributr.EventUsersController do
       join: e in assoc(eu, :event),
       where: eu.event_id == ^event_id,
       select: %{
-        event_user: eu,
         event_user_id: eu.id,
         event_name: e.name,
         user_name: u.name,
@@ -198,7 +182,7 @@ defmodule Contributr.EventUsersController do
       [nil]->
         %{total_allocated: 0}
       [] =  total ->
-        %{total_allocated: total}
+        %{total_allocated: Number.Currency.number_to_currency(total)}
     end
   end
 
@@ -209,7 +193,7 @@ defmodule Contributr.EventUsersController do
                   join: c in Contribution,
                   where: eu.id == ^event_user_id,
                   where: c.to_user_id == u.id and c.event_id == e.id,
-                  select: c.comments) do
+                  select: {c.comments}) do
 
       [nil]->
         %{comments: []}
@@ -230,7 +214,7 @@ defmodule Contributr.EventUsersController do
       [nil]->
         %{total_received: 0}
       [] =  total ->
-        %{total_received: total}
+        %{total_received: Number.Currency.number_to_currency(total)}
     end
   end
 end

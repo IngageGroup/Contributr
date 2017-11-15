@@ -26,7 +26,7 @@
                        <% else %>
                            <!-- user options -->
                            <a href='<%= contribution_path(@conn, :index,@current_user.org_name, event.id) %>' class='mui-btn mui-btn--small mui-btn--raised mui-btn--accent'>
-                              Open
+                              Start !
                            </a>
                        <% end %>
                        </span>

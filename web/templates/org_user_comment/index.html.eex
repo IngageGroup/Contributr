@@ -1,0 +1,20 @@
+<div class="mui-panel page-break">
+    <div class="mui--clearfix">
+        <div class="mui--text-headline mui--pull-left">User Reports</div>
+        <div class="mui--pull-right"><a href="javascript:if(window.print)window.print()">
+            <i class="fa fa-print fa-3x" aria-hidden="true"></i></a>
+        </div>
+    </div>
+    <span >Each box will print on a separate page. It might be necessary to disable double sided printing to achieve the desired result.</span>
+</div>
+<%= for user <- @users do %>
+    <div class="mui-panel page-break">
+        <div class="mui--text-headline mui--divider-bottom"> <%= "#{user.name}" %></div>
+        <div style="padding-bottom:10px"></div>
+        <% comments = comments_for_user(user.id) %>
+            <%= for comment <- comments do %>
+                <div class="mui-col-xs-12" style="padding-bottom:10px"><%= "#{comment}" %></div>
+            <%= end %>
+    </div>
+<%= end %>
+

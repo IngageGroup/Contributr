@@ -6,7 +6,7 @@ defmodule Contributr.Repo.Migrations.CreateRole do
       add :name, :string
       add :description, :string
 
-      timestamps
+      timestamps()
     end
 
   end

@@ -1,0 +1,16 @@
+<h2>Confirmation</h2>
+
+<ul>
+
+
+  <li>
+    <strong>Eligible to receive:</strong>
+    <%= @event_users.eligible_to_receive %>
+  </li>
+
+  <li>
+    <strong>Eligible to give:</strong>
+    <%= @event_users.eligible_to_give %>
+  </li>
+
+</ul>

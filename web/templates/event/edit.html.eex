@@ -1,0 +1,11 @@
+<div class="mui-panel mui--clearfix">
+    <div class="mui--text-headline mui--text-left">Edit event</div>
+</div>
+
+<div class="highlight mui--clearfix">
+    <span>
+            <%= render "form.html", changeset: @changeset,
+                      action: event_path(@conn, :update, @event.id, @event) %>
+    </span>
+    <span><%= link "Back", to: "/", class: "mui-btn mui-btn--primary" %></span
+</div>

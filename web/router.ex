@@ -11,7 +11,7 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 defmodule Contributr.Router do
@@ -26,26 +26,37 @@ defmodule Contributr.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :admin do
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   pipeline :organization do
-    # eventually figure out how to create plugs 
-    # that I can add here
   end
 
   #TODO: make a plug that only allows superadmins in here
   scope "/admin", Contributr do
-    pipe_through :browser # Use the default browser stack
+    pipe_through [:browser, :admin] # Use the default browser stack
     resources "/users", UserController
     resources "/orgs", OrgController
     resources "/roles", RoleController
+    resources "/:organization/events", EventController
+    resources "/:organization/users", EventUsersController
+    get "/:organization/event_users/:event_id", EventUsersController, :list
+    get "/:organization/event_users/:event_id/:id/comments", EventUsersController, :list_comments
+    get "/:organization/event_users/:event_id/new", EventUsersController, :new_event_user
+    get "/:organization/event_users/:event_id/:id/edit", EventUsersController, :edit_event_user
+    get "/:organization/event_users/:event_id/:id/delete", EventUsersController, :delete_event_user
+    put "/:organization/event_users/:event_id/:id/update", EventUsersController, :update
+    patch "/:organization/event_users/:event_id/:id/update", EventUsersController, :update
+    post "/:organization/event_users/:event_id", EventUsersController, :create_event_user
+
   end
 
   scope "/auth", Contributr do
     pipe_through [:browser]
-
     get "/logout", AuthController, :delete
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
@@ -60,14 +71,18 @@ defmodule Contributr.Router do
     get "/login", LoginController, :index
   end
 
-  scope "/:organization", Contributr do 
+  scope "/:organization", Contributr do
 
-    pipe_through [:browser,:organization]
+    pipe_through [:browser, :organization]
 
     get "/", ApplicationController, :index
+
     resources "/user", UserController
-    resources "/orgusers", OrgUserController
-    resources "/contributions", ContributionController
+    get "/user/bulk/add", UserController, :bulk_add
+    post "/user/bulk/create", UserController, :bulk_create
+    resources "/orgusers/:event_id", OrgUserController
+    resources "/contributions/:event_id", ContributionController
+    resources "/comments/:event_id", OrgUserCommentController
   end
 
 end

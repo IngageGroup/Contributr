@@ -7,7 +7,7 @@ defmodule Contributr.Repo.Migrations.CreateOrganization do
       add :active, :boolean, default: false
       add :manager_id, references(:users, on_delete: :nothing)
 
-      timestamps
+      timestamps()
     end
     create index(:orgs, [:manager_id])
 

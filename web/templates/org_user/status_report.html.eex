@@ -6,6 +6,8 @@
       <thead>
         <tr>
           <th><a>Participant <i class="fa fa-sort" aria-hidden="true"></i></a></th>
+
+          <th><a>Dollars Received <i class="fa fa-sort" aria-hidden="true"></i></a></th>
           <th><a>Dollars Given <i class="fa fa-sort" aria-hidden="true"></i></a></th>
           <th><a>Eligible To Give <i class="fa fa-sort" aria-hidden="true"></i></a></th>
           <th><a>Dollars Left <i class="fa fa-sort" aria-hidden="true"></i></a></th>
@@ -21,6 +23,7 @@
             <% view_percent = if (view_allowed == 0), do: "n/a", else: (view_contrib/view_allowed) * 100 %>
             <tr>
               <td><%= user.name %></a></td>
+
               <td><%= Number.Currency.number_to_currency(view_contrib)%></td>
               <td><%= Number.Currency.number_to_currency(view_allowed)%></td>
               <td><%= Number.Currency.number_to_currency(view_remaining)%></td>

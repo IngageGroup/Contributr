@@ -18,6 +18,11 @@
 defmodule Contributr.OrgUserView do
   use Contributr.Web, :view
 
+  def contributed_to_user(id) do
+    Contributr.Contribution
+            |> Contributr.Contribution.funds_received(id)
+            |> Contributr.Repo.one
+  end
 end
 
 

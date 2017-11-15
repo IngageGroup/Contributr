@@ -1,11 +1,12 @@
+
 body {
-  font-family: 'Roboto Slab', serif;
+    font-family: 'Roboto Slab', serif;
 }
 
- /* Space out content a bit */
+/* Space out content a bit */
 body, form, ul, table {
-  margin-top: 20px;
-  margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 /* Phoenix flash messages */
@@ -13,84 +14,84 @@ body, form, ul, table {
 
 /* Phoenix inline forms in links and buttons */
 form.link, form.button {
-  display: inline;
+    display: inline;
 }
 
 /* Custom page header */
 .header {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 .logo {
-  width: 519px;
-  height: 71px;
-  display: inline-block;
-  margin-bottom: 1em;
-  background-size: 519px 71px;
+    width: 519px;
+    height: 71px;
+    display: inline-block;
+    margin-bottom: 1em;
+    background-size: 519px 71px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing {
-  padding-right: 15px;
-  padding-left: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 /* Customize container */
 @media (min-width: 768px) {
-  .container {
-    max-width: 730px;
-  }
+    .container {
+        max-width: 730px;
+    }
 }
 .container-narrow > hr {
-  margin: 30px 0;
+    margin: 30px 0;
 }
 
 /* Main marketing message */
 .jumbotron {
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 /* Supporting marketing content */
 .marketing {
-  margin: 35px 0;
+    margin: 35px 0;
 }
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing {
-    padding-right: 0;
-    padding-left: 0;
-  }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 30px;
-  }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
-  }
+    /* Remove the padding we set earlier */
+    .header,
+    .marketing {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    /* Space out the masthead */
+    .header {
+        margin-bottom: 30px;
+    }
+    /* Remove the bottom border on the jumbotron for visual effect */
+    .jumbotron {
+        border-bottom: 0;
+    }
 }
 
 /* Circle Avatar Styles */
 
-.circle {
-  line-height: 0;		/* remove line-height */
-  display: inline-block;	/* circle wraps image */
-  margin: 5px;
-  border-radius: 50%;	/* relative value */
-  border: 3px solid white;/* border width   */
-  box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
-  transition: linear 0.25s;
+
+.avatar-frame,.avatar-frame img{
+    width: 50px;
+    height: 50px;
+    -webkit-border-radius: 30px; /* Saf3+, Chrome */
+    border-radius: 30px; /* Opera 10.5, IE 9 */
+    /*-moz-border-radius: 30px;  Disabled for FF1+ */
 }
-.circle img {
-  border-radius: 50%;	/* relative value for
-				   adjustable image size */
+
+/* Some print stuff */
+
+@media all {
+    .no-print	{ display: none; }
 }
-.circle:hover {
-  transition: ease-out 0.3s;
-  transform: scale(0.8) rotate(20deg);
+
+@media print {
+    .page-break	{ display: block; page-break-after: always;}
 }
-a.circle { color: transparent; }

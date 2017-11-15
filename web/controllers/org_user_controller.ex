@@ -28,21 +28,24 @@ defmodule Contributr.OrgUserController do
   plug :scrub_params, "user" when action in [:create, :update]
 
   plug Contributr.Plugs.Authenticated
-  plug Contributr.Plugs.OrganizationExists 
   plug Contributr.Plugs.Authorized 
   plug :put_layout, "organization.html"
 
+  def new(conn, _params) do
+    OrganizationsUsers.changeset(%OrganizationsUsers{})
+  end
 
-  def index(conn, %{"organization" => org} ) do
+  def index(conn, %{"organization" => org, "event_id" => event_id} ) do
     role = get_session(conn, :role)
     uid = get_session(conn, :current_user).uid
 
     user_id = Repo.get_by(Contributr.User, uid: uid ).id
 
     contributions_by_user = User.in_org(org)
-    |> User.eligible_to_give_more_than(0)
-    |> User.contributions_from
-    |> Repo.all
+
+    #|> User.eligible_to_give_more_than(0)
+    #|> User.contributions_from
+     |> Repo.all
 
 
 

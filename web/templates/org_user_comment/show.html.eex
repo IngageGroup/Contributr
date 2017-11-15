@@ -1,0 +1,25 @@
+<%= last_user = "none" %>
+<div class="mui-panel">
+    <span class="mui--text-headline">User Reports</span>
+</div>
+
+<%= for user <- @users do %>
+    <% last_user = user.name %>
+    <% if last_user != user.name do %>
+        <div class="mui-panel">
+             <span class="mui--text-headline"> <%= "#{@user.name}" %></span>
+         </div>
+         <div class="mui-container">
+         <table class="mui-table" >
+    <% end %>
+    <tbody>
+      <tr>
+        <td><%= "#{user.comment}" %></td>
+      </tr>
+    </tbody>
+    <% if last_user != "#{user.name}" do %>
+        </table>
+        </div>
+        <div class="page-break"></div>
+    <% end %>
+<% end %>

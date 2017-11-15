@@ -24,11 +24,15 @@ defmodule Contributr.UserController do
 
 
   plug :scrub_params, "user" when action in [:create, :update]
-  plug Contributr.Plugs.Authenticated
 
   def index(conn, _params) do
     users = Repo.all(User)
     render(conn, "index.html", users: users, current_user: get_session(conn, :current_user))
+  end
+
+  def bulk_add(conn, _params) do
+    changeset = User.changeset(%User{})
+    render(conn, "bulk_add.html", changeset: changeset, current_user: get_session(conn, :current_user))
   end
 
   def new(conn, _params) do
@@ -37,7 +41,6 @@ defmodule Contributr.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    IO.inspect("INSPECTING!!!!!!")
     email = String.downcase Map.get(user_params, "email")
     clean_params = Map.put(user_params, "email", email)
     changeset = User.changeset(%User{}, user_params)
@@ -53,18 +56,45 @@ defmodule Contributr.UserController do
     end
   end
 
-  def add_org_user(user, conn) do
-    cu = Repo.get_by(Contributr.User, uid: get_session(conn, :current_user).uid)
-    q =  from ou in Contributr.OrganizationsUsers,
-              where: ou.user_id == ^cu.id,
-              select: ou
-    org = Repo.one(q)
-    role = Repo.get_by(Contributr.Role, name: "User")
-    cs = OrganizationsUsers.changeset(%OrganizationsUsers{}, %{user_id: user.id, org_id: org.org_id,role_id: role.id })
-    Repo.insert(cs)
+  def bulk_create(conn, %{"user" => user_params}) do
+    emails = String.split(user_params["email"], "\r\n", trim: true)
+    now =  DateTime.utc_now
+    params = Enum.map(emails, fn (email) ->
+    parts = String.split(email,[".","@"], trim: true)
+    name = String.capitalize(Enum.at(parts,0)) <>" "<> String.capitalize(Enum.at(parts,1))
+    result = %{name: name, email: email, inserted_at: now, updated_at: now}
+    end)
+
+
+    case Repo.insert_all(User, params, on_conflict: :nothing, returning: [:id, :inserted_at, :updated_at]) do
+      {:ok, _user} ->
+        #add_org_user(_user, conn)
+        conn
+        |> put_flash(:info, "User created successfully.")
+        |> redirect(to: user_path(conn, :index))
+      {:error, changeset} ->
+        render(conn, "new.html", changeset: changeset, current_user: get_session(conn, :current_user))
+        {_, results} ->
+          add_org_user(results, conn)
+          conn
+          |> put_flash(:info, "User created successfully.")
+          |> redirect(to: user_path(conn, :index))
+    end
   end
 
+  def add_org_user(users, conn) do
+    now =  DateTime.utc_now
+    current_user = get_session(conn, :current_user)
+    params = Enum.map(users, fn (user) ->
+      result = %{user_id: user.id,
+        org_id: current_user.org_id,
+        role_id: 3,
+        inserted_at: now,
+        updated_at: now}
+    end)
 
+    Repo.insert_all(OrganizationsUsers,params, on_conflict: :nothing )
+  end
 
 
   def show(conn, %{"organization" => organization, "event_id" => event_id, "id" => id}) do

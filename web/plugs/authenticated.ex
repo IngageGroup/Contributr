@@ -11,7 +11,7 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -26,15 +26,15 @@ defmodule Contributr.Plugs.Authenticated do
   use Contributr.Web, :controller
 
   def init(opts) do
-    opts 
+    opts
   end
 
   def call(conn, _opts) do
     case get_session(conn, :current_user) do
       nil ->
         conn |> put_flash(:error, "Unauthorized!") |> redirect(to: "/") |> halt
-      %{} = user -> 
-        assign(conn, :current_user, user) 
+      %{} = user ->
+        assign(conn, :current_user, user)
     end
   end
 end

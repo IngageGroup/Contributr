@@ -1,0 +1,8 @@
+<h2>Show config</h2>
+
+<ul>
+
+</ul>
+
+<%= link "Edit", to: config_path(@conn, :edit, @config) %>
+<%= link "Back", to: config_path(@conn, :index) %>

@@ -1,0 +1,21 @@
+<% firstName = Enum.at(String.split(@user.name," "),0) %>
+<% domain = Enum.at(String.split(@user.email,"@"),1) %>
+<% orgName = String.capitalize(Enum.at(String.split(domain,"."),0)) %>
+<div class="mui-panel">
+    <div class="mui--text-headline">Welcome <%=firstName%>! </div>
+    <div class="mui--text-subhead "> It looks like this is the first time you've run Contributr.</div>
+    <div class="mui--text-subhead "></div>
+</div>
+
+<div class="mui-panel">
+    <div class="mui--text-headline ">Your user info:</div>
+    <div class="mui--text-subhead">Name: <%= @user.name %></div>
+    <div class="mui--text-subhead">Email: <%= @user.email%></div>
+    <div class="mui--text-subhead">Domain: <%= domain %></div>
+</div>
+
+
+<div class="mui-panel">
+    <div class="mui--text-headline ">Manage</div>
+    <%= link "Organizations", to: org_path(@conn, :index), class: "mui-btn mui-btn--big mui-btn--primary" %>
+</div>

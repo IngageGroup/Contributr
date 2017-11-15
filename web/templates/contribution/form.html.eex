@@ -15,15 +15,15 @@
           <% end %>
 
           <div class="mui-col-md-8 mui-textfield ">
-            <%= label f, :amount  %>
-            <%= number_input f, :amount %>
+            <%= label f, :amount   %>
+            <%= number_input f, :amount  %>
             <%= error_tag f, :amount %>
           </div>
 
           <div class="mui-col-md-8 mui-textfield " style: "height:75px">
-            <%= label f, :comments %>
-            <%= text_input f, :comments%>
-            <%= error_tag f, :comments %>
+            <%= label f, :comments  %>
+            <%= textarea f, :comments %>
+            <%= error_tag f, :comments%>
           </div>
       </div>
       <%= submit "Submit", class: "mui-btn mui-btn--raised mui-btn--primary" %>

@@ -22,7 +22,6 @@ defmodule Contributr.ApplicationController do
   alias Contributr.Organization
   
   plug Contributr.Plugs.Authenticated
-  plug Contributr.Plugs.OrganizationExists 
   plug Contributr.Plugs.Authorized 
   plug :put_layout, "organization.html"
 

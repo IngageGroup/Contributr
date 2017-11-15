@@ -21,5 +21,6 @@ defmodule Contributr.PageView do
     today = Date.utc_today
     end_date = Date.from_iso8601!(Ecto.Date.to_iso8601(event.end_date))
     days_left  = Date.diff(today,end_date)
+    if days_left < 1 do 0 else days_left end
   end
 end

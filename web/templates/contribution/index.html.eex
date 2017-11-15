@@ -34,4 +34,7 @@
     <span>
         <%= link  "New", to: dest, class: class %>
     </span>
+    <span>
+        <%= link  "Back", to: "/", class: "small mui-btn mui-btn--primary" %>
+    </span>
 </div>

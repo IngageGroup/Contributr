@@ -189,12 +189,12 @@ defmodule Contributr.ContributionController do
 
   def funds_remaining(current_user, event_id) do
     eu = Repo.get_by(Contributr.EventUsers, user_id: current_user.user_id, event_id: String.to_integer(event_id))
-    mycontributions = round(Number.Conversion.to_float(total_allocated(eu.id).total_allocated))
+    mycontributions = round(total_allocated(eu.id))
     remaining = eu.eligible_to_give - mycontributions
   end
 
   defp total_allocated(event_user_id) do
-    case Repo.all(from eu in EventUsers,
+    case Repo.one(from eu in EventUsers,
                   join: u in assoc(eu, :user),
                   join: e in assoc(eu, :event),
                   join: c in Contribution,

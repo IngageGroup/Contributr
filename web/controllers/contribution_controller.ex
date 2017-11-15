@@ -208,6 +208,7 @@ defmodule Contributr.ContributionController do
       [] =  total ->
         %{total_allocated: Number.Currency.number_to_currency(total)}
         result -> %{total_allocated: result}
+
     end
   end
 

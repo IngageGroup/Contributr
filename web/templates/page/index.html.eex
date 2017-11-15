@@ -9,7 +9,7 @@
                     <div class="mui-panel mui--clearfix mui--bg-primary-dark mui-col-md-8">
                         <div class="mui-panel mui--clearfix">
                             <span class="mui--align-bottom mui--pull-left mui--text-title"><b><%= event.name %></b></span>
-                            <span class="mui--align-bottom mui--pull-right mui--text-headline"><ul class="mui-list--inline"><li>days left</li><li><%= event.days_left%></li></ul>
+                            <span class="mui--align-bottom mui--pull-right mui--text-headline"><ul class="mui-list--inline"><li>End Date</li><li><%= event.end_date%></li></ul>
                         </div>
                         <span class="mui--appbar-min-height">
                        <%= if  @current_user.role_name == "Superadmin" do %>
@@ -46,4 +46,3 @@
         </div>
     </span>
 </div>
-

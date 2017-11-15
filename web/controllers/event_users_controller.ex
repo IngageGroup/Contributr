@@ -5,9 +5,7 @@ defmodule Contributr.EventUsersController do
   use Contributr.Web, :controller
   alias Contributr.EventUsers
   alias Contributr.Event
-  alias Contributr.Organization
   alias Contributr.Contribution
-  alias Contributr.User
 
   plug Contributr.Plugs.Authenticated
 
@@ -22,11 +20,11 @@ defmodule Contributr.EventUsersController do
     render(conn, "show_event.html", organization: organization, event: event, event_users: user_info, encoded: encoded_ui)
   end
 
-  def list_comments(conn, _params) do
+  def list_comments(conn, params) do
     current_user = get_session(conn, :current_user)
     organization = current_user.org_name
-    eu_id = _params["id"]
-    event_id = _params["event_id"]
+    eu_id = params["id"]
+    event_id = params["event_id"]
     comments = comments_for(eu_id)
     event_user = Repo.get(EventUsers, String.to_integer(eu_id))|> Repo.preload([:user])
     render(conn, "show_comments.html", organization: organization, event: event_id,event_user: event_user, comments: comments)
@@ -75,14 +73,13 @@ defmodule Contributr.EventUsersController do
     end
   end
 
-  def edit_event_user(conn, _params) do
+  def edit_event_user(conn, params) do
     current_user = get_session(conn, :current_user)
-    user_id = _params["id"]
+    user_id = params["id"]
     Logger.info(user_id)
-    event_id = _params["event_id"]
+    event_id = params["event_id"]
     Logger.info(event_id)
     event_user = Repo.get!(EventUsers, user_id) |> Repo.preload([:event])|> Repo.preload([:user])
-    user = event_user.user
     changeset = EventUsers.changeset(event_user)
     users = selected_user(event_user)
 
@@ -101,11 +98,11 @@ defmodule Contributr.EventUsersController do
     render(conn, "show.html", event_id: id, event_users: event_users)
   end
 
-  def update(conn, _params) do
+  def update(conn, params) do
 
     current_user = get_session(conn, :current_user)
-    event_id = _params["id"]
-    event_user = _params["event_users"]
+    event_id = params["id"]
+    event_user = params["event_users"]
     event_user_user = event_user["user"]
     event_user_id = String.to_integer(event_user_user["id"])
     updated_etg = elem(Float.parse(event_user["eligible_to_give"]), 0)
@@ -117,7 +114,7 @@ defmodule Contributr.EventUsersController do
     event_users = Repo.get!(EventUsers, event_user_id)
     changeset = EventUsers.changeset(event_users, changes_params)
     case Repo.update(changeset) do
-      {:ok, event_users} ->
+      {:ok, _event_users} ->
         conn
         |> put_flash(:info, "Event users updated successfully.")
         |> redirect(to:  event_users_path(conn, :list,current_user.org_name, event_id))
@@ -126,9 +123,9 @@ defmodule Contributr.EventUsersController do
     end
   end
 
-  def delete_event_user(conn, _params) do
+  def delete_event_user(conn, params) do
     current_user = get_session(conn, :current_user)
-    event_user_id = String.to_integer(_params["id"])
+    event_user_id = String.to_integer(params["id"])
     event_users = Repo.get!(EventUsers, event_user_id) |> Repo.preload([:event])|> Repo.preload([:user])
     user = event_users.user
     event = event_users.event
@@ -193,17 +190,17 @@ defmodule Contributr.EventUsersController do
   end
 
   defp total_allocated(event_user_id) do
-    case Repo.all(from eu in EventUsers,
+    case Repo.one(from eu in EventUsers,
                   join: u in assoc(eu, :user),
                   join: e in assoc(eu, :event),
                   join: c in Contribution,
                   where: eu.id == ^event_user_id,
                   where: c.from_user_id == u.id and c.event_id == e.id,
                   select: sum(c.amount)) do
-      [nil]->
-        %{total_allocated: 0}
-      [] =  total ->
-        %{total_allocated: Number.Currency.number_to_currency(total)}
+              nil ->
+                %{total_allocated: 0}
+              result ->
+                %{total_allocated: Number.Conversion.to_float(result)}
     end
   end
 
@@ -214,18 +211,19 @@ defmodule Contributr.EventUsersController do
                   join: c in Contribution,
                   where: eu.id == ^event_user_id,
                   where: c.to_user_id == u.id and c.event_id == e.id,
-                  select: {c.comments}) do
+                  select: c.comments) do
 
       [nil]->
         %{comments: []}
-      [] =  comments ->
-        %{comments: comments}
+      result ->
+        IO.inspect(result)
+        %{comments: result}
     end
 
   end
 
   defp total_received(event_user_id) do
-    case Repo.all(from eu in EventUsers,
+    case Repo.one(from eu in EventUsers,
                   join: u in assoc(eu, :user),
                   join: e in assoc(eu, :event),
                   join: c in Contribution,
@@ -233,9 +231,9 @@ defmodule Contributr.EventUsersController do
                   where: c.to_user_id == u.id and c.event_id == e.id,
                   select: sum(c.amount)) do
       [nil]->
-        %{total_received: 0}
-      [] =  total ->
-        %{total_received: Number.Currency.number_to_currency(total)}
+       %{total_received: 0}
+      result ->
+        %{total_received: Number.Currency.number_to_currency(result)}
     end
   end
 end

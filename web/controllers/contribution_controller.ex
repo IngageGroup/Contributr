@@ -190,7 +190,7 @@ defmodule Contributr.ContributionController do
 
   def funds_remaining(current_user, event_id) do
     eu = Repo.get_by(Contributr.EventUsers, user_id: current_user.user_id, event_id: String.to_integer(event_id))
-    mycontributions = round(Number.Conversion.to_float(Enum.at(total_allocated(eu.id),0)))
+    mycontributions = round(Number.Conversion.to_float(total_allocated(eu.id).total_allocated))
     remaining = eu.eligible_to_give - mycontributions
     IO.inspect(remaining)
   end
@@ -207,7 +207,8 @@ defmodule Contributr.ContributionController do
         %{total_allocated: 0}
       [] =  total ->
         %{total_allocated: Number.Currency.number_to_currency(total)}
-        result -> result
+        result -> %{total_allocated: result}
+
     end
   end
 

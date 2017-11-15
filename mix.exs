@@ -43,6 +43,7 @@ defmodule Contributr.Mixfile do
       {:dialyxir, "~> 0.5.1", only: [:dev]},
       {:number, "~> 0.5.4"},
       {:uuid, "~> 1.1"},
+      {:plug, "~> 1.3"}
     ]
   end
 

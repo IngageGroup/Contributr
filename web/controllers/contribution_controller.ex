@@ -11,7 +11,6 @@ defmodule Contributr.ContributionController do
 
   def index(conn, %{"organization" => organization, "event_id" => event_id}) do
     user = get_session(conn, :current_user)
-    IO.inspect(event_id)
     funds_remaining = funds_remaining(user, event_id)
 
 
@@ -192,7 +191,6 @@ defmodule Contributr.ContributionController do
     eu = Repo.get_by(Contributr.EventUsers, user_id: current_user.user_id, event_id: String.to_integer(event_id))
     mycontributions = round(Number.Conversion.to_float(total_allocated(eu.id).total_allocated))
     remaining = eu.eligible_to_give - mycontributions
-    IO.inspect(remaining)
   end
 
   defp total_allocated(event_user_id) do
@@ -203,12 +201,10 @@ defmodule Contributr.ContributionController do
                   where: eu.id == ^event_user_id,
                   where: c.from_user_id == u.id and c.event_id == e.id,
                   select: sum(c.amount)) do
-      [nil]->
-        %{total_allocated: 0}
-      [] =  total ->
-        %{total_allocated: Number.Currency.number_to_currency(total)}
-        result -> %{total_allocated: result}
-
+      nil ->
+         0
+      result ->
+          Number.Conversion.to_float(result)
     end
   end
 

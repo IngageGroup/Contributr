@@ -88,7 +88,7 @@ defmodule Contributr.UserController do
     params = Enum.map(users, fn (user) ->
       result = %{user_id: user.id,
         org_id: current_user.org_id,
-        role_id: current_user.role_id,
+        role_id: 3,
         inserted_at: now,
         updated_at: now}
     end)

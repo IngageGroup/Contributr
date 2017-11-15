@@ -38,9 +38,10 @@
              <div class="mui--align-bottom mui--text-left mui--text-display1 mui-col-md-8">Manage</div>
              <div class="mui-panel mui--appbar-line-height mui--invisible"></div>
              <div class="mui--appbar-min-height mui-panel mui--clearfix mui--bg-primary-dark ">
-                             <ul class="mui--text-left mui--appbar-min-height mui-list--inline">
-                                    <li><a href='<%=user_path(@conn, :bulk_add,@current_user.org_name )%>' class='mui-btn mui-btn--small mui-btn--raised mui-btn--danger'>Add new user to org</a></li>
-                             </ul>
+                   <ul class="mui--text-left mui--appbar-min-height mui-list--inline">
+                     <li><a href='<%=event_path(@conn, :new, @current_user.org_name )%>' class='mui-btn mui-btn--small mui-btn--raised mui-btn--danger'>Add new event</a></li>
+                     <li><a href='<%=user_path(@conn, :bulk_add,@current_user.org_name )%>' class='mui-btn mui-btn--small mui-btn--raised mui-btn--danger'>Add new user to org</a></li>
+                   </ul>
             </div>
             <% end %>
              <!-- end application admin section -->

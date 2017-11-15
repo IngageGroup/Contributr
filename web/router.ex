@@ -76,12 +76,13 @@ defmodule Contributr.Router do
     pipe_through [:browser, :organization]
 
     get "/", ApplicationController, :index
+
     resources "/user", UserController
+    get "/user/bulk/add", UserController, :bulk_add
+    post "/user/bulk/create", UserController, :bulk_create
     resources "/orgusers/:event_id", OrgUserController
     resources "/contributions/:event_id", ContributionController
     resources "/comments/:event_id", OrgUserCommentController
-
-
   end
 
 end

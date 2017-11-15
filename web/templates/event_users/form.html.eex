@@ -13,7 +13,7 @@
           <%= if Enumerable.count(@users) > 1 do %>
           <span class="mui-select mui--text-left"><%= select(i, :id, @users) %></span>
           <% else %>
-          <span class="mui-select mui--text-left" "disabled"><%= select(i, :id, @users, [:disabled]) %></span>
+          <span class="mui-select mui--text-left" "><%= select(i, :id, @users) %></span>
           <% end %>
           <span><%= error_tag i, :user %></span>
         </div>

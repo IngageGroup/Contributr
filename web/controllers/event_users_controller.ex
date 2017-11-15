@@ -19,7 +19,6 @@ defmodule Contributr.EventUsersController do
           Enum.into(total_allocated(eu.event_user_id),
             eu)))end)
     encoded_ui = Poison.encode(user_info)
-    IO.inspect(encoded_ui)
     render(conn, "show_event.html", organization: organization, event: event, event_users: user_info, encoded: encoded_ui)
   end
 
@@ -34,14 +33,46 @@ defmodule Contributr.EventUsersController do
   end
 
   def new_event_user(conn, %{"organization" => organization, "event_id" => event_id}) do
+    current_user = get_session(conn,:current_user)
     event = Repo.get(Event, event_id)
     changeset = EventUsers.changeset(%EventUsers{eligible_to_give: event.default_bonus})
-    org_users = all_unassigned_users(organization,event_id)
+    org_users = all_unassigned_users(current_user,event_id)
     render(conn, "new.html",
       organization: organization,
       event: event,
       users: org_users,
       changeset: changeset)
+  end
+
+
+  def create_event_user(conn, %{"organization" => organization, "event_id" => event_id, "event_users" => event_users_params}) do
+    #create event
+    current_user = get_session(conn, :current_user)
+
+    user_id = String.to_integer(event_users_params["user"]["id"])
+    id = String.to_integer(event_id)
+    eligible_to_give = elem(Float.parse(event_users_params["eligible_to_give"]), 0)
+    eligible_to_receive =  if (event_users_params["eligible_to_receive"] == "true") do true else false end
+
+    changeset = EventUsers.changeset(%EventUsers{event_id: id,
+      user_id: user_id,
+      eligible_to_give: eligible_to_give,
+      eligible_to_receive: eligible_to_receive }
+    )
+
+    case Repo.insert(changeset) do
+      {:ok, _event_users} ->
+        conn
+        |> put_flash(:info, "Event users created successfully.")
+        |> redirect(to: event_users_path(conn, :list, current_user.org_name, id))
+      {:error, changeset} ->
+        org_users = all_unassigned_users(get_session(conn, :current_user),event_id)
+        render(conn, "new.html",
+          organization: organization,
+          event: Repo.get(Event, event_id),
+          users: org_users,
+          changeset: changeset)
+    end
   end
 
   def edit_event_user(conn, _params) do
@@ -63,19 +94,7 @@ defmodule Contributr.EventUsersController do
   end
 
 
-  def create_event_user(conn, %{"organization" => organization, "event_id" => event_id, "event_users" => event_users_params}) do
-    #create event
-    changeset = EventUsers.changeset(%EventUsers{event_id: event_id}, event_users_params)
 
-    case Repo.insert(changeset) do
-      {:ok, _event_users} ->
-        conn
-        |> put_flash(:info, "Event users created successfully.")
-        |> redirect(to: event_users_path(conn, :index,  event_id: event_users_params.event_id))
-      {:error, changeset} ->
-        render(conn, "new.html", event_id: event_users_params.event_id, changeset: changeset)
-    end
-  end
 
   def show(conn, %{"id" => id}) do
     event_users = Repo.get!(EventUsers, id)
@@ -143,14 +162,16 @@ defmodule Contributr.EventUsersController do
     )
   end
 
-  def all_unassigned_users(org_name, event_id) do
-    Repo.all(
-      from ou in Contributr.OrganizationsUsers,
-      join: eu in Contributr.EventUsers,
-      join: u in assoc(ou, :user),
-      where: ou.user_id != eu.user_id,
-      select: {u.name, eu.id}
-    )
+  def all_unassigned_users(current_user, event_id) do
+      all_users = Repo.all(from(ou in Contributr.OrganizationsUsers,
+        where: ou.org_id == ^current_user.org_id,
+        join: u in assoc(ou, :user),
+        select: {u.name, u.id}))
+      event_users = Repo.all(from(eu in EventUsers,
+        where: eu.event_id == ^event_id,
+        join: u in assoc(eu, :user),
+        select: {u.name, u.id}))
+      Enum.reject(all_users, fn (user) -> Enum.any?(event_users, fn (eu) -> user == eu end)  end)
   end
 
   def selected_user(user) do

@@ -30,6 +30,7 @@ defmodule Contributr.Plugs.Authenticated do
   end
 
   def call(conn, _opts) do
+    IO.inspect(conn)
     case get_session(conn, :current_user) do
       nil ->
         conn |> put_flash(:error, "Unauthorized!") |> redirect(to: "/") |> halt

@@ -95,14 +95,13 @@ defmodule Contributr.EventController do
 
     update = %{default_bonus: default_bonus, description: desc, name: name, end_date: end_date,start_date: s_date}
     changeset = Event.changeset(event, update)
-    IO.inspect("updating")
+
 
     case Repo.update(changeset) do
       {:ok, _event} ->
-      IO.inspect(_event)
         conn
         |> put_flash(:info, "Event updated successfully.")
-        |> redirect(to: event_path(conn, :index, current_user.org_name))
+        |> redirect(to: "/")
       {:error, changeset} ->
         render(conn, "edit.html", event: event, changeset: changeset, current_user: get_session(conn, :current_user))
     end

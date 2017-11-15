@@ -26,7 +26,6 @@ defmodule Contributr.OrgUserCommentController do
   plug :scrub_params, "user" when action in [:create, :update]
 
   plug Contributr.Plugs.Authenticated
-  plug Contributr.Plugs.OrganizationExists
   plug Contributr.Plugs.Authorized
   plug :put_layout, "organization.html"
 

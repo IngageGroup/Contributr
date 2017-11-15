@@ -9,6 +9,7 @@ defmodule Contributr.ContributionController do
   plug Contributr.Plugs.Authenticated
 
 
+
   def index(conn, %{"organization" => organization, "event_id" => event_id}) do
     user = get_session(conn, :current_user)
     funds_remaining = funds_remaining(user, event_id)
@@ -18,6 +19,7 @@ defmodule Contributr.ContributionController do
                           where: c.from_user_id == ^user.user_id and c.event_id == ^event_id ,
                           select: c)
     |> Repo.preload(:to_user)
+
 
     render(conn,
     "index.html",
@@ -81,10 +83,12 @@ defmodule Contributr.ContributionController do
     end
   end
 
+
   def update(conn, %{"organization" => organization, "id" => id, "event_id" => event_id, "contribution" => contribution_params}) do
 
     contribution = Repo.get!(Contribution, id)
     |> Repo.preload(:to_user)
+
 
 
     user =  get_session(conn, :current_user)
@@ -122,6 +126,7 @@ defmodule Contributr.ContributionController do
     else
         formatted_entry = Number.Currency.number_to_currency(entered_amount)
         msg = "#{formatted_entry} exceeds allowable amount."
+
         eligible_users = eligible_users(conn, event_id)
         conn
         |> put_flash(:error, msg)
@@ -131,15 +136,18 @@ defmodule Contributr.ContributionController do
 
   def show(conn, %{"organization" => organization, "event_id" => event_id, "id" => id}) do
 
+
     contribution = Repo.get!(Contribution, id)
     |> Repo.preload(:to_user)
 
     #TODO handle this with guardian, for now this will work.
     check_ownership(conn, contribution)
 
+
     current_user = get_session(conn, :current_user)
     eligible_users = eligible_users(conn, event_id)
     funds_remaining = funds_remaining(current_user, event_id)
+
 
     render(conn,
             "show.html",
@@ -150,8 +158,10 @@ defmodule Contributr.ContributionController do
             remaining: funds_remaining)
   end
 
+
   def edit(conn, %{"organization" => organization, "event_id" => event_id, "id" => id}) do
     user =  get_session(conn, :current_user)
+
     contribution = Repo.get(Contribution, id)
     |> Repo.preload(:to_user)
 
@@ -187,11 +197,13 @@ defmodule Contributr.ContributionController do
     |> redirect(to: contribution_path(conn, :index, organization, event_id))
   end
 
+
   def funds_remaining(current_user, event_id) do
     eu = Repo.get_by(Contributr.EventUsers, user_id: current_user.user_id, event_id: String.to_integer(event_id))
     mycontributions = round(total_allocated(eu.id))
     remaining = eu.eligible_to_give - mycontributions
   end
+
 
   defp total_allocated(event_user_id) do
     case Repo.one(from eu in EventUsers,

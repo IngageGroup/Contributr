@@ -20,6 +20,7 @@
               <span><a class="mui--text-white mui--pull-right mui--appbar-height mui--appbar-line-height" href="/">CONTRIBUTR</a></span>
           </div>
 
+
           <div class="mui--pull-right mui--appbar-height mui--appbar-line-height">
                 <ul class="mui-list--inline">
                     <li></li>
@@ -45,6 +46,7 @@
                       <% end %>
                 </ul>
           </div>
+
       </div>
       <div class="mui-container" style="padding-top: 10px">
         <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>

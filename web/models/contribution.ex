@@ -6,7 +6,9 @@ defmodule Contributr.Contribution do
     belongs_to :from_user, Contributr.User
     field :amount, :float
     field :comments, :string
+
     belongs_to :event, Contributr.Event
+
 
     timestamps()
   end
@@ -29,6 +31,7 @@ defmodule Contributr.Contribution do
      select: sum(c.amount)
   end
 
+
   @spec funds_spent(Ecto.Query.t, String.t, String.t) :: [Ecto.Query.t]
   def funds_spent(query,user_id,event_id ) do
      from c in query,
@@ -43,4 +46,5 @@ defmodule Contributr.Contribution do
      where: c.to_user_id == ^id,
      select: c.comments
   end
+
 end

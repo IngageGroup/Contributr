@@ -10,6 +10,7 @@
             <%= tag :meta, name: "channel_token", content: Phoenix.Token.sign(@conn, "user", @current_user.uid) %>
         <% end %>
         <title> <%= assigns[:page_title] || "Home" %> |  Contributr </title>
+
         <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
         <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     </head>

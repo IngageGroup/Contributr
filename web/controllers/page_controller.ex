@@ -29,7 +29,6 @@ defmodule Contributr.PageController do
     else
       render conn, "index.html",
              current_user: current_user
-
     end
   end
 end

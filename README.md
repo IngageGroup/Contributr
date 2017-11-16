@@ -28,7 +28,7 @@ config :pdf_generator,
   * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
   * Seed the database with `mix run priv/repo/seeds.exs`
   * Install Node.js dependencies with `npm install`
-  * Start Phoenix endpoint with `mix phoenix.server`
+  * Start Phoenix endpoint with `mix phx.server`
   
   
 With docker:

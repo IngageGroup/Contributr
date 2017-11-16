@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+   <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+   <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,7 +35,7 @@
                            <a class="mui--appbar-height mui--appbar-line-height mui--text-white" href="/">Welcome <%= @current_user.name %></a>
                         </li>
                         <li class="mui--appbar-height mui--appbar-line-height mui--align-middle">
-                           <div class="avatar-frame mui--align-middle"><img class="mui--align-middle" src="<%= @current_user.avatar_url %>" /></div>
+                           <div class="avatar-frame mui--align-middle"><img src="<%= @current_user.avatar_url %>" /></div>
                         </li>
 
 
@@ -56,8 +58,5 @@
           <%= render @view_module, @view_template, assigns %>
         </main>
       </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </body>
 </html>
-

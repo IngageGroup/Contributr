@@ -1,3 +1,4 @@
+
 body {
     font-family: 'Roboto Slab', serif;
 }
@@ -76,24 +77,14 @@ form.link, form.button {
 
 /* Circle Avatar Styles */
 
-.circle {
-    line-height: 0;		/* remove line-height */
-    display: inline-block;	/* circle wraps image */
-    margin: 5px;
-    border-radius: 50%;	/* relative value */
-    border: 3px solid white;/* border width   */
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
-    transition: linear 0.25s;
+
+.avatar-frame,.avatar-frame img{
+    width: 50px;
+    height: 50px;
+    -webkit-border-radius: 30px; /* Saf3+, Chrome */
+    border-radius: 30px; /* Opera 10.5, IE 9 */
+    /*-moz-border-radius: 30px;  Disabled for FF1+ */
 }
-.circle img {
-    border-radius: 50%;	/* relative value for
-				   adjustable image size */
-}
-.circle:hover {
-    transition: ease-out 0.3s;
-    transform: scale(0.8) rotate(20deg);
-}
-a.circle { color: transparent; }
 
 /* Some print stuff */
 

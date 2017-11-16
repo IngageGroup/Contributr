@@ -13,35 +13,40 @@
    </head>
 
   <body>
-      <div class="mui-container-fluid mui--bg-primary-dark">
-            <nav role="navigation">
-              <div class="mui--pull-right">
-                  <%= if assigns[:current_user] do %>
+      <div class="mui-appbar mui--bg-primary-dark">
 
-                      <span class="circle"><img src="<%= @current_user.avatar_url %>" /></span>
-                      <span>
-                        <a href="/">
-                            <span class="mui--text-white">Welcome <%= @current_user.name %></span>
-                        </a>
-                      </span>
-                      <span>
-                        <a href="<%= auth_path(@conn, :delete) %>">
-                            <span class="mui--text-white"> Logout</span>
-                        </a>
-                      </span>
+          <div class="mui--pull-left mui--text-display1 mui--text-white">
+              <span class ="mui--invisible">p</span>
+              <span><a class="mui--text-white mui--pull-right mui--appbar-height mui--appbar-line-height" href="/">CONTRIBUTR</a></span>
+          </div>
 
-                  <% else %>
-                    <span>
-                        <a class="btn btn-primary" href="<%= auth_path(@conn, :request, "google") %>">
-                            <span class="mui--text-white">  Login</span>
-                        </a>
-                    </span>
-                  <% end %>
-              </div>
-              <div class="mui--pull-left mui--align-middle" style="pagging-top: 20px;">
-                  <a href="/"><div class="mui--text-display1 mui--text-white">CONTRIBUTR</div></a>
-              </div>
-            </nav>
+
+          <div class="mui--pull-right mui--appbar-height mui--appbar-line-height">
+                <ul class="mui-list--inline">
+                    <li></li>
+                      <%= if assigns[:current_user] do %>
+                        <li>
+                          <a class="mui--appbar-height mui--appbar-line-height mui--text-white" href="<%= auth_path(@conn, :delete) %>">Logout</a>
+                        </li>
+                        <li>|</li>
+                        <li>
+                           <a class="mui--appbar-height mui--appbar-line-height mui--text-white" href="/">Welcome <%= @current_user.name %></a>
+                        </li>
+                        <li class="mui--appbar-height mui--appbar-line-height mui--align-middle">
+                           <div class="avatar-frame mui--align-middle"><img class="mui--align-middle" src="<%= @current_user.avatar_url %>" /></div>
+                        </li>
+
+
+                      <% else %>
+                        <li>
+                            <a class="btn btn-primary" href="<%= auth_path(@conn, :request, "google") %>">
+                                <p class="mui--text-white">Login</p>
+                            </a>
+                        </li>
+                      <% end %>
+                </ul>
+          </div>
+
       </div>
       <div class="mui-container" style="padding-top: 10px">
         <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
@@ -51,15 +56,8 @@
           <%= render @view_module, @view_template, assigns %>
         </main>
       </div> <!-- /container -->
-    <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
-    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-    <link href="//cdn.muicss.com/mui-latest/css/mui.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.cyan-light_blue.min.css">
-    <link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous">
   </body>
 </html>
 

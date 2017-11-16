@@ -6,7 +6,9 @@ defmodule Contributr.Contribution do
     belongs_to :from_user, Contributr.User
     field :amount, :float
     field :comments, :string
+
     belongs_to :event, Contributr.Event
+
 
     timestamps()
   end
@@ -18,7 +20,7 @@ defmodule Contributr.Contribution do
     struct
     |> cast(params, [:to_user_id, :from_user_id, :amount, :comments, :event_id])
     |> validate_required([:to_user_id, :from_user_id, :amount, :comments, :event_id])
-    |> validate_length(:comments, min: 20, max: 255)
+    |> validate_length(:comments, min: 20, max: 750)
     |> validate_number(:amount, greater_than_or_equal_to: 0)
   end
 
@@ -28,6 +30,7 @@ defmodule Contributr.Contribution do
      where: c.to_user_id == ^id,
      select: sum(c.amount)
   end
+
 
   @spec funds_spent(Ecto.Query.t, String.t, String.t) :: [Ecto.Query.t]
   def funds_spent(query,user_id,event_id ) do
@@ -43,4 +46,5 @@ defmodule Contributr.Contribution do
      where: c.to_user_id == ^id,
      select: c.comments
   end
+
 end

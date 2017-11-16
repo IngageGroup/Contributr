@@ -11,18 +11,26 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-import "phoenix_html"
+import "phoenix_html";
+import "jquery";
 
 // Import local files
 //
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
-import socket from "./socket"
+import commentReport from "./reportGenerator.js";
 
 jQuery(function($) {
     var $bodyEl = $('body'),
         $sidedrawerEl = $('#sidedrawer');
+
+    var reportButton = $("#commentReport");
+    var reportData = reportButton.attr("data-comments");
+    reportButton.click(commentReport);
+    console.log("test");
+    console.log(reportButton);
+    console.log(reportData);
 
 
     // ==========================================================================
@@ -30,7 +38,7 @@ jQuery(function($) {
     // ==========================================================================
     function showSidedrawer() {
         // show overlay
-        var options = {
+        let options = {
             onclose: function() {
                 $sidedrawerEl
                     .removeClass('active')
@@ -38,7 +46,7 @@ jQuery(function($) {
             }
         };
 
-        var $overlayEl = $(mui.overlay('on', options));
+        let $overlayEl = $(mui.overlay('on', options));
 
         // show element
         $sidedrawerEl.appendTo($overlayEl);
@@ -60,7 +68,7 @@ jQuery(function($) {
     // ==========================================================================
     // Animate menu
     // ==========================================================================
-    var $titleEls = $('strong', $sidedrawerEl);
+    let $titleEls = $('strong', $sidedrawerEl);
 
     $titleEls
         .next()

@@ -1,39 +1,50 @@
-<div class="mui-panel">
-    <span class="mui--text-headline">Users participating in <%= @event.name %></span>
+<div class="mui-panel mui--text-left">
+    <span class="mui--text-headline mui--text-left">Users participating in <%= @event.name %></span>
+    <div class="mui-panel mui--invisible"></div>
+        <div><span class="mui--bg-danger mui--text-subhead">Warning!! Modifying or deleting users who have associated contributions will cause those contributions to be removed**</span></div>
+        <div class="mui-col-sm-2">
+        <%= link "Add User", to: event_users_path(@conn, :new_event_user,  @organization, @event), class: "mui-btn mui-btn--raised mui-btn--primary" %>
+        </div>
+        <div class="mui-col-sm-2">
+            <%= link "Back", to: "/", class: "mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" %>
+        </div>
+        <div class="mui-col-sm-4" >
+            <button  id="commentReport" data-report="<%=elem(@encoded,1)%>" class="mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" >Comment Report</button>
+        </div>
+        <div class="mui-col-sm-4" >
+            <button  id="contribReport" data-report="<%=elem(@encoded,1)%>" class="mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" >Contribution Report</button>
+        </div>
 </div>
 
 <table class="mui-table mui-table--bordered">
   <thead>
     <tr>
-      <th>User</th>
-      <th>Eligible to receive</th>
-      <th>Eligible to give</th>
-      <th>Mange</th>
+      <th class="mui--text-left">User</th>
+      <th class="mui--text-left">Eligible to receive</th>
+      <th class="mui--text-left">Amount received</th>
+      <th class="mui--text-left">Eligible to give</th>
+      <th class="mui--text-left">Amount Given</th>
+      <th class="mui--text-left">Mange</th>
+
     </tr>
   </thead>
   <tbody>
 <%= for event_user <- @event_users do %>
     <tr>
-      <td><%= event_user[:user_name] %></td>
-      <td><%= if event_user[:eligible_to_receive] do "Yes" else "No" end %></td>
-      <td><%= Number.Currency.number_to_currency(event_user[:eligible_to_give]) %></td>
-      <td>
-      <%= link "Edit", to: event_users_path(@conn, :edit_event_user, @organization, @event.id, event_user[:event_user_id]) %>
-      <%= link "Remove", to: event_users_path(@conn, :edit_event_user, @organization, @event.id, event_user[:event_user_id]) %>
-
+      <td class="mui--text-left"><%= event_user[:user_name] %></td>
+      <td class="mui--text-left"><%= if event_user[:eligible_to_receive] do "Yes" else "No" end %></td>
+      <td class="mui--text-left"><%= if event_user[:total_received] do event_user[:total_received] else 0 end %></td>
+      <td class="mui--text-left"><%= Number.Currency.number_to_currency(event_user[:eligible_to_give]) %></td>
+      <td class="mui--text-left"><%= if event_user[:total_allocated] do event_user[:total_allocated] else 0 end %></td>
+      <td class="mui--text-left">
+          <%= link "Edit", to: event_users_path(@conn, :edit_event_user, @organization, @event.id, event_user[:event_user_id]) %> |
+          <%= link "Remove", to: event_users_path(@conn, :delete_event_user, @organization, @event.id, event_user[:event_user_id],method: :delete, data: [confirm: "Are you sure?"]) %> |
+          <%= link "Comments Received", to: event_users_path(@conn, :list_comments, @current_user.org_name, @event.id, event_user[:event_user_id]) %>
       </td>
     </tr>
 <% end %>
   </tbody>
-  <div>
 </table>
 <div class="mui-panel">
-    <div class="mui-col-sm-2">
-    <%= link "Add User", to: event_users_path(@conn, :new_event_user,  @organization, @event), class: "mui-btn mui-btn--raised mui-btn--primary" %>
-    </div>
-    <div class="mui-col-sm-2">
-        <%= link "Back", to: event_path(@conn, :index, @organization), class: "mui-col-md-10 mui-btn mui-btn--raised mui-btn--primary" %>
-    </div>
+
 </div>
-
-

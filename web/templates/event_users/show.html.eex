@@ -14,6 +14,3 @@
   </li>
 
 </ul>
-
-<%= link "Edit", to: event_users_path(@conn, :edit, @oranization, @event_users) %>
-<%= link "Back", to: event_users_path(@conn, :index, @organization, @event.id) %>

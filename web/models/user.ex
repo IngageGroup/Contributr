@@ -57,6 +57,7 @@ defmodule Contributr.User do
       where: o.url == ^org_url
   end
 
+
 #  @spec eligible_to_recieve(Ecto.Query.t, Boolean.t) :: [Ecto.Query.t]
 #  def eligible_to_recieve(query, status) do
 #    from u in query,
@@ -88,5 +89,6 @@ defmodule Contributr.User do
      from u in query,
          left_join: c in Contributr.Contribution,  on: c.to_user_id == ^id,
          select:  sum(c.amount)
+
   end
 end

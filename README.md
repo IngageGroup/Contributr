@@ -12,7 +12,15 @@ This is a simple tool that makes it easy to manage and contribute a bonus to you
 
 # Running the app
 
-To start your the app:
+## Preqeqs
+Reports require wkhtmltopdf. For more detailed info refer to https://github.com/gutschilla/elixir-pdf-generator
+Once installed, make sure to change or override the settings to reflect the proper value in config.exs:
+
+config :pdf_generator,
+       command_prefix: "/usr/X11/bin/xvfb"
+
+
+##Starting the app:
   
   * Setup your google account to allow for oauth
     * add environment variables for GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET

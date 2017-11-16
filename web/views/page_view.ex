@@ -11,15 +11,17 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 defmodule Contributr.PageView do
   use Contributr.Web, :view
   def days_left(event) do
-    today = Date.utc_today
+    today = Date.from_iso8601!(Date.utc_today)
     end_date = Date.from_iso8601!(Ecto.Date.to_iso8601(event.end_date))
     days_left  = Date.diff(today,end_date)
+    IO.inspect(days_left)
+    if days_left < 1 do 0 else days_left end
   end
 end

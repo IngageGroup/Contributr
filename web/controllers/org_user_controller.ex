@@ -28,7 +28,6 @@ defmodule Contributr.OrgUserController do
   plug :scrub_params, "user" when action in [:create, :update]
 
   plug Contributr.Plugs.Authenticated
-  plug Contributr.Plugs.OrganizationExists 
   plug Contributr.Plugs.Authorized 
   plug :put_layout, "organization.html"
 
@@ -43,9 +42,10 @@ defmodule Contributr.OrgUserController do
     user_id = Repo.get_by(Contributr.User, uid: uid ).id
 
     contributions_by_user = User.in_org(org)
+
     #|> User.eligible_to_give_more_than(0)
     #|> User.contributions_from
-    |> Repo.all
+     |> Repo.all
 
 
 

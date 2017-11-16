@@ -1,6 +1,5 @@
 <div class="mui-panel">
     <div class="mui--text-headline center"><%= gettext "Welcome to %{name}", name: "Contributr", class: "mui--text-heading" %></div>
-    <div class="mui--text-subhead center">Login to begin</div>
 </div>
 
 <div class="highlight" style="height:100px;">

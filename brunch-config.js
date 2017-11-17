@@ -37,8 +37,15 @@ exports.config = {
     // Configure your plugins
     plugins: {
         babel: {
-            // Do not use ES6 compiler in vendor code
-            ignore: [/(web\/static\/vendor)|node_modules/]
+          "presets": [
+              ["env", {
+               "targets": {
+               "browsers": ["last 2 versions", "safari >= 7"]
+               }
+              }]
+           ],
+          // Do not use ES6 compiler in vendor code
+          ignore: [/(web\/static\/vendor)|node_modules/]
         },
         sass: {
             options: {
@@ -51,8 +58,8 @@ exports.config = {
         },
         copycat: {
             "fonts": [
-                "node_modules/font-awesome/scss/",
-                "node_modules/roboto-fontface/css/roboto/sass/"]
+                "node_modules/font-awesome/fonts/",
+                "node_modules/roboto-fontface/fonts/"]
         }
     },
 

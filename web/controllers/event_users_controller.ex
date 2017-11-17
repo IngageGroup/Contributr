@@ -216,7 +216,6 @@ defmodule Contributr.EventUsersController do
       [nil]->
         %{comments: []}
       result ->
-        IO.inspect(result)
         %{comments: result}
     end
 

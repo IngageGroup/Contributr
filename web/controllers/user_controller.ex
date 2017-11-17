@@ -60,18 +60,10 @@ defmodule Contributr.UserController do
     where: ou.org_id == ^current_user.org_id,
     join: u in assoc(ou, :user),
     select: u.email )
-
     cusers = Enum.dedup(users_in_org)
-
     param_array = String.split(user_params["email"],"\r\n", trim: true)
-    IO.inspect cusers
-
     in_emails = Enum.map(Enum.dedup(param_array), fn (em) -> String.downcase em end)
-IO.inspect in_emails
-
     new_emails = Enum.reject(in_emails,fn (inuser) -> Enum.any?(cusers,fn (em) -> String.downcase(em) == String.downcase(inuser) end) end)
-
-    IO.inspect new_emails
     now =  DateTime.utc_now
     params = Enum.map(new_emails, fn (email) ->
       parts = String.split(email,[".","@"], trim: true)
@@ -79,10 +71,6 @@ IO.inspect in_emails
       result = %{name: name, email: email, inserted_at: now, updated_at: now}
       result
     end)
-
-    IO.inspect params
-
-
 
     case Repo.insert_all(User, params, on_conflict: :nothing, returning: [:id, :inserted_at, :updated_at]) do
       {:ok, user} ->

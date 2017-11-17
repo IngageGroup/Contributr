@@ -221,7 +221,7 @@ defmodule Contributr.ContributionController do
   end
 
   def eligible_users(conn, event_id) do
-    user = current_user(conn)
+    user = get_session(conn, :current_user)
     Repo.all(
       from eu in Contributr.EventUsers,
       join: u in assoc(eu, :user),
@@ -239,8 +239,8 @@ defmodule Contributr.ContributionController do
   end
 
   def check_ownership(conn, contribution) do
-    user = current_user(conn)
-    if  user.id != contribution.from_user_id do
+    user = get_session(conn, :current_user)
+    if  user.user_id != contribution.from_user_id do
         msg = "You must own the contribution in order to edit or view it"
         conn
         |> put_flash(:error, msg)

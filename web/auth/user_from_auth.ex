@@ -99,6 +99,8 @@ defmodule UserFromAuth do
       from eu in Contributr.EventUsers,
            where: eu.user_id == ^user.id,
            join: e in assoc(eu, :event),
+           order_by: [desc: e.inserted_at],
+           limit: 1,
            select: %{id: e.id, name: e.name, end_date: e.end_date , start_date: e.start_date }
     end
   end
@@ -135,4 +137,3 @@ defmodule UserFromAuth do
     end
   end
 end
-

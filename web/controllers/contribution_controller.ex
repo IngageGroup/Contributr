@@ -230,9 +230,6 @@ defmodule Contributr.ContributionController do
     )
   end
 
-  def current_user(conn) do
-   Repo.get_by(Contributr.User , uid: get_session(conn, :current_user).uid)
-  end
 
   def parse_to_user(params) do
     String.to_integer(params["to_user"]["id"])

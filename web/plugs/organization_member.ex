@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Contributr.  If not, see <http://www.gnu.org/licenses/>.
 
-defmodule Contributr.Plugs.Authorized do
+defmodule Contributr.Plugs.OrganizationMember do
   @moduledoc """
-    Plug to determine if a user has the correct authorization
+    Plug to determine if a user is a member of the organization
   """
   import Plug.Conn
   use Contributr.Web, :controller
@@ -35,7 +35,7 @@ defmodule Contributr.Plugs.Authorized do
             where: ou.user_id == ^user.id and o.url == ^org,
             preload: [:role],
             select: ou
-
+   
     case Repo.all(query) do
       [] -> conn |> put_flash(:error, "Not a member of this organization") |> redirect(to: "/") |> halt
       [%Contributr.OrganizationsUsers{}]= ou -> 

@@ -28,7 +28,7 @@ defmodule Contributr.OrgUserController do
   plug :scrub_params, "user" when action in [:create, :update]
 
   plug Contributr.Plugs.Authenticated
-  plug Contributr.Plugs.Authorized 
+  plug Contributr.Plugs.OrganizationMember 
   plug :put_layout, "organization.html"
 
   def new(conn, _params) do

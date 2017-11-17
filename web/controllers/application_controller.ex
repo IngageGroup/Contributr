@@ -22,7 +22,8 @@ defmodule Contributr.ApplicationController do
   alias Contributr.Organization
   
   plug Contributr.Plugs.Authenticated
-  plug Contributr.Plugs.Authorized 
+  plug Contributr.Plugs.OrganizationMember 
+  plug Contributr.Plugs.CheckPermission
   plug :put_layout, "organization.html"
 
   def index(conn, %{"organization" => orgname}) do

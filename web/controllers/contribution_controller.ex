@@ -7,6 +7,7 @@ defmodule Contributr.ContributionController do
   alias Contributr.EventUsers
 
   plug Contributr.Plugs.Authenticated
+  plug Contributr.Plugs.OrganizationMember
 
 
 

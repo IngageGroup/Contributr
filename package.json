@@ -21,6 +21,7 @@
     "uglify-js-brunch": ">= 1.0 < 1.8"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.6.1"
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-latest": "^6.24.1"
   }
 }

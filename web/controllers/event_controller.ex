@@ -10,6 +10,8 @@ defmodule Contributr.EventController do
   alias Contributr.EventUsers
 
   plug Contributr.Plugs.Authenticated
+  plug Contributr.Plugs.CheckPermission
+  plug Contributr.Plugs.OrganizationMember
 
   def index(conn, %{"organization" => organization}) do
     org = Repo.get_by!(Organization, name: organization)

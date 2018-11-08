@@ -23,8 +23,7 @@ defmodule Contributr.PageController do
 
     if current_user == nil do
       # not logged in....
-      conn
-      |> put_flash(:error, "You must log in first")
+      conn    
       |> redirect(to: "/login")
     else
       render conn, "index.html",

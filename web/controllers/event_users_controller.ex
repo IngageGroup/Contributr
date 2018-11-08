@@ -8,6 +8,8 @@ defmodule Contributr.EventUsersController do
   alias Contributr.Contribution
 
   plug Contributr.Plugs.Authenticated
+  plug Contributr.Plugs.CheckPermission
+  plug Contributr.Plugs.OrganizationMember
 
   def list(conn, %{"organization" => organization, "event_id" => event_id}) do
     event = Repo.get(Event, event_id)

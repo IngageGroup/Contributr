@@ -1,5 +1,11 @@
-defmodule Contributr.CheckPermission do
+defmodule Contributr.Plugs.CheckPermission do
+  @moduledoc """
+    Plug to determine if the user has the necessary role.    
+  """
+  import Plug.Conn
   use Contributr.Web, :controller
+
+  alias Contributr.CheckPermission
 
   def init(opts) do
     Keyword.fetch(opts, :allowedRole)

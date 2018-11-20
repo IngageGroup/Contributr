@@ -27,16 +27,15 @@ defmodule UserFromAuth do
   end
 
   def update_user_from_provider(user) do
-    changeset = Contributr.User.changeset(%Contributr.User{}, user)
     case Repo.get_by(Contributr.User, email: user.email) do
       nil ->
         Logger.debug "no results found"
       %Contributr.User{} = u ->
         changeset = Contributr.User.changeset(u, user)
         case Repo.update(changeset) do
-          {:ok, _user} ->
+          {:ok, update_user} ->
             Logger.debug "Successfully update record"
-            {:ok, _user}
+            {:ok, update_user}
           {:error, _changeset} ->
             Logger.error "Unable to update the user record"
             {:error, "Unable to update the user record"}

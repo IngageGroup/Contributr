@@ -34,8 +34,8 @@ defmodule Contributr.User do
     timestamps
   end
 
-  @required_fields ~w(name email)
-  @optional_fields ~w(uid access_token expires_at avatar_url setup_admin)
+  @required_fields ~w(name email uid access_token expires_at)
+  @optional_fields ~w(avatar_url setup_admin)
 
   @doc """
   Creates a changeset based on the `model` and `params`.

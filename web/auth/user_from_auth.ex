@@ -27,7 +27,6 @@ defmodule UserFromAuth do
   end
 
   def update_user_from_provider(user) do
-    changeset = Contributr.User.changeset(%Contributr.User{}, user)
     case Repo.get_by(Contributr.User, email: user.email) do
       nil ->
         Logger.debug "no results found"

@@ -33,9 +33,9 @@ defmodule UserFromAuth do
       %Contributr.User{} = u ->
         changeset = Contributr.User.changeset(u, user)
         case Repo.update(changeset) do
-          {:ok, _user} ->
+          {:ok, update_user} ->
             Logger.debug "Successfully update record"
-            {:ok, _user}
+            {:ok, update_user}
           {:error, _changeset} ->
             Logger.error "Unable to update the user record"
             {:error, "Unable to update the user record"}

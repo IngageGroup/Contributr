@@ -24,7 +24,7 @@ defmodule Contributr.EventUsersController do
         render(conn, "show_event.html", organization: organization, event: event, event_users: user_info, encoded: encoded_ui)
       _   ->
         conn
-        |> put_flash(:error, "You do not have permission to see this page")
+        |> put_flash(:info, "You do not have permission to see this page")
         |> redirect(to: "/")
     end
   end

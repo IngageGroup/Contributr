@@ -19,7 +19,7 @@ defmodule Contributr.EventUsersController do
             eu)))end)
     encoded_ui = Poison.encode(user_info)
     case role do
-      %Role{name: "Admin"} = r ->
+      %Role{name: "Superadmin"} = r ->
         render(conn, "show_event.html", organization: organization, event: event, event_users: user_info, encoded: encoded_ui)
       _   ->
         conn

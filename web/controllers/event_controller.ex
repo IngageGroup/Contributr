@@ -123,6 +123,7 @@ defmodule Contributr.EventController do
       join: o in assoc(e, :org),
       join: eu in assoc(e, :event_users),
       where: o.id == ^org.id,
+      order_by: [desc: e.start_date],
       select: e,
       preload: [org: o],
       preload: [event_users: eu])

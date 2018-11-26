@@ -30,18 +30,20 @@
   </thead>
   <tbody>
 <%= for event_user <- @event_users do %>
-    <tr>
-      <td class="mui--text-left"><%= event_user[:user_name] %></td>
-      <td class="mui--text-left"><%= if event_user[:eligible_to_receive] do "Yes" else "No" end %></td>
-      <td class="mui--text-left"><%= if event_user[:total_received] do event_user[:total_received] else 0 end %></td>
-      <td class="mui--text-left"><%= Number.Currency.number_to_currency(event_user[:eligible_to_give]) %></td>
-      <td class="mui--text-left"><%= if event_user[:total_allocated] do event_user[:total_allocated] else 0 end %></td>
-      <td class="mui--text-left">
-          <%= link "Edit", to: event_users_path(@conn, :edit_event_user, @organization, @event.id, event_user[:event_user_id]) %> |
-          <%= link "Remove", to: event_users_path(@conn, :delete_event_user, @organization, @event.id, event_user[:event_user_id],method: :delete, data: [confirm: "Are you sure?"]) %> |
-          <%= link "Comments Received", to: event_users_path(@conn, :list_comments, @current_user.org_name, @event.id, event_user[:event_user_id]) %>
-      </td>
-    </tr>
+    <%= if false do %>
+        <tr>
+          <td class="mui--text-left"><%= event_user[:user_name] %></td>
+          <td class="mui--text-left"><%= if event_user[:eligible_to_receive] do "Yes" else "No" end %></td>
+          <td class="mui--text-left"><%= if event_user[:total_received] do event_user[:total_received] else 0 end %></td>
+          <td class="mui--text-left"><%= Number.Currency.number_to_currency(event_user[:eligible_to_give]) %></td>
+          <td class="mui--text-left"><%= if event_user[:total_allocated] do event_user[:total_allocated] else 0 end %></td>
+          <td class="mui--text-left">
+              <%= link "Edit", to: event_users_path(@conn, :edit_event_user, @organization, @event.id, event_user[:event_user_id]) %> |
+              <%= link "Remove", to: event_users_path(@conn, :delete_event_user, @organization, @event.id, event_user[:event_user_id],method: :delete, data: [confirm: "Are you sure?"]) %> |
+              <%= link "Comments Received", to: event_users_path(@conn, :list_comments, @current_user.org_name, @event.id, event_user[:event_user_id]) %>
+          </td>
+        </tr>
+    <% end %>
 <% end %>
   </tbody>
 </table>

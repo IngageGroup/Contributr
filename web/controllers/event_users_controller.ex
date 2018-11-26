@@ -6,6 +6,7 @@ defmodule Contributr.EventUsersController do
   alias Contributr.EventUsers
   alias Contributr.Event
   alias Contributr.Contribution
+  alias Contributr.Role
 
   plug Contributr.Plugs.Authenticated
 
@@ -17,7 +18,14 @@ defmodule Contributr.EventUsersController do
           Enum.into(total_allocated(eu.event_user_id),
             eu)))end)
     encoded_ui = Poison.encode(user_info)
-    render(conn, "show_event.html", organization: organization, event: event, event_users: user_info, encoded: encoded_ui)
+    case role do
+      %Role{name: "Admin"} = r ->
+        render(conn, "show_event.html", organization: organization, event: event, event_users: user_info, encoded: encoded_ui)
+      _   ->
+        conn
+        |> put_flash(:error, "You do not have permission to see this page")
+        |> redirect(to: "/")
+    end
   end
 
   def list_comments(conn, params) do

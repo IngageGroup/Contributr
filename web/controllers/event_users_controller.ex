@@ -12,7 +12,6 @@ defmodule Contributr.EventUsersController do
   alias Contributr.Role
 
   plug Contributr.Plugs.Authenticated
-  plug Contributr.Plugs.Authorized
 
   def list(conn, %{"organization" => organization, "event_id" => event_id}) do
     event = Repo.get(Event, event_id)

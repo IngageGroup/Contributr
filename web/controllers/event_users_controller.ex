@@ -13,7 +13,6 @@ defmodule Contributr.EventUsersController do
 
   plug Contributr.Plugs.Authenticated
   plug Contributr.Plugs.Authorized
-   plug :put_layout, "organization.html"
 
   def list(conn, %{"organization" => organization, "event_id" => event_id}) do
     event = Repo.get(Event, event_id)

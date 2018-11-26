@@ -18,8 +18,7 @@ defmodule Contributr.EventUsersController do
           Enum.into(total_allocated(eu.event_user_id),
             eu)))end)
     encoded_ui = Poison.encode(user_info)
-    role = get_session(conn, :role)
-    case role do
+    case user_info.role do
       %Role{name: "Superadmin"} = r ->
         render(conn, "show_event.html", organization: organization, event: event, event_users: user_info, encoded: encoded_ui)
       _   ->

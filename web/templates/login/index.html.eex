@@ -11,5 +11,6 @@
   </span>
 </div>
 
-<div class="mui-panel">
+<div class="mui-panel" style="padding-top: 10px">
+  <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
 </div>

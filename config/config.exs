@@ -32,8 +32,8 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: "694437167504-041e6hbmuedefeoecckr3p56aq9fd03h.apps.googleusercontent.com",
-  client_secret: "YX0zP0NEbOwWfddxS5PpVmNi",
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
   redirect_uri: System.get_env("GOOGLE_REDIRECT_URI")
 
 # Import environment specific config. This must remain at the bottom

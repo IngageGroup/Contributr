@@ -6,8 +6,13 @@ defmodule Contributr.EventUsersController do
   alias Contributr.EventUsers
   alias Contributr.Event
   alias Contributr.Contribution
+  alias Contributr.User
+  alias Contributr.Organization
+  alias Contributr.OrganizationsUsers
+  alias Contributr.Role
 
   plug Contributr.Plugs.Authenticated
+  plug Contributr.Plugs.Authorized
 
   def list(conn, %{"organization" => organization, "event_id" => event_id}) do
     event = Repo.get(Event, event_id)
@@ -17,7 +22,14 @@ defmodule Contributr.EventUsersController do
           Enum.into(total_allocated(eu.event_user_id),
             eu)))end)
     encoded_ui = Poison.encode(user_info)
-    render(conn, "show_event.html", organization: organization, event: event, event_users: user_info, encoded: encoded_ui)
+    role = get_session(conn, :role)
+    case role do
+      %Role{id: 1} = r ->
+        render(conn, "show_event.html", organization: organization, event: event, event_users: user_info, encoded: encoded_ui)
+      _   ->
+        conn
+        |> redirect(to: "/")
+    end
   end
 
   def list_comments(conn, params) do

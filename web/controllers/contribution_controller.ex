@@ -226,6 +226,7 @@ defmodule Contributr.ContributionController do
       from eu in Contributr.EventUsers,
       join: u in assoc(eu, :user),
       where: eu.eligible_to_receive == true  and eu.event_id == ^event_id and eu.user_id != ^user.user_id,
+      order_by: u.name,
       select: {u.name, u.id}
     )
   end

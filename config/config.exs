@@ -33,6 +33,8 @@ config :phoenix, :generators,
 
 # config :phoenix, :json_library, Poison
 
+config :phoenix, :json_library, Jason
+
 config :ueberauth, Ueberauth,
   providers: [
     google: {Ueberauth.Strategy.Google, ["email profile https://www.googleapis.com/auth/admin.directory.customer.readonly"]}

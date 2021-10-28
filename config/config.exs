@@ -31,6 +31,9 @@ config :phoenix, :generators,
 config :phoenix, :format_encoders,
   "json-api": Poison
 
+config :phoenix, :json_library, Poison
+
+
 config :ueberauth, Ueberauth,
   providers: [
     google: {Ueberauth.Strategy.Google, ["email profile https://www.googleapis.com/auth/admin.directory.customer.readonly"]}

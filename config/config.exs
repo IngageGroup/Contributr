@@ -28,11 +28,10 @@ config :phoenix, :generators,
 
 # config :phoenix, :json_library, Poison
 
-config :phoenix, :format_encoders,
-  "json-api": Poison
+#config :phoenix, :format_encoders,
+#  "json-api": Poison
 
-config :phoenix, :json_library, Poison
-
+# config :phoenix, :json_library, Poison
 
 config :ueberauth, Ueberauth,
   providers: [

@@ -109,7 +109,8 @@ defmodule UserFromAuth do
   end
 
   defp days_left(from_date, end_date) do
-    end_date = Date.from_iso8601!(Ecto.Date.to_iso8601(end_date))
+    #end_date = Date.from_iso8601!(Ecto.Date.to_iso8601(end_date))
+    end_date = Date.from_iso8601!(Date.to_iso8601(end_date))
     days_left  = Date.diff(from_date,end_date)
     if days_left < 1 do 0 else days_left end
   end

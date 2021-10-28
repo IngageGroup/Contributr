@@ -46,7 +46,8 @@ defmodule Contributr.Mixfile do
       {:number, "~> 1.0.3"},
       {:uuid, "~> 1.1.8"},
       {:plug, "~> 1.12.1"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:jason, "~>1.2.2"}
     ]
   end
 

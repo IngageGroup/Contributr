@@ -44,10 +44,10 @@ defmodule Contributr.AuthController do
       {:ok, user} ->
         token = Phoenix.Token.sign(conn, "user", user.uid)
         case UserFromAuth.update_user_from_provider(user) do
-          {:ok, _user} ->
-            case UserFromAuth.fetch_user_info(_user.id) do
-              {:ok, _ou} ->
-                extended_info = UserFromAuth.extended_info(user,_ou)
+          {:ok, user} ->
+            case UserFromAuth.fetch_user_info(user.id) do
+              {:ok, ou} ->
+                extended_info = UserFromAuth.extended_info(user, ou)
                 conn
                 |> put_session(:current_user, extended_info)
                 |> redirect(to: "/", token: token)

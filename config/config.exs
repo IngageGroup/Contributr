@@ -26,6 +26,8 @@ config :phoenix, :generators,
   migration: true,
   binary_id: false
 
+config :phoenix, :json_library, Jason
+
 config :ueberauth, Ueberauth,
   providers: [
     google: {Ueberauth.Strategy.Google, ["email profile https://www.googleapis.com/auth/admin.directory.customer.readonly"]}

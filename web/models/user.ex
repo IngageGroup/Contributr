@@ -34,8 +34,8 @@ defmodule Contributr.User do
     timestamps
   end
 
-  @required_fields ~w(name email uid access_token expires_at)
-  @optional_fields ~w(avatar_url setup_admin)
+  @required_fields ~w(name email uid access_token expires_at)a
+  @optional_fields ~w(avatar_url setup_admin)a
 
   @doc """
   Creates a changeset based on the `model` and `params`.
@@ -45,7 +45,7 @@ defmodule Contributr.User do
   """
   def changeset(model, params \\ %{}) do
     model
-    |> cast(params, @required_fields, @optional_fields)
+    |> cast(params, @required_fields ++ @optional_fields)
  #   |> validate_number(:eligible_to_give, greater_than_or_equal_to: 0)
   end
 

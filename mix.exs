@@ -4,7 +4,7 @@ defmodule Contributr.Mixfile do
   def project do
     [app: :contributr,
       version: "0.0.1",
-      elixir: "~> 1.5",
+      elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       build_embedded: Mix.env == :prod,
@@ -30,20 +30,24 @@ defmodule Contributr.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.3.0"},
-      {:phoenix_pubsub, "~> 1.0"},
-      {:phoenix_ecto, "~> 3.3.0"},
-      {:postgrex, ">= 0.13.3"},
-      {:phoenix_html, "~> 2.10"},
-      {:phoenix_live_reload, "~> 1.1.3", only: :dev},
-      {:gettext, "~> 0.13"},
-      {:cowboy, "~> 1.0"},
-      {:ueberauth, "~> 0.4"},
-      {:ueberauth_google, "~> 0.6"},
-      {:dialyxir, "~> 0.5.1", only: [:dev]},
-      {:number, "~> 0.5.4"},
-      {:uuid, "~> 1.1"},
-      {:plug, "~> 1.3"}
+    [{:phoenix, "~> 1.6.2"},
+      {:phoenix_pubsub, "~> 2.0"},
+      {:phoenix_ecto, "~> 4.4"},
+      {:ecto_sql, "~> 3.7.1"},
+      {:postgrex, ">= 0.15.13"},
+      {:phoenix_html, "~> 3.0.4"},
+      {:phoenix_live_reload, "~> 1.3.3", only: :dev},
+      {:gettext, "~> 0.18.2"},
+      {:cowboy, "~> 2.9.0"},
+      {:plug_cowboy, "~> 2.5.2"},
+      {:ueberauth, "~> 0.6.3"},
+      {:ueberauth_google, "~> 0.10.0"},
+      {:dialyxir, "~> 1.1.0", only: [:dev]},
+      {:number, "~> 1.0.3"},
+      {:uuid, "~> 1.1.8"},
+      {:plug, "~> 1.12.1"},
+      {:poison, "~> 3.1"},
+      {:jason, "~>1.2.2"}
     ]
   end
 

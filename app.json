@@ -18,7 +18,10 @@
   ],
   "buildpacks": [
     {
-      "url": "https://github.com/HashNuke/heroku-buildpack-elixir.git#a0fd1ce618761c745a8c3d6fe2bb6ba1fb220906"
+      "url": "https://github.com/HashNuke/heroku-buildpack-elixir.git"
+    },
+    {
+      "url": "https://github.com/techgaun/heroku-buildpack-mix-tasks.git"
     },
     {
       "url": "https://github.com/gjaldon/heroku-buildpack-phoenix-static.git"

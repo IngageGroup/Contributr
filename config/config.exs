@@ -26,13 +26,6 @@ config :phoenix, :generators,
   migration: true,
   binary_id: false
 
-# config :phoenix, :json_library, Poison
-
-#config :phoenix, :format_encoders,
-#  "json-api": Poison
-
-# config :phoenix, :json_library, Poison
-
 config :phoenix, :json_library, Jason
 
 config :ueberauth, Ueberauth,

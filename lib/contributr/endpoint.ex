@@ -26,11 +26,6 @@ defmodule Contributr.Endpoint do
     parsers: [:urlencoded, :multipart],
     pass: ["*/*"]
 
-  # plug Plug.Parsers,
-  #   parsers: [:urlencoded, :multipart, :json],    
-  #   pass: ["*/*"],
-  #   json_decoder: Poison
-
   plug Plug.MethodOverride
   plug Plug.Head
 

@@ -5,8 +5,6 @@ defmodule Contributr.Event do
     field :name, :string
     field :description, :string
     field :default_bonus, :float
-    # field :start_date, Ecto.Date
-    # field :end_date, Ecto.Date
     field :start_date, :date
     field :end_date, :date
     belongs_to :org, Contributr.Organization

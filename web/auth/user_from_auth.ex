@@ -54,7 +54,6 @@ defmodule UserFromAuth do
 
   defp basic_info(auth) do
     %{uid: auth.uid,
-      name: name_from_auth(auth),
       avatar_url: auth.info.image,
       email: auth.info.email,
       access_token: auth.extra.raw_info.token.access_token,

@@ -5,7 +5,7 @@
   "repository": {},
   "dependencies": {
     "babel-brunch": "^6.0.0",
-    "brunch": "^2.10.12",
+    "brunch": "^2.10.17",
     "clean-css-brunch": "*",
     "copycat-brunch": "^1.1.0",
     "css-brunch": "*",
